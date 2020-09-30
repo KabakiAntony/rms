@@ -9,7 +9,7 @@ def root():
     """
     this is the root of our app
     """
-    return "Welcome to rms. :-)"
+    return "Welcome to rms."
 
 
 if __name__ == "__main__":
