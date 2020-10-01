@@ -7,7 +7,7 @@ db = SQLAlchemy()
 
 class Company(db.Model):
     """
-    this will create the company table
+    this creates the company model
     """
     __tablename__ = "Company"
 
@@ -31,7 +31,7 @@ class Company(db.Model):
 
 class User(db.Model):
     """
-    this will create the table for the users
+    this creates the system users model
     """
     __tablename__ = "Users"
 
@@ -57,7 +57,7 @@ class User(db.Model):
 
 class Project(db.Model):
     """
-    this will create a project table
+    this creates the project model
     """
     __tablename__ = "Project"
 
@@ -99,3 +99,33 @@ class Budget(db.Model):
     def __repr__(self):
         """format how the budget object will be represented"""
         return "{}{}{}".format(self.companyId, self.projectId, self.amount)
+
+
+class Employees(db.Model):
+    """this  creates the employees model"""
+    __tablename__ = "Employees"
+
+    id = db.Column(db.Integer, primary_key=True)
+    firstname = db.Column(db.String(120), nullable=False)
+    lastname = db.Column(db.String(120), nullable=False)
+    email = db.Column(db.String(120))
+    companyId = db.Column(db.Integer, db.ForeignKey('Company.id'))
+    project = db.Column(db.Integer, db.ForeignKey('Project.id'))
+
+    def __init__(self, firstname, lastname, email, companyId, projectId):
+        """initilizing employees model table items"""
+        self.firstname = firstname
+        self.lastname = lastname
+        self.email = email
+        self.companyId = companyId
+        self.projectId = projectId
+
+    def __repr__(self):
+        """formating the employees object for view"""
+        return "{}{}{}{}{}".format(
+            self.firstname,
+            self.lastname,
+            self.email,
+            self.companyId,
+            self.project
+        )
