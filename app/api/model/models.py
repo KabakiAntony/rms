@@ -60,21 +60,20 @@ class Project(db.Model):
     this will create a project table
     """
     __tablename__ = "Project"
+
     id = db.Column(db.Integer, primary_key=True)
     project_name = db.Column(db.String(100), nullable=False, unique=True)
     companyId = db.Column(db.Integer, db.ForeignKey('Company.id'))
-    date_from = db.Column(db.DateTime())
-    date_to = db.Column(db.DateTime())
+    date_from = db.Column(db.DateTime)
+    date_to = db.Column(db.DateTime)
 
     def __init__(self, project_name, companyId, date_from, date_to):
         """initializing inputs for this model"""
         self.project_name = project_name
         self.companyId = companyId
         self.date_from = date_from
-        self.date_to
+        self.date_to = date_to
 
     def __repr__(self):
         """this formats the project object for view"""
-        return "{}{}{}{}".format
-        (self.project_name, self.companyId,
-            self.date_from, self.date_to)
+        return "{}{}".format(self.project_name, self.companyId)
