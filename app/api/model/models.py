@@ -77,3 +77,25 @@ class Project(db.Model):
     def __repr__(self):
         """this formats the project object for view"""
         return "{}{}".format(self.project_name, self.companyId)
+
+
+class Budget(db.Model):
+    """
+    this creates the  budget model
+    """
+    __tablename__ = "Budget"
+
+    id = db.Column(db.Integer, primary_key=True)
+    companyId = db.Column(db.Integer, db.ForeignKey('Company.id'))
+    projectId = db.Column(db.Integer, db.ForeignKey('Project.id'))
+    amount = db.Column(db.Integer, nullable=False)
+
+    def __init___(self, companyId, projectId, amount):
+        """initializing objects for budget model"""
+        self.companyId = companyId
+        self.projectId = projectId
+        self.amount = amount
+
+    def __repr__(self):
+        """format how the budget object will be represented"""
+        return "{}{}{}".format(self.companyId, self.projectId, self.amount)
