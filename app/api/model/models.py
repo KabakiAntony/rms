@@ -57,10 +57,19 @@ class User(db.Model):
         self.email = email
         self.password = password
         self.companyId = companyId
+        self.role = role
 
-    # def __repr__(self):
-    #     """this formats how a user will be returned from the db"""
-    #     return '<{}:{}:{}>'.format(self.id, self.firstname, self.email)
+
+class UserSchema(ma.Schema):
+    class meta:
+        """
+        this will serialize the user schema
+        """
+        fields = ("id", "firstname", "email", "companyId", "role")
+
+
+user_schema = UserSchema()
+users_schema = UserSchema(many=True)
 
 
 class Project(db.Model):
@@ -82,9 +91,17 @@ class Project(db.Model):
         self.date_from = date_from
         self.date_to = date_to
 
-    def __repr__(self):
-        """this formats the project object for view"""
-        return "{}{}".format(self.project_name, self.companyId)
+
+class ProjectSchema(ma.Schema):
+    class meta:
+        """
+        this will serialize the project model
+        """
+        fields = ("id", "project_name", "companyId", "date_from", "date_to")
+
+
+project_schema = ProjectSchema()
+projects_schema = ProjectSchema(many=True)
 
 
 class Budget(db.Model):
@@ -104,9 +121,17 @@ class Budget(db.Model):
         self.projectId = projectId
         self.amount = amount
 
-    def __repr__(self):
-        """format how the budget object will be represented"""
-        return "{}{}{}".format(self.companyId, self.projectId, self.amount)
+
+class BudgetSchema(ma.Schema):
+    class meta:
+        """
+        this will serialize the budget model
+        """
+        fields = ("id", "companyId", "projectId", "amount")
+
+
+budget_schema = BudgetSchema()
+budgets_schema = BudgetSchema(many=True)
 
 
 class Employees(db.Model):
@@ -128,15 +153,20 @@ class Employees(db.Model):
         self.companyId = companyId
         self.projectId = projectId
 
-    def __repr__(self):
-        """formating the employees object for view"""
-        return "{}{}{}{}{}".format(
-            self.firstname,
-            self.lastname,
-            self.email,
-            self.companyId,
-            self.project
-        )
+
+class EmployeesSchema(ma.Schema):
+    class meta:
+        """
+        serialize the employees model
+        """
+        fields = (
+            "id", "firstname", "lastname", "email", "companyId",
+            "projectId"
+            )
+
+
+employee_schema = EmployeesSchema()
+employees_schema = EmployeesSchema(many=True)
 
 
 class Files(db.Model):
@@ -183,18 +213,27 @@ class Files(db.Model):
         self.status = status
         self.url = url
 
-    def __repr__(self):
-        """formating the file object for view"""
-        return "{}{}{}{}{}{}{}{}{}{}{}" .format(
-            self.file_name,
-            self.companyId,
-            self.projectId,
-            self.created_by,
-            self.date_created,
-            self.reviewed_by,
-            self.date_reviewed,
-            self.authorized_by,
-            self.date_authorized,
-            self.status,
-            self.url
+
+class FilesSchema(ma.Schema):
+    class meta:
+        """
+        serialize the files model
+        """
+        fields = (
+            "id",
+            "file_name",
+            "companyId",
+            "projectId",
+            "created_by",
+            "date_created",
+            "reviewed_by",
+            "date_reviewed",
+            "authorized_by",
+            "date_authorized",
+            "status",
+            "url"
         )
+
+
+files_schema = FilesSchema(many=True)
+file_schema = FilesSchema()
