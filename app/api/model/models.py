@@ -1,8 +1,10 @@
 from flask_sqlalchemy import SQLAlchemy
+from flask_marshmallow import Marshmallow
 from datetime import datetime
 
 
 db = SQLAlchemy()
+ma = Marshmallow()
 
 
 class Company(db.Model):
@@ -22,11 +24,17 @@ class Company(db.Model):
         self.company = company
         self.joined_at = joined_at
 
-    def __repr__(self):
+
+class CompanySchema(ma.Schema):
+    class meta:
         """
-        format how the company info will be returned from the db
+        this will serialize the company model
         """
-        return '{}{}{}'.format(self.id, self.company, self.joined_at)
+        fields = ("id", "company", "joined_at")
+
+
+company_schema = CompanySchema()
+companies_schema = CompanySchema(many=True)
 
 
 class User(db.Model):
@@ -50,9 +58,9 @@ class User(db.Model):
         self.password = password
         self.companyId = companyId
 
-    def __repr__(self):
-        """this formats how a user will be returned from the db"""
-        return '<{}:{}:{}>'.format(self.id, self.firstname, self.email)
+    # def __repr__(self):
+    #     """this formats how a user will be returned from the db"""
+    #     return '<{}:{}:{}>'.format(self.id, self.firstname, self.email)
 
 
 class Project(db.Model):
