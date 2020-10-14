@@ -1,9 +1,7 @@
 from flask import Flask
-from flask_marshmallow import Marshmallow
 from flask_migrate import Migrate
 
 
-ma = Marshmallow()
 migrate = Migrate()
 
 
@@ -14,7 +12,7 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object('config.DevelopmentConfig')
 
-    from app.api.model.models import db
+    from app.api.model.models import db, ma
     db.init_app(app)
     ma.init_app(app)
     migrate.init_app(app, db)
