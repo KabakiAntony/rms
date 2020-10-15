@@ -4,9 +4,12 @@ functions.
 """
 import re
 import os
+import jwt
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
-from flask import jsonify, make_response, abort
+from functools import wraps
+from flask import jsonify, make_response, abort, request
+from app.api.model.models import User
 
 
 KEY = os.getenv('SECRET_KEY')
@@ -108,3 +111,29 @@ def send_mail(user_email, the_subject, the_content):
         sg.send(message)
     except Exception as e:
         print(e)
+
+
+def token_required(f):
+    """
+    ensure a token is supplied to reach certain routes
+    and also verify that the token supplied is valid
+    """
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = None
+        if 'x-access-token' in request.headers:
+            token = request.headers['x-access-token']
+        if request.args.get('in'):
+            token = request.args.get('in')
+        if not token:
+            return custom_make_response("error", "token is missing", 401)
+        try:
+            data = jwt.decode(token, KEY, algorithm="HS256")
+            # get the user that is logged in by email
+            current_user = User.query\
+                .filter_by(public_id=data['email']).first()
+        except Exception as e:
+            return custom_make_response(
+                "error", f"{e} token is expired or invalid", 401)
+        return f(current_user, *args, **kwargs)
+    return decorated
