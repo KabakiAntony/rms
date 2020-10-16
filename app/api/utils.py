@@ -110,7 +110,9 @@ def send_mail(user_email, the_subject, the_content):
         sg = SendGridAPIClient(os.environ.get('SENDGRID_KEY'))
         sg.send(message)
     except Exception as e:
-        print(e)
+        custom_make_response(
+                "error", f"an error occured sending email contact administrator\
+                     {e}", 401)
 
 
 def token_required(f):
