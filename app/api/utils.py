@@ -133,7 +133,7 @@ def token_required(f):
             data = jwt.decode(token, KEY, algorithm="HS256")
             # get the user that is logged in by email
             current_user = User.query\
-                .filter_by(public_id=data['email']).first()
+                .filter_by(email=data['email']).first()
         except Exception as e:
             return custom_make_response(
                 "error", f"{e} token is expired or invalid", 401)
