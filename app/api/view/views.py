@@ -3,7 +3,7 @@ import jwt
 import datetime
 from flask import request, abort, render_template, jsonify
 from app.api import rms
-from app.api.model.models import User, Employees, Company,\
+from app.api.model.models import db, User, Employees, Company,\
     Files, Budget, Project
 from app.api.utils import check_for_whitespace, isValidEmail,\
     isValidPassword, token_required, send_mail, check_model_return,\
@@ -37,10 +37,10 @@ def signup_intent():
     check_for_whitespace(data, ['firsname', 'email', 'company'])
     isValidEmail(email)
     # check if the company is already registered
-    if User.query.get(company):
+    if Company.query.filter_by(company=data['company']).first():
         abort(
             custom_make_response(
-                "error", "seems like the company is already registered", 409
+                "error", "please check email for further instructions.", 409
             )
         )
     token = jwt.encode(
@@ -53,23 +53,31 @@ def signup_intent():
         algorithm='HS256'
     )
     # send signup intent email
-    subject = """Thank for your interest in RMS"""
+    subject = f"""Thank you for registering {company}."""
     content = f"""
-    Hey {firstname},
+    Welcome {firstname},
     <br/>
     <br/>
-    We are grateful for your interest on signing up with us<br/>
-    Please logon to the below link to register.
-    <a href="{signup_url}?in={token.decode('utf-8')}">link</a>.
+    We are grateful to have you.<br/>
+    Please click on sign up below to register your personal
+    information to start using the system.Kindly note this 
+    link will only be available for three hours.
+    <br/>
+    <br/>
+    <a href="{signup_url}?in={token.decode('utf-8')}">Sign Up</a>
     <br/>
     <br/>
     Regards Antony,<br/>
     RMS Admin.
     """
     send_mail(email, subject, content)
+    new_company = Company(company, joined_at=datetime.datetime.utcnow())
+    db.session.add(new_company)
+    db.session.commit()
     return custom_make_response(
         "data", [{
-            "firstname": firstname,
-            "email": email
+            "Company": company,
+            "email": email,
+            "message": "Please check your email to complete registration."
         }], 200
     )
