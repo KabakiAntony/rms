@@ -1,10 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
-from flask_marshmallow import Marshmallow
 from datetime import datetime
 
 
 db = SQLAlchemy()
-ma = Marshmallow()
 
 
 class Company(db.Model):
@@ -23,18 +21,6 @@ class Company(db.Model):
         """
         self.company = company
         self.joined_at = joined_at
-
-
-class CompanySchema(ma.Schema):
-    class meta:
-        """
-        this will serialize the company model
-        """
-        fields = ("id", "company", "joined_at")
-
-
-company_schema = CompanySchema()
-companies_schema = CompanySchema(many=True)
 
 
 class User(db.Model):
@@ -60,18 +46,6 @@ class User(db.Model):
         self.role = role
 
 
-class UserSchema(ma.Schema):
-    class meta:
-        """
-        this will serialize the user schema
-        """
-        fields = ("id", "firstname", "email", "companyId", "role")
-
-
-user_schema = UserSchema()
-users_schema = UserSchema(many=True)
-
-
 class Project(db.Model):
     """
     this creates the project model
@@ -92,18 +66,6 @@ class Project(db.Model):
         self.date_to = date_to
 
 
-class ProjectSchema(ma.Schema):
-    class meta:
-        """
-        this will serialize the project model
-        """
-        fields = ("id", "project_name", "companyId", "date_from", "date_to")
-
-
-project_schema = ProjectSchema()
-projects_schema = ProjectSchema(many=True)
-
-
 class Budget(db.Model):
     """
     this creates the  budget model
@@ -120,18 +82,6 @@ class Budget(db.Model):
         self.companyId = companyId
         self.projectId = projectId
         self.amount = amount
-
-
-class BudgetSchema(ma.Schema):
-    class meta:
-        """
-        this will serialize the budget model
-        """
-        fields = ("id", "companyId", "projectId", "amount")
-
-
-budget_schema = BudgetSchema()
-budgets_schema = BudgetSchema(many=True)
 
 
 class Employees(db.Model):
@@ -152,21 +102,6 @@ class Employees(db.Model):
         self.email = email
         self.companyId = companyId
         self.projectId = projectId
-
-
-class EmployeesSchema(ma.Schema):
-    class meta:
-        """
-        serialize the employees model
-        """
-        fields = (
-            "id", "firstname", "lastname", "email", "companyId",
-            "projectId"
-            )
-
-
-employee_schema = EmployeesSchema()
-employees_schema = EmployeesSchema(many=True)
 
 
 class Files(db.Model):
@@ -212,28 +147,3 @@ class Files(db.Model):
         self.date_authorized = date_authorized
         self.status = status
         self.url = url
-
-
-class FilesSchema(ma.Schema):
-    class meta:
-        """
-        serialize the files model
-        """
-        fields = (
-            "id",
-            "file_name",
-            "companyId",
-            "projectId",
-            "created_by",
-            "date_created",
-            "reviewed_by",
-            "date_reviewed",
-            "authorized_by",
-            "date_authorized",
-            "status",
-            "url"
-        )
-
-
-files_schema = FilesSchema(many=True)
-file_schema = FilesSchema()
