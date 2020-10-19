@@ -5,6 +5,7 @@ from flask import request, abort, render_template, jsonify
 from app.api import rms
 from app.api.model.models import db, User, Employees, Company,\
     Files, Budget, Project
+from app.api.model.models import company_schema, companies_schema
 from app.api.utils import check_for_whitespace, isValidEmail,\
     isValidPassword, token_required, send_mail, check_model_return,\
     custom_make_response
@@ -31,10 +32,10 @@ def signup_intent():
     except Exception:
         abort(
             custom_make_response(
-                "error", "keys should be 'firstname','email','company'", 400)
+                "error", "One or more mandatory fields has not been filled!", 400)
         )
     # check data for sanity
-    check_for_whitespace(data, ['firsname', 'email', 'company'])
+    check_for_whitespace(data, ['firstname', 'email', 'company'])
     isValidEmail(email)
     # check if the company is already registered
     if Company.query.filter_by(company=data['company']).first():
@@ -46,6 +47,7 @@ def signup_intent():
     token = jwt.encode(
         {
             "email": email,
+            "company": company,
             'exp': datetime.datetime.utcnow() +
             datetime.timedelta(minutes=1800)
         },
@@ -71,13 +73,60 @@ def signup_intent():
     RMS Admin.
     """
     send_mail(email, subject, content)
-    new_company = Company(company, joined_at=datetime.datetime.utcnow())
+    new_company = Company(company=company, joined_at=datetime.datetime.now())
+    print(new_company)
     db.session.add(new_company)
     db.session.commit()
-    return custom_make_response(
-        "data", [{
-            "Company": company,
-            "email": email,
-            "message": "Please check your email to complete registration."
-        }], 200
-    )
+    print(new_company)
+    return company_schema.jsonify(new_company)
+    # return custom_make_response(
+    #     "data", [{
+    #         "Company": company,
+    #         "email": email,
+    #         "message": "Please check your email to complete registration."
+    #     }], 200
+    # )
+
+
+# @rms.route('/signup', methods=['POST'])
+# def signup_system_users():
+#     """
+#     this handles registration of the system
+#     users for a particular company
+#     """
+#     try:
+#         data = request.get_json()
+#         firstname = data["firstname"]
+#         email = data["email"]
+#         password = data["password"]
+#         # company name comes from the user token
+#         # but the user registration we need
+#         # companyId so after getting company name
+#         # we need to pull companyId from the db &
+#         # use that to register the user
+#         company = data["company"]
+#         # companyId = 
+#         role = data["role"]
+#         isActive = data["isActive"]
+#     except Exception:
+#         abort(
+#             custom_make_response(
+#                 "error",
+#                 "One or more mandatory fields has not been filled!", 400)
+#         )
+#     # check data for sanity
+#     check_for_whitespace(data, ['firstname', 'email', 'company'])
+#     isValidEmail(email)
+
+
+@rms.route('/companies', methods=['GET'])
+def get_companies():
+    """
+    get all companies that are registered
+    at any onetime 
+    also test to see whether marshmallow 
+    integration works.
+    """
+    all_companies = Company.query.all()
+    print(all_companies)
+    return companies_schema.dump(all_companies)
