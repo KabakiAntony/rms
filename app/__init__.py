@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_migrate import Migrate
 from app.api.view.company import rms as company_blueprint
+from app.api.view.user import rms as user_blueprint
 
 
 migrate = Migrate()
@@ -18,5 +19,6 @@ def create_app():
     ma.init_app(app)
     migrate.init_app(app, db)
     app.register_blueprint(company_blueprint)
+    app.register_blueprint(user_blueprint)
 
     return app
