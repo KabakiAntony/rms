@@ -9,7 +9,7 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 from functools import wraps
 from flask import jsonify, make_response, abort, request
-from app.api.model.models import User
+from app.api.model.company import Company, company_schema
 
 
 KEY = os.getenv('SECRET_KEY')
@@ -115,10 +115,11 @@ def send_mail(user_email, the_subject, the_content):
                      {e}", 401)
 
 
-def token_required(f):
+def company_token_required(f):
     """
-    ensure a token is supplied to reach certain routes
-    and also verify that the token supplied is valid
+    this token is only supplied for new registration
+    of a company, and is to enable the admin user 
+    to register.
     """
     @wraps(f)
     def decorated(*args, **kwargs):
@@ -131,11 +132,12 @@ def token_required(f):
             return custom_make_response("error", "token is missing", 401)
         try:
             data = jwt.decode(token, KEY, algorithm="HS256")
-            # get the user that is logged in by email
-            current_user = User.query\
-                .filter_by(email=data['email']).first()
+            # return the company info from the sign up token
+            current_company = Company.query\
+                .filter_by(company=data['company']).first()
+            _company = company_schema.dump(current_company)
         except Exception as e:
             return custom_make_response(
                 "error", f"{e} token is expired or invalid", 401)
-        return f(current_user, *args, **kwargs)
+        return f(_company, *args, **kwargs)
     return decorated
