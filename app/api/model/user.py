@@ -2,7 +2,8 @@
 this will create the user model(table)
 and its serialization.
 """
-from app.api.model.models import db
+from app.api.model.models import db, ma
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class User(db.Model):
@@ -19,10 +20,29 @@ class User(db.Model):
     role = db.Column(db.String(25), nullable=False)
     isActive = db.Column(db.String(25), default='False', nullable=False)
 
-    def __init__(self, firstname, email, password, role, companyId):
+    def __init__(self, firstname, email, password, role, companyId, isActive):
         """initilize user db values"""
         self.firstname = firstname
         self.email = email
-        self.password = password
+        self.password = self.hash_password(password)
         self.companyId = companyId
         self.role = role
+        self.isActive = isActive
+
+    def hash_password(self, password):
+        """create a password hash for storage"""
+        password_hash = generate_password_hash(str(password))
+        return password_hash
+
+    def compare_password(hashed_password, password):
+        """compare a plain password with its stored hash"""
+        return check_password_hash(hashed_password, str(password))
+
+
+class UserSchema(ma.Schema):
+    class Meta:
+        fields = ("id", "firstname", "email", "companyId", "role", "isActive")
+
+
+user_schema = UserSchema()
+users_schema = UserSchema(many=True)
