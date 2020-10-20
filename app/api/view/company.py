@@ -16,7 +16,7 @@ signup_url = os.getenv('SIGNUP_URL')
 
 
 @rms.route('/intent', methods=['POST'])
-def signup_intent():
+def company_signup_intent():
     """
     send a sign up link on the email to
     would be customers
