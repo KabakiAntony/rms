@@ -20,5 +20,7 @@ def create_app():
     migrate.init_app(app, db)
     app.register_blueprint(company_blueprint)
     app.register_blueprint(user_blueprint)
+    from app.api.model.user import login_manager
+    login_manager.init_app(app)
 
     return app
