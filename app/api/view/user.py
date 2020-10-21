@@ -8,7 +8,10 @@ from app.api import rms
 from app.api.model.models import db
 from app.api.model.user import user_schema, users_schema, User
 from app.api.model.company import Company, company_schema
-from flask import request, abort, render_template
+from flask import request, abort, render_template, redirect,\
+    url_for
+from flask_login import current_user, login_user, logout_user,\
+    login_required
 from app.api.utils import check_for_whitespace, isValidEmail,\
      send_mail, custom_make_response, company_token_required,\
      isValidPassword
@@ -82,6 +85,7 @@ def signup_admin_user():
 # this route is accessible to the admin
 # when they are logged in
 @rms.route('/auth/admin/create', methods=['POST'])
+@login_required
 def create_other_users():
     """
     here the admin creates the other
@@ -145,3 +149,66 @@ def load_signup_ui(company):
         title="Sign Up",
         company=_company,
     )
+
+
+@rms.route('/auth/signin', methods=['POST'])
+def signin_all_users():
+    """
+    this signs in all users
+    """
+    if current_user.is_authenticated:
+        return redirect(url_for('/'))
+    try:
+        user_data = request.get_json()
+        email = user_data['email']
+        password = user_data['password']
+    except Exception as e:
+        abort(custom_make_response(
+            "error",
+            f"{e} one or more mandatory fields was not filled!",
+            400
+        ))
+    # check data for sanity incase it bypass js on the frontend
+    check_for_whitespace(user_data, ['email', 'password'])
+    isValidEmail(email)
+    # check if user is already registered
+    user = User.query.filter_by(email=user_data['email']).first()
+    if not user:
+        abort(
+            custom_make_response(
+                "error",
+                "the user has not been found, please sign up to use system!",
+                404
+            )
+        )
+    _user = user_schema.dump(user)
+    print(_user)
+    _password_hash = _user['password']
+    if not User.compare_password(_password_hash, password):
+        abort(
+            custom_make_response(
+                "error",
+                "Invalid email and or password, please check and try again!",
+                401
+            )
+        )
+    login_user(user, remember=user_data)
+    return custom_make_response(
+        "data",
+        "login successful",
+        200
+    )
+
+
+@rms.route('/auth/signout', methods=['GET'])
+def signout_all_users():
+    """
+    this signs out all users
+    """
+    logout_user()
+    return custom_make_response(
+        "data",
+        "logged out successfully",
+        200
+    )
+    # return redirect(url_for('/fe/signin'))
