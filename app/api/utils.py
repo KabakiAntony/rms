@@ -118,7 +118,7 @@ def send_mail(user_email, the_subject, the_content):
 def company_token_required(f):
     """
     this token is only supplied for new registration
-    of a company, and is to enable the admin user 
+    of a company, and is to enable the admin user
     to register.
     """
     @wraps(f)
