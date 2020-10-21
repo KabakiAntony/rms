@@ -60,7 +60,7 @@ def company_signup_intent():
     <br/>
     We are grateful to have you.<br/>
     Please click on sign up below to register your personal
-    information to start using the system.Kindly note this
+    information to start using the system.<br/>Kindly note this
     link will only be available for three hours.
     <br/>
     <br/>
