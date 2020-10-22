@@ -132,7 +132,7 @@ def create_other_users():
     return custom_make_response(
         "data",
         user_schema.dump(new_user),
-        200
+        201
     )
 
 
