@@ -1,7 +1,12 @@
+"""
+this is my application
+factory
+"""
 from flask import Flask
 from flask_migrate import Migrate
 from app.api.view.company import rms as company_blueprint
 from app.api.view.user import rms as user_blueprint
+from app.api.view.ui import rms as ui_blueprint
 
 
 migrate = Migrate()
@@ -20,6 +25,7 @@ def create_app():
     migrate.init_app(app, db)
     app.register_blueprint(company_blueprint)
     app.register_blueprint(user_blueprint)
+    app.register_blueprint(ui_blueprint)
     from app.api.model.user import login_manager
     login_manager.init_app(app)
 
