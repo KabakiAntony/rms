@@ -33,7 +33,7 @@ def check_model_return(returned):
     and assigns it a better message for the user
     """
     if not returned:
-        message = "no data was found!"
+        message = "the resource you are looking for was not found!"
         status = 404
         response = custom_make_response("error", message, status)
     else:
@@ -138,6 +138,6 @@ def company_token_required(f):
             _company = company_schema.dump(current_company)
         except Exception as e:
             return custom_make_response(
-                "error", f"{e} token is expired or invalid", 401)
+                "error", f"Token {e}", 401)
         return f(_company, *args, **kwargs)
     return decorated
