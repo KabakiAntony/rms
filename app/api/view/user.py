@@ -6,10 +6,9 @@ import jwt
 import datetime
 from app.api import rms
 from app.api.model.models import db
+from flask import request, abort, url_for, redirect
 from app.api.model.user import user_schema, users_schema, User
 from app.api.model.company import Company, company_schema
-from flask import request, abort, render_template, redirect,\
-    url_for
 from flask_login import current_user, login_user, logout_user,\
     login_required
 from app.api.utils import check_for_whitespace, isValidEmail,\
@@ -78,7 +77,7 @@ def signup_admin_user():
     return custom_make_response(
         "data",
         user_schema.dump(new_admin_user),
-        200
+        201
     )
 
 
@@ -137,27 +136,13 @@ def create_other_users():
     )
 
 
-@rms.route('/admin/fe/signup', methods=['GET'])
-@company_token_required
-def load_signup_ui(company):
-    """
-    load the ui user for admin signup
-    """
-    _company = company['company']
-    return render_template(
-        'signup.html',
-        title="Sign Up",
-        company=_company,
-    )
-
-
 @rms.route('/auth/signin', methods=['POST'])
 def signin_all_users():
     """
     this signs in all users
     """
     if current_user.is_authenticated:
-        return redirect(url_for('/'))
+        return redirect(url_for('rms.load_welcome_ui'))
     try:
         user_data = request.get_json()
         email = user_data['email']
@@ -198,17 +183,3 @@ def signin_all_users():
         "login successful",
         200
     )
-
-
-@rms.route('/auth/signout', methods=['GET'])
-def signout_all_users():
-    """
-    this signs out all users
-    """
-    logout_user()
-    return custom_make_response(
-        "data",
-        "logged out successfully",
-        200
-    )
-    # return redirect(url_for('/fe/signin'))
