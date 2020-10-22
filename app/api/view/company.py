@@ -77,7 +77,7 @@ def company_signup_intent():
     return custom_make_response(
         "data",
         company_schema.dump(new_company),
-        200
+        201
     )
 
 
