@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+   <!-- whatever the user sees when they sign in go in here 
+   so it is some sort of their profile and 
+   all the actions they are authorized to do they 
+   initiate from this page here
+   for now you can just type /fe/username and get here( testing phase)
+   but since this is a locked system we need to login to access 
+   this page  -->
+    <h1>Welcome: {{ user.username }}</h1>
+{% endblock %}
