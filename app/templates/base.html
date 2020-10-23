@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="description" content="This is rekuisition management system">
+  <meta name="Keywords" content="rekuisition management, register your company here">
+  <meta name="author" content="kabaki.antony@gmail.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+  <!-- <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/gif" sizes="48x48">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  <script defer src="{{ url_for('static', filename='js/signin.js')}}"></script> -->
+  {% if title %}
+    <title>RMS : {{ title }} </title>
+    {% else %}
+    <title>RMS</title>
+    {% endif %}
+</head>
+<body>
+    <!-- <hr> -->
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}   
+</body >
+</html>
