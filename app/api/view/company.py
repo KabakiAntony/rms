@@ -8,6 +8,7 @@ from app.api.model.company import Company, company_schema,\
 from flask import request, abort
 from app.api.utils import check_for_whitespace, isValidEmail,\
      send_mail, custom_make_response
+from flask_login import login_required
 
 
 # getting environment variables
@@ -23,7 +24,7 @@ def company_signup_intent():
     """
     try:
         data = request.get_json()
-        firstname = data["firstname"]
+        username = data["username"]
         email = data["email"]
         company = data["company"]
     except Exception:
@@ -33,9 +34,11 @@ def company_signup_intent():
                 "One or more mandatory fields has not been filled!", 400)
         )
     # check data for sanity
-    check_for_whitespace(data, ['firstname', 'email', 'company'])
+    check_for_whitespace(data, ['username', 'email', 'company'])
     isValidEmail(email)
     # check if the company is already registered
+    # the feedback message when a company is already
+    # registered needs refining
     if Company.query.filter_by(company=data['company']).first():
         abort(
             custom_make_response(
@@ -47,7 +50,7 @@ def company_signup_intent():
             "email": email,
             "company": company,
             'exp': datetime.datetime.now() +
-            datetime.timedelta(minutes=1800)
+            datetime.timedelta(minutes=180)
         },
         KEY,
         algorithm='HS256'
@@ -55,7 +58,7 @@ def company_signup_intent():
     # send signup intent email
     subject = f"""Thank you for registering {company}."""
     content = f"""
-    Welcome {firstname},
+    Welcome {username},
     <br/>
     <br/>
     We are grateful to have you.<br/>
@@ -82,6 +85,11 @@ def company_signup_intent():
 
 
 @rms.route('/company', methods=['GET'])
+# login is turned for now for testing purposes
+# but I will definately turn it on for we only
+# need the site administrator to access this
+# information.
+# @login_required
 def get_companies():
     """
     get all companies that are registered
