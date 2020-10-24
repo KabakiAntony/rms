@@ -16,16 +16,16 @@ class User(UserMixin, db.Model):
     __tablename__ = "Users"
 
     id = db.Column(db.Integer, primary_key=True)
-    firstname = db.Column(db.String(64), index=True, unique=False)
+    username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True, nullable=False)
     password = db.Column(db.String(128), nullable=False)
     companyId = db.Column(db.Integer, db.ForeignKey('Company.id'))
     role = db.Column(db.String(25), nullable=False)
     isActive = db.Column(db.String(25), default='False', nullable=False)
 
-    def __init__(self, firstname, email, password, role, companyId, isActive):
+    def __init__(self, username, email, password, role, companyId, isActive):
         """initilize user db values"""
-        self.firstname = firstname
+        self.username = username
         self.email = email
         self.password = self.hash_password(password)
         self.companyId = companyId
@@ -46,7 +46,7 @@ class UserSchema(ma.Schema):
     class Meta:
         fields = (
             "id",
-            "firstname",
+            "username",
             "password",
             "email",
             "companyId",
