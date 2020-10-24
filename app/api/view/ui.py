@@ -8,7 +8,8 @@ fe - conotes frontend
 from app.api import rms
 from app.api.utils import company_token_required
 from flask import render_template, flash, redirect, url_for
-from flask_login import logout_user
+from flask_login import logout_user, login_required
+from app.api.model.user import User
 
 
 @rms.route('/Welcome')
@@ -40,6 +41,21 @@ def load_signin_ui():
     load the sign in page
     """
     return render_template("signin.html", title="Sign In")
+
+
+@rms.route('/fe/<username>', methods=['GET'])
+# @login_required
+def load_profile_ui(username):
+    """
+    load the logged in profile ui
+    """
+    user = User.query.filter_by(username=username).first()
+    print(user)
+    return render_template(
+        'profile.html',
+        title="Profile",
+        user=user
+    )
 
 
 @rms.route('/fe/signout', methods=['GET'])
