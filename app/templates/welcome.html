@@ -1,11 +1,55 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RMS : {{ title }}</title>
-</head>
-<body>
-    <h1>Welcome to RMS</h1>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+    <div id="container">
+        <header>
+            <nav>
+                <div class="header">
+                    <a href="/" class="logo">RMS</a>
+                    <div class="header-right">
+                        <a href="/fe/signin" id="sign-in" class="sign-in">Sign In</a>
+                        <a href="/fe/contact">Contact Us</a>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <div id="section-wrapper" class="index-wrapper">
+            <h1>Welcome to RMS, we are happy to have you here</h1>
+            <div class="flex-container">
+                <div class="left-text-card">
+                    <p class="top-text">RMS  is a Requisition Management System</p>
+                    <p>Manage all your projects from creating a project,
+                        budgeting for it, managing the people working on the projects, 
+                        get to know all the over heads for the project,get to know even 
+                        when you overrun your budget.</p>
+                    <p>Really this is project management all under one roof , 
+                        see for yourself, all you need to get started is register 
+                        your company with us by just filling up the small form on the side 
+                        and the company admin will receive an email with the finer details and 
+                        you will be one step closer using our product.</p>
+                </div>
+                <div class="right-form-card">
+                    <div id="form-container">
+                        <h2 class="form-header">Sign up here.</h2>
+                        <form  class="form" id="upForm" method="POST">
+                            <div class="error" id="up-error-company"></div>
+                            <label >Company</label>
+                            <input type="text" class="input" id="company" name="company" required>
+                            <label >Admin username</label>
+                            <input  type="text" class="input" name ="username" id="username" required>
+                            <div class="error" id="up-error-email"></div>
+                            <label >Admin email</label>
+                            <input type="email" class="input" id="upEmail" name="upEmail" required>
+                            <input type="submit" id="submit" class="submit" value="Sign Up">
+                            <div class="text-center">Already have an account? <a href="/fe/signin" id="bottom-sign-in">Sign In</a></div>
+                       </form>
+                      </div>            
+                </div>
+            </div>
+        </div>
+        <footer>
+            <p>&copy; RMS 2020&nbsp;&nbsp;<a href="https://twitter.com/kabakikiarie">Find RMS Admin Here.</a></p>
+          </footer>
+          <div id="hack">.</div>
+    </div>
+{% endblock %}
