@@ -6,7 +6,7 @@ import jwt
 import datetime
 from app.api import rms
 from app.api.model.models import db
-from flask import request, abort, url_for, redirect
+from flask import request, abort, url_for, redirect, flash
 from app.api.model.user import user_schema, users_schema, User
 from app.api.model.company import Company, company_schema
 from flask_login import current_user, login_user, logout_user,\
@@ -40,7 +40,7 @@ def signup_admin_user():
             .filter_by(company=admin_data['company']).first()
         _company = company_schema.dump(this_company)
         companyId = _company['id']
-        firstname = admin_data['firstname']
+        username = admin_data['username']
         email = admin_data['email']
         password = admin_data['password']
     except Exception as e:
@@ -52,7 +52,7 @@ def signup_admin_user():
     # check data for sanity incase it bypass js on the frontend
     check_for_whitespace(
         admin_data,
-        ['companyId', 'firstname', 'email', 'password']
+        ['companyId', 'username', 'email', 'password']
     )
     isValidEmail(email)
     # check if user is already registered
@@ -65,7 +65,7 @@ def signup_admin_user():
         )
     isValidPassword(password)
     new_admin_user = User(
-        firstname=firstname,
+        username=username,
         email=email,
         password=password,
         companyId=companyId,
@@ -90,10 +90,17 @@ def create_other_users():
     here the admin creates the other
     system users.
     """
+    # user = current_user
+    # print(user)
+    # we need to determine if the person
+    # who is logged in is the administrator
+    # for the particular company so that we
+    # can allow them to create users for the system
+
     try:
         user_data = request.get_json()
         companyId = user_data['companyId']
-        firstname = user_data['firstname']
+        username = user_data['username']
         email = user_data['email']
         password = user_data['password']
         role = user_data['role']
@@ -106,7 +113,7 @@ def create_other_users():
     # check data for sanity incase it bypass js on the frontend
     check_for_whitespace(
         user_data,
-        ['companyId', 'firstname', 'email', 'password', 'role', 'isActive']
+        ['companyId', 'username', 'email', 'password', 'role', 'isActive']
     )
     isValidEmail(email)
     # check if user is already registered
@@ -120,7 +127,7 @@ def create_other_users():
         )
     isValidPassword(password)
     new_user = User(
-        firstname=firstname,
+        username=username,
         email=email,
         password=password,
         companyId=companyId,
@@ -142,7 +149,10 @@ def signin_all_users():
     this signs in all users
     """
     if current_user.is_authenticated:
-        return redirect(url_for('rms.load_welcome_ui'))
+        _curr_user = user_schema.dump(current_user)
+        redirect(
+            url_for("rms.load_profile_ui", username=_curr_user['username'])
+        )
     try:
         user_data = request.get_json()
         email = user_data['email']
@@ -150,7 +160,7 @@ def signin_all_users():
     except Exception as e:
         abort(custom_make_response(
             "error",
-            f"{e} one or more mandatory fields was not filled!",
+            f"{e} One or more mandatory fields was not filled!",
             400
         ))
     # check data for sanity incase it bypass js on the frontend
@@ -162,24 +172,24 @@ def signin_all_users():
         abort(
             custom_make_response(
                 "error",
-                "the user has not been found, please sign up to use system!",
+                "User not found, Please sign up to use system!",
                 404
             )
         )
     _user = user_schema.dump(user)
-    print(_user)
     _password_hash = _user['password']
     if not User.compare_password(_password_hash, password):
         abort(
             custom_make_response(
                 "error",
-                "Invalid email and or password, please check and try again!",
+                "Wrong email and or password, Please check and try again!",
                 401
             )
         )
     login_user(user, remember=user_data)
-    return custom_make_response(
-        "data",
-        "login successful",
-        200
-    )
+    # there are two ways we can handle successful login
+    # on the backend where we can just redirect the user
+    # or return a 200 with a success message and let the js
+    # on the frontend handle the redirects
+    flash("Signed in successfully, Welcome")
+    return redirect(url_for("rms.load_profile_ui", username=_user['username']))
