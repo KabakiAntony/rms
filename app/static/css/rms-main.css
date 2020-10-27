@@ -74,8 +74,9 @@ html,body{
     background-color: rgba(239, 239, 241, 0.924);
   }
   .left-text-card p{
-    color:rgb(214, 0, 160);
+    /* color:rgb(214, 0, 160); */
     font-size: 100%;
+    color: #0d1113;
   }
   .top-text{
 
