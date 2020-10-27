@@ -3,6 +3,7 @@ this is my application
 factory
 """
 from flask import Flask
+from config import Config
 from flask_migrate import Migrate
 from app.api.view.company import rms as company_blueprint
 from app.api.view.user import rms as user_blueprint
@@ -28,5 +29,6 @@ def create_app():
     app.register_blueprint(ui_blueprint)
     from app.api.model.user import login_manager
     login_manager.init_app(app)
+    app.app_context().push()
 
     return app
