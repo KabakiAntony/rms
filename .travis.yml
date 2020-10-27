@@ -1,13 +1,8 @@
 language: python
-
 python:
    - "3.7"
-
-os: 
-  - "linux"
-
+os: Linux
 dist:
-  - "bionic"
   - "xenial"
 # command to install dependencies
 install:
