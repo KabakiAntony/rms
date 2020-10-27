@@ -8,11 +8,11 @@ from app.api.model.company import Company, company_schema,\
 from flask import request, abort
 from app.api.utils import check_for_whitespace, isValidEmail,\
      send_mail, custom_make_response
-from flask_login import login_required
+# from flask_login import login_required
 
 
 # getting environment variables
-KEY = os.getenv('SECRET_KEY')
+KEY = os.environ.get('SECRET_KEY')
 signup_url = os.getenv('SIGNUP_URL')
 
 
