@@ -110,7 +110,7 @@ class TestUser(RmsBaseTest):
             data=json.dumps(self._user_with_missing_fields),
             content_type='application/json'
         )
-        self.assertEquals(response.status_code, 400)
+        self.assertEqual(response.status_code, 400)
 
     def test_signup_an_already_existing_user(self):
         """test signing up and already existing user"""
