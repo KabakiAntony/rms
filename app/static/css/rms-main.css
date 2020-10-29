@@ -74,7 +74,6 @@ html,body{
     background-color: rgba(239, 239, 241, 0.924);
   }
   .left-text-card p{
-    /* color:rgb(214, 0, 160); */
     font-size: 100%;
     color: #0d1113;
   }
@@ -98,8 +97,6 @@ html,body{
   font-weight: 500;
   overflow: hidden;
   margin:0 auto;
-  /* margin-bottom: 30px;
-  margin-top: 30px; */
   position: relative;
 }
 .form{
@@ -188,6 +185,50 @@ footer
   footer a:hover {
     text-decoration: underline;
   }
+  /* successful signup toast */
+#signup-success {
+  visibility: hidden;
+  width:40%;
+  left:30%;
+  background-color: rgb(73, 173, 53);
+  color: rgb(19, 18, 18);
+  text-align:center;
+  border-radius: 5px;
+  padding: 15px;
+  position: fixed; 
+  z-index: 1;
+  top: 150px;
+  font-size: 120%;
+  font-weight: 500;
+}
+
+#signup-success.show {
+  visibility: visible;
+  -webkit-animation: fadein 0.5s;
+  animation: fadein 0.5s;
+}
+span{
+  color:rgb(15, 15, 15);
+}
+@-webkit-keyframes fadein {
+  from {top: 0; opacity: 0;} 
+  to {top: 150px; opacity: 1;}
+}
+
+@keyframes fadein {
+  from {top: 0; opacity: 0;}
+  to {top: 150px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+  from {top: 150px; opacity: 1;} 
+  to {top: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+  from {top: 150px; opacity: 1;}
+  to {top: 0; opacity: 0;}
+}
 
 
 
