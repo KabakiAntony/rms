@@ -77,6 +77,9 @@ html,body{
     font-size: 100%;
     color: #0d1113;
   }
+  .sign-in-form{
+    margin:0 auto;
+  }
   .top-text{
 
     font-size: larger;
@@ -142,7 +145,7 @@ color:rgb(255, 255, 255);
 margin-bottom: 10px;
 display: inline-block;
 width:100%;
-font-size: 100%;
+font-size: 120%;
 }
 .text-center{
   text-align: center;
@@ -198,7 +201,7 @@ footer
   position: fixed; 
   z-index: 1;
   top: 150px;
-  font-size: 120%;
+  font-size: 100%;
   font-weight: 500;
 }
 
