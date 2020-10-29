@@ -37,10 +37,10 @@ fetch('/intent',{
         inputReset();
       }
       else if(status === 400){
-        document.getElementById('up-error-email').innerHTML = `${error}`;
+        document.getElementById('up-error-company').innerHTML = `${error}`;
       }
       else if(status === 409){
-        document.getElementById('up-error-email').innerHTML = `${error}`;
+        document.getElementById('up-error-company').innerHTML = `${error}`;
       }
   })
   .catch(err => console.log(`This error occured :${err}`));
@@ -61,7 +61,8 @@ function validateData(){
 function callToast(company) {
     let snackbar = document.getElementById("signup-success");
     snackbar.innerHTML = `
-    ${company} registered successfully.
+    ${company} registered successfully ,<br/>
+    see admin email for further instructions.
     `
     snackbar.className = "show";
     setTimeout(function(){ snackbar.className = snackbar.className.replace("show", "");
