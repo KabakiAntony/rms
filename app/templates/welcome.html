@@ -1,6 +1,23 @@
-{% extends "base.html" %}
-
-{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="description" content="This is rekuisition management system">
+  <meta name="Keywords" content="rekuisition management, register your company here">
+  <meta name="author" content="kabaki.antony@gmail.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+  <!-- <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/gif" sizes="48x48"> -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/rms-main.css') }}">
+  <script defer src="{{ url_for('static', filename='js/intent.js')}}"></script>
+  {% if title %}
+    <title> RMS  {{ title }} </title>
+    {% else %}
+    <title>RMS</title>
+    {% endif %}
+</head>
+<body>
     <div id="container">
         <header>
             <nav>
@@ -30,12 +47,11 @@
                 </div>
                 <div class="right-form-card">
                     <div id="form-container">
-                        <h2 class="form-header">Sign up here.</h2>
+                        <h2 class="form-header">Sign up here</h2>
                         <form  class="form" id="upForm" method="POST">
                             <div class="error" id="up-error-company"></div>
                             <label >Company</label>
                             <input type="text" class="input" id="upCompany" name="upCompany" required>
-                            <div class="error" id="up-error-username"></div>
                             <label >Admin username</label>
                             <input  type="text" class="input" name ="upUsername" id="upUsername" required>
                             <div class="error" id="up-error-email"></div>
@@ -54,4 +70,5 @@
           </footer>
           <div id="hack">.</div>
     </div>
-{% endblock %}
+</body >
+</html>
