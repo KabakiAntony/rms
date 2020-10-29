@@ -1,12 +1,61 @@
-{% extends "base.html" %}
-
-{% block content %}
-   <!-- whatever the user sees when they sign in go in here 
-   so it is some sort of their profile and 
-   all the actions they are authorized to do they 
-   initiate from this page here
-   for now you can just type /fe/username and get here( testing phase)
-   but since this is a locked system we need to login to access 
-   this page  -->
-    <h1>Welcome: {{ user.username }}</h1>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="description" content="This is rekuisition management system">
+  <meta name="Keywords" content="rekuisition management, register your company here">
+  <meta name="author" content="kabaki.antony@gmail.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+  <!-- <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/gif" sizes="48x48"> -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/rms-main.css') }}">
+  <!-- <script defer src="{{ url_for('static', filename='js/signin.js')}}"></script> -->
+  {% if title %}
+    <title> RMS  {{ title }} </title>
+    {% else %}
+    <title>RMS</title>
+    {% endif %}
+</head>
+<body>
+    <div id="container">
+        <header>
+            <nav>
+                <div class="header">
+                    <a href="/" class="logo">RMS</a>
+                    <div class="header-right">
+                        <a href="/" id="sign-in" class="sign-in">Sign Up</a>
+                        <!-- <a href="/fe/contact">Contact Us</a> -->
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <div id="section-wrapper" class="index-wrapper">
+            <h1>Welcome: {{ user.username }}</h1>
+            <!-- <h1>Please sign in in here  to use the system</h1>
+            <div class="flex-container">
+                <div class="right-form-card   sign-in-form">
+                    <div id="form-container">
+                        <h2 class="form-header">Sign In here</h2>
+                        <form  class="form" id="inForm" method="POST">
+                            <div class="error" id="in-error-email"></div>
+                            <label >Email</label>
+                            <input type="email" class="input" id="inEmail" name="inEmail" required>
+                            <div class="error" id="in-error-password"></div>
+                            <label >Password</label>
+                            <input  type="password" class="input" name ="inPassword" id="inPassword" required>
+                            <input type="submit" id="submit" class="submit" value="Sign In">
+                            <div class="text-center">Not registered ? <a href="/" id="bottom-sign-in">Sign Up</a></div>
+                       </form>
+                      </div>            
+                </div>
+            </div> -->
+        </div>
+        <div id="signup-success"></div>
+        <footer>
+            <p>&copy; RMS 2020&nbsp;&nbsp;<a href="https://twitter.com/kabakikiarie">Find RMS Admin Here</a></p>
+          </footer>
+          <div id="hack">.</div>
+    </div>
+</body>
+</html>
