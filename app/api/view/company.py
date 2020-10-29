@@ -77,10 +77,6 @@ def company_signup_intent():
     new_company = Company(company=company, joined_at=datetime.datetime.now())
     db.session.add(new_company)
     db.session.commit()
-    flash(
-        f"{company}\
-        registered successfully, see email for further instructions."
-        )
     return custom_make_response(
         "data",
         company_schema.dump(new_company),
