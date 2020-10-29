@@ -45,7 +45,7 @@ class TestCompany(RmsBaseTest):
         """test getting all companies"""
         self.company_creation_post()
         response = self.client.get('/company')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 401)
 
     def test_creating_a_company_with_fields_missing(self):
         """test creating a company with missing fields"""
