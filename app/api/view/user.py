@@ -6,7 +6,7 @@ import jwt
 import datetime
 from app.api import rms
 from app.api.model.models import db
-from flask import request, abort, url_for, redirect, flash
+from flask import request, abort, url_for, redirect
 from app.api.model.user import user_schema, users_schema, User
 from app.api.model.company import Company, company_schema
 from flask_login import current_user, login_user, logout_user,\
@@ -187,9 +187,4 @@ def signin_all_users():
             )
         )
     login_user(user, remember=user_data)
-    # there are two ways we can handle successful login
-    # on the backend where we can just redirect the user
-    # or return a 200 with a success message and let the js
-    # on the frontend handle the redirects
-    flash("Signed in successfully, Welcome")
-    return redirect(url_for("rms.load_profile_ui", username=_user['username']))
+    return custom_make_response("data", "Signed in successfully", 200)

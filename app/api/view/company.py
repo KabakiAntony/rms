@@ -5,10 +5,10 @@ from app.api import rms
 from app.api.model.models import db
 from app.api.model.company import Company, company_schema,\
     companies_schema
-from flask import request, abort, flash
+from flask import request, abort
 from app.api.utils import check_for_whitespace, isValidEmail,\
      send_mail, custom_make_response
-# from flask_login import login_required
+from flask_login import login_required
 
 
 # getting environment variables
@@ -42,7 +42,10 @@ def company_signup_intent():
     if Company.query.filter_by(company=data['company']).first():
         abort(
             custom_make_response(
-                "error", "please check email for further instructions.", 409
+                "error",
+                "Company already registered,\
+                     contact your company administrator",
+                409
             )
         )
     token = jwt.encode(
@@ -89,7 +92,7 @@ def company_signup_intent():
 # but I will definately turn it on for we only
 # need the site administrator to access this
 # information.
-# @login_required
+@login_required
 def get_companies():
     """
     get all companies that are registered
