@@ -6,11 +6,10 @@ import jwt
 import datetime
 from app.api import rms
 from app.api.model.models import db
-from flask import request, abort, url_for, redirect, make_response
+from flask import request, abort, url_for, redirect,\
+     make_response, session
 from app.api.model.user import user_schema, users_schema, User
 from app.api.model.company import Company, company_schema
-from flask_login import current_user, login_user, logout_user,\
-    login_required
 from app.api.utils import check_for_whitespace, isValidEmail,\
      send_mail, custom_make_response, token_required,\
      isValidPassword
@@ -86,11 +85,6 @@ def signin_all_users():
     """
     this signs in all users
     """
-    # if current_user.is_authenticated:
-    #     _curr_user = user_schema.dump(current_user)
-    #     redirect(
-    #         url_for("rms.load_profile_ui", username=_curr_user['username'])
-    #     )
     try:
         user_data = request.get_json()
         email = user_data['email']
@@ -139,12 +133,31 @@ def signin_all_users():
         KEY,
         algorithm='HS256'
     )
-    resp = custom_make_response("data", "Signed successfully", 200)
+    # this creates a session for the user in the
+    # server so as to help us login and log out
+    session['username'] = _curr_user['username']
+    resp = custom_make_response("data", "Signed in successfully", 200)
     resp.set_cookie(
         "auth_token",
         token.decode('utf-8'),
         httponly=True,
         secure=True,
         expires=datetime.datetime.now() + datetime.timedelta(minutes=480)
+    )
+    return resp
+
+
+@rms.route('/auth/signout')
+@token_required
+def signout_all_users(user):
+    """sign out users """
+    session.pop('username', None)
+    resp = custom_make_response("data", "Signed out successfully.", 200)
+    resp.set_cookie(
+        "auth_token",
+        "session over",
+        httponly=True,
+        secure=True,
+        expires="Thu, 01 Jan 1970 00:00:00 GMT"
     )
     return resp
