@@ -123,11 +123,8 @@ def token_required(f):
     """
     @wraps(f)
     def decorated(*args, **kwargs):
-        # general_token = None
         user_token = None
         company_token = None
-        # if 'x-access-token' in request.headers:
-        #     general_token = request.headers['x-access-token']
         if (request.cookies.get('auth_token') or request.args.get('in')):
             user_token = request.cookies.get('auth_token')
             company_token = request.args.get('in')
