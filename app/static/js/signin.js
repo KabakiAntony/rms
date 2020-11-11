@@ -81,6 +81,7 @@ function postSignIn(signInData){
     if (status === 200){
         callToast(data);
         inputReset();
+        location.href='/fe/who'
     }
     else if (status === 401)
     {
@@ -98,11 +99,9 @@ function postSignIn(signInData){
 })
 .catch(err => console.log(err));
 }
-function callToast(message) {
+function callToast(msg) {
     let snackbar = document.getElementById("signup-success");
-    snackbar.innerHTML = `
-    ${message}, please hold as we take you to your profile.
-    `
+    snackbar.innerHTML = msg;
     snackbar.className = "show";
     setTimeout(function(){ snackbar.className = snackbar.className.replace("show", "");
     }, 3000);
