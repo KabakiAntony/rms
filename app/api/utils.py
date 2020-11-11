@@ -10,6 +10,7 @@ from sendgrid.helpers.mail import Mail
 from functools import wraps
 from flask import jsonify, make_response, abort, request
 from app.api.model.company import Company, company_schema
+from app.api.model.user import User, user_schema
 
 
 KEY = os.getenv('SECRET_KEY')
@@ -115,29 +116,36 @@ def send_mail(user_email, the_subject, the_content):
                      {e}", 401)
 
 
-def company_token_required(f):
+def token_required(f):
     """
-    this token is only supplied for new registration
-    of a company, and is to enable the admin user
-    to register.
+    this token is used to allow the user to access
+    certain routes
     """
     @wraps(f)
     def decorated(*args, **kwargs):
-        token = None
-        if 'x-access-token' in request.headers:
-            token = request.headers['x-access-token']
-        if request.args.get('in'):
-            token = request.args.get('in')
-        if not token:
+        # general_token = None
+        user_token = None
+        company_token = None
+        # if 'x-access-token' in request.headers:
+        #     general_token = request.headers['x-access-token']
+        if (request.cookies.get('auth_token') or request.args.get('in')):
+            user_token = request.cookies.get('auth_token')
+            company_token = request.args.get('in')
+        if not user_token or company_token:
             return custom_make_response("error", "token is missing", 401)
         try:
-            data = jwt.decode(token, KEY, algorithm="HS256")
-            # return the company info from the sign up token
-            current_company = Company.query\
-                .filter_by(company=data['company']).first()
-            _company = company_schema.dump(current_company)
+            if user_token:
+                data = jwt.decode(user_token, KEY, algorithm="HS256")
+                current_user = User.query\
+                    .filter_by(username=data['username']).first()
+                _user = user_schema.dump(current_user)
+            if company_token:
+                data = jwt.decode(company_token, KEY, algorithms="HS256")
+                current_company = Company.query\
+                    .filter_by(company=data['company']).first()
+                _company = company_schema.dump(current_company)
         except Exception as e:
             return custom_make_response(
                 "error", f"Token {e}", 401)
-        return f(_company, *args, **kwargs)
+        return f(_user or _company, *args, **kwargs)
     return decorated
