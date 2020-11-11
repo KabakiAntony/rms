@@ -2,14 +2,11 @@
 this will create the user model(table)
 and its serialization.
 """
-from flask_login import UserMixin, LoginManager
 from app.api.model.models import db, ma
 from werkzeug.security import generate_password_hash, check_password_hash
 
-login_manager = LoginManager()
 
-
-class User(UserMixin, db.Model):
+class User(db.Model):
     """
     this creates the system users model
     """
@@ -57,12 +54,3 @@ class UserSchema(ma.Schema):
 
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)
-
-
-@login_manager.user_loader
-def load_user(id):
-    """
-    load the user id for
-    session creation in flask-login
-    """
-    return User.query.get(int(id))

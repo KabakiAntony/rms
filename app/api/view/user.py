@@ -6,13 +6,13 @@ import jwt
 import datetime
 from app.api import rms
 from app.api.model.models import db
-from flask import request, abort, url_for, redirect
+from flask import request, abort, url_for, redirect, make_response
 from app.api.model.user import user_schema, users_schema, User
 from app.api.model.company import Company, company_schema
 from flask_login import current_user, login_user, logout_user,\
     login_required
 from app.api.utils import check_for_whitespace, isValidEmail,\
-     send_mail, custom_make_response, company_token_required,\
+     send_mail, custom_make_response, token_required,\
      isValidPassword
 
 
@@ -23,7 +23,7 @@ verification_url = os.getenv('VERIFY_EMAIL_URL')
 password_reset_url = os.getenv('PASSWORD_RESET_URL')
 
 
-@rms.route('/auth/admin/signup', methods=['POST'])
+@rms.route('/admin/signup', methods=['POST'])
 def signup_admin_user():
     """
     this method creates a company users admin
@@ -60,7 +60,7 @@ def signup_admin_user():
         abort(
             custom_make_response(
                 "error",
-                "The user is already registered please use another email!", 409
+                "User exists, please use another email!", 409
             )
         )
     isValidPassword(password)
@@ -81,78 +81,16 @@ def signup_admin_user():
     )
 
 
-# this route is accessible to the admin
-# when they are logged in
-@rms.route('/auth/admin/create', methods=['POST'])
-@login_required
-def create_other_users():
-    """
-    here the admin creates the other
-    system users.
-    """
-    # user = current_user
-    # print(user)
-    # we need to determine if the person
-    # who is logged in is the administrator
-    # for the particular company so that we
-    # can allow them to create users for the system
-
-    try:
-        user_data = request.get_json()
-        companyId = user_data['companyId']
-        username = user_data['username']
-        email = user_data['email']
-        password = user_data['password']
-        role = user_data['role']
-    except Exception as e:
-        abort(
-            custom_make_response(
-                "error",
-                f"{e} One or more mandatory fields has not been filled!", 400)
-        )
-    # check data for sanity incase it bypass js on the frontend
-    check_for_whitespace(
-        user_data,
-        ['companyId', 'username', 'email', 'password', 'role', 'isActive']
-    )
-    isValidEmail(email)
-    # check if user is already registered
-    if User.query.filter_by(email=user_data['email']).first():
-        abort(
-            custom_make_response(
-                "error",
-                "The user is already a system user please register another.",
-                409
-            )
-        )
-    isValidPassword(password)
-    new_user = User(
-        username=username,
-        email=email,
-        password=password,
-        companyId=companyId,
-        role=role,
-        isActive="True"
-    )
-    db.session.add(new_user)
-    db.session.commit()
-    return custom_make_response(
-        "data",
-        user_schema.dump(new_user),
-        201
-    )
-
-
 @rms.route('/auth/signin', methods=['POST'])
 def signin_all_users():
     """
     this signs in all users
     """
-    if current_user.is_authenticated:
-        _curr_user = user_schema.dump(current_user)
-        redirect(
-            url_for("rms.load_profile_ui", username=_curr_user['username'])
-        )
+    # if current_user.is_authenticated:
+    #     _curr_user = user_schema.dump(current_user)
+    #     redirect(
+    #         url_for("rms.load_profile_ui", username=_curr_user['username'])
+    #     )
     try:
         user_data = request.get_json()
         email = user_data['email']
@@ -182,9 +120,31 @@ def signin_all_users():
         abort(
             custom_make_response(
                 "error",
-                "Wrong email and or password, Please check and try again!",
+                "Incorrect email and or password!",
                 401
             )
         )
-    login_user(user, remember=user_data)
-    return custom_make_response("data", "Signed in successfully", 200)
+    # login_user(user, remember=user_data)
+    _curr_user = user_schema.dump(user)
+    # return redirect(
+    #         url_for("rms.load_profile_ui")
+    #     )
+    token = jwt.encode(
+        {
+            "username": _curr_user['username'],
+            "role": _curr_user['role'],
+            'exp': datetime.datetime.now() +
+            datetime.timedelta(minutes=480)
+        },
+        KEY,
+        algorithm='HS256'
+    )
+    resp = custom_make_response("data", "Signed successfully", 200)
+    resp.set_cookie(
+        "auth_token",
+        token.decode('utf-8'),
+        httponly=True,
+        secure=True,
+        expires=datetime.datetime.now() + datetime.timedelta(minutes=480)
+    )
+    return resp
