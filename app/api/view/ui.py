@@ -7,8 +7,7 @@ fe - conotes frontend
 """
 from app.api import rms
 from app.api.utils import token_required
-from flask import render_template, redirect, url_for, request
-# from app.api.model.user import User, user_schema
+from flask import render_template
 
 
 @rms.route('/Welcome')
@@ -53,14 +52,3 @@ def load_profile_ui(user):
         title="Profile",
         username=user['username']
     )
-
-
-# @rms.route('/fe/signout', methods=['GET'])
-# def signout_all_users():
-#     """
-#     sign out the current user and
-#     redirect them to the sign in
-#     page
-#     """
-#     logout_user()
-#     return redirect(url_for('rms.load_signin_ui'))
