@@ -7,8 +7,7 @@ from app.api.model.company import Company, company_schema,\
     companies_schema
 from flask import request, abort
 from app.api.utils import check_for_whitespace, isValidEmail,\
-     send_mail, custom_make_response
-from flask_login import login_required
+     send_mail, custom_make_response, token_required
 
 
 # getting environment variables
@@ -43,7 +42,7 @@ def company_signup_intent():
         abort(
             custom_make_response(
                 "error",
-                "Company already registered,\
+                "Company exists,\
                      contact your company administrator",
                 409
             )
@@ -87,17 +86,15 @@ def company_signup_intent():
     )
 
 
-@rms.route('/company', methods=['GET'])
-# login is turned for now for testing purposes
-# but I will definately turn it on for we only
-# need the site administrator to access this
-# information.
-@login_required
-def get_companies():
+@rms.route('/companies', methods=['GET'])
+@token_required
+def get_companies(user):
     """
     get all companies that are registered
     at any onetime
     """
+    # please not only the site admin
+    # should have access to this data
     all_companies = Company.query.all()
     return custom_make_response(
         "data",
