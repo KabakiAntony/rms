@@ -3,6 +3,8 @@ this is my application
 factory
 """
 from flask import Flask
+# this is to force config
+# to be loaded on startup
 from config import Config
 from flask_migrate import Migrate
 from app.api.view.company import rms as company_blueprint
@@ -27,8 +29,6 @@ def create_app():
     app.register_blueprint(company_blueprint)
     app.register_blueprint(user_blueprint)
     app.register_blueprint(ui_blueprint)
-    from app.api.model.user import login_manager
-    login_manager.init_app(app)
     app.app_context().push()
 
     return app
