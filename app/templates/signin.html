@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/rms-main.css') }}">
   <script defer src="{{ url_for('static', filename='js/signin.js')}}"></script>
   {% if title %}
-    <title> RMS  {{ title }} </title>
+    <title> RMS :: {{ title }} </title>
     {% else %}
     <title>RMS</title>
     {% endif %}
@@ -24,7 +24,7 @@
                 <div class="header">
                     <a href="/" class="logo">RMS</a>
                     <div class="header-right">
-                        <a href="/" id="sign-in" class="sign-in">Sign Up</a>
+                        <a href="/fe/signin" id="sign-in" class="sign-in">Sign Up</a>
                         <a href="/fe/contact">Contact Us</a>
                     </div>
                 </div>
