@@ -9,9 +9,6 @@ html,body{
     text-align: left;
     background-color: #fff;
     height: 100%;
-    /* background-image: url(../images/indexbg.jpg);
-    background-repeat: no-repeat;
-    background-size:cover; */
 }
 #container {
     width: 100%;
@@ -134,6 +131,12 @@ html,body{
   border: 2px solid rgba(2, 3, 8, 0.644);
   cursor: pointer;
 }
+.signout-button:hover{
+  background-color: white;
+  color: rgba(2, 3, 8, 0.644);
+  border: 1px solid rgba(2, 3, 8, 0.644);
+  cursor: pointer;
+}
 .submit{
 font-weight:bold;
 background-color: #0096D6;
@@ -147,6 +150,16 @@ display: inline-block;
 width:100%;
 font-size: 120%;
 }
+.signout-button{
+  font-weight: normal;
+  background-color: #464849da;
+  color:rgb(255, 255, 255);
+  border-radius:0.2rem;
+  text-decoration: none;
+  padding: 5px;
+  border: 1px solid rgb(5, 5, 5);
+}
+
 .text-center{
   text-align: center;
   margin-top: inherit;
