@@ -5,9 +5,14 @@ methods start as load_
 endpoints start as /fe/****
 fe - conotes frontend
 """
+import jwt
+import os
 from app.api import rms
 from app.api.utils import token_required
-from flask import render_template
+from flask import render_template, request
+
+
+KEY = os.getenv('SECRET_KEY')
 
 
 @rms.route('/Welcome')
@@ -26,10 +31,14 @@ def load_signup_ui(company):
     load the admin sign up page
     """
     _company = company['company']
+    admin_token = request.cookies.get('admin_token')
+    admin_data = jwt.decode(admin_token, KEY, algorithm="HS256")
     return render_template(
         'admin-signup.html',
-        title="Sign Up",
+        title="Admin Signup",
         company=_company,
+        email=admin_data['email'],
+        username=admin_data['username']
     )
 
 
