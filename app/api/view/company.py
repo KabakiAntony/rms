@@ -50,6 +50,7 @@ def company_signup_intent():
     token = jwt.encode(
         {
             "email": email,
+            "username": username,
             "company": company,
             'exp': datetime.datetime.now() +
             datetime.timedelta(minutes=180)
@@ -79,11 +80,19 @@ def company_signup_intent():
     new_company = Company(company=company, joined_at=datetime.datetime.now())
     db.session.add(new_company)
     db.session.commit()
-    return custom_make_response(
+    resp = custom_make_response(
         "data",
         company_schema.dump(new_company),
         201
     )
+    resp.set_cookie(
+        "admin_token",
+        token.decode('utf-8'),
+        httponly=True,
+        secure=True,
+        expires=datetime.datetime.now() + datetime.timedelta(minutes=180)
+    )
+    return resp
 
 
 @rms.route('/companies', methods=['GET'])
@@ -93,7 +102,7 @@ def get_companies(user):
     get all companies that are registered
     at any onetime
     """
-    # please not only the site admin
+    # please note only the site admin
     # should have access to this data
     all_companies = Company.query.all()
     return custom_make_response(
