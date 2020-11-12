@@ -26,8 +26,7 @@
                     <div class="header-right">
                         Hi {{ username }}&nbsp;&nbsp;
                         {% if session %}
-                        <!-- <a href="{{ url_for('rms.signout_all_users')}}">Sign Out</a> -->
-                        <input type="button" class="signout-button" id="signout-button" value="Sign Out">
+                        <input type="button" class="signout-button" id="signout-button" value="Sign out">
                         {% else %}
                         <a href="{{ url_for('rms.load_signin_ui')}}">Sign In</a>
                         {% endif %}

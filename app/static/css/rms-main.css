@@ -43,6 +43,11 @@ html,body{
     font-size: 2rem;
     font-weight: bold;
   }
+  .header a.username{
+    color:rgb(5, 5, 5);
+    font-weight: bold;
+    text-decoration: none;
+  }
   h1{
     text-align: center;
     color: rgb(64, 66, 60);
@@ -224,7 +229,7 @@ footer
   animation: fadein 0.5s;
 }
 span{
-  color:rgb(15, 15, 15);
+  color:rgb(214, 0, 160);
 }
 @-webkit-keyframes fadein {
   from {top: 0; opacity: 0;} 
