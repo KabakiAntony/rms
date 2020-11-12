@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
   <!-- <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/gif" sizes="48x48"> -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/rms-main.css') }}">
-  <!-- <script defer src="{{ url_for('static', filename='js/signin.js')}}"></script> -->
+  <script defer src="{{ url_for('static', filename='js/signout.js')}}"></script>
   {% if title %}
     <title> RMS :: {{ title }} </title>
     {% else %}
@@ -24,13 +24,20 @@
                 <div class="header">
                     <a href="/" class="logo">RMS</a>
                     <div class="header-right">
-                        <a href="/fe/contact">Contact Us</a>
+                        Hi {{ username }}&nbsp;&nbsp;
+                        {% if session %}
+                        <!-- <a href="{{ url_for('rms.signout_all_users')}}">Sign Out</a> -->
+                        <input type="button" class="signout-button" id="signout-button" value="Sign Out">
+                        {% else %}
+                        <a href="{{ url_for('rms.load_signin_ui')}}">Sign In</a>
+                        {% endif %}
+                        <!-- <a href="/fe/contact">Contact Us</a> -->
                     </div>
                 </div>
             </nav>
         </header>
         <div id="section-wrapper" class="index-wrapper">
-            <h1>Welcome: {{ username }}</h1>
+            <!-- <h1>Welcome: {{ username }}</h1> -->
         </div>
         <div id="signup-success"></div>
         <footer>
