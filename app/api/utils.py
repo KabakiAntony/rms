@@ -113,7 +113,7 @@ def send_mail(user_email, the_subject, the_content):
     except Exception as e:
         custom_make_response(
                 "error", f"an error occured sending email contact administrator\
-                     {e}", 401)
+                     {e}", 500)
 
 
 def token_required(f):
@@ -128,21 +128,20 @@ def token_required(f):
         if (request.cookies.get('auth_token') or request.args.get('in')):
             user_token = request.cookies.get('auth_token')
             company_token = request.args.get('in')
-        if not user_token or company_token:
-            return custom_make_response("error", "token is missing", 401)
+        if not (user_token or company_token):
+            return custom_make_response("error", "Token is missing", 401)
         try:
             if user_token:
                 data = jwt.decode(user_token, KEY, algorithm="HS256")
                 current_user = User.query\
                     .filter_by(username=data['username']).first()
-                _user = user_schema.dump(current_user)
+                _data = user_schema.dump(current_user)
             if company_token:
                 data = jwt.decode(company_token, KEY, algorithms="HS256")
                 current_company = Company.query\
                     .filter_by(company=data['company']).first()
-                _company = company_schema.dump(current_company)
+                _data = company_schema.dump(current_company)
         except Exception as e:
-            return custom_make_response(
-                "error", f"Token {e}", 401)
-        return f(_user or _company, *args, **kwargs)
+            return custom_make_response("error", f"Token {e}", 401)
+        return f(_data, *args, **kwargs)
     return decorated
