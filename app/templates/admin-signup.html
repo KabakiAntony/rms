@@ -1,13 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RMS : {{ title }}</title>
-</head>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <meta name="description" content="This is rekuisition management system">
+        <meta name="Keywords" content="rekuisition management, register your company here">
+        <meta name="author" content="kabaki.antony@gmail.com">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+        <!-- <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/gif" sizes="48x48"> -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/rms-main.css') }}">
+        <script defer src="{{ url_for('static', filename='js/admin-signup.js')}}"></script>
+        {% if title %}
+          <title> RMS :: {{ title }} </title>
+          {% else %}
+          <title>RMS</title>
+          {% endif %}
+      </head>
 <body>
-    <h1>Thank you for registering {{ company }} with us.</h1>
-    <p>Please go ahead and fill up your user details below</p>
-    <p>to start using the system.</p>
+    <div id="container">
+        <header>
+            <nav>
+                <div class="header">
+                    <a href="/" class="logo">RMS</a>
+                    <div class="header-right">
+                        <a href="#" class="username">Hi {{ username }}</a>
+                        <a href="/fe/contact">Contact Us</a>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <div id="section-wrapper" class="index-wrapper">
+            <h1>Thank you for registering <span>{{ company }}</span> with us, Complete registration below.</h1>
+            <p class="text-center">We took the liberty of filling up what we know about you, just to make your work easy.</p>
+            <div class="flex-container">
+                <div class="right-form-card   sign-in-form">
+                    <div id="form-container">
+                        <h2 class="form-header">Sign up here</h2>
+                        <form  class="form" id="adminUpForm" method="POST">
+                            <div class="error" id="admin-up-error-username"></div>
+                            <label >Username</label>
+                            <input  type="text" class="input" name ="adminUsername" id="adminUsername" value="{{ username }}" required>
+                            <div class="error" id="admin-up-error-email"></div>
+                            <label >Email</label>
+                            <input type="email" class="input" id="adminEmail" name="adminEmail" value="{{ email }}" required>
+                            <div class="error" id="admin-up-error-company"></div>
+                            <label >Company</label>
+                            <input type="text" class="input" id="adminCompany" name="adminCompany" value="{{ company }}" required>
+                            <div class="error" id="admin-up-error-password"></div>
+                            <label >Password</label>
+                            <input  type="password" class="input" name ="adminPassword" id="adminPassword" required>
+                            <input type="submit" id="submit" class="submit" value="Complete registration">
+                       </form>
+                      </div>            
+                </div>
+            </div>
+        </div>
+        <div id="signup-success"></div>
+        <footer>
+            <p>&copy; RMS 2020&nbsp;&nbsp;<a href="https://twitter.com/kabakikiarie">Find RMS Admin Here</a></p>
+          </footer>
+          <div id="hack">.</div>
+    </div>
 </body>
 </html>
