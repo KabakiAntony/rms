@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/rms-main.css') }}">
   <script defer src="{{ url_for('static', filename='js/signin.js')}}"></script>
   {% if title %}
-    <title> RMS :: {{ title }} </title>
+    <title> RMS / {{ title }} </title>
     {% else %}
     <title>RMS</title>
     {% endif %}
@@ -31,7 +31,7 @@
             </nav>
         </header>
         <div id="section-wrapper" class="index-wrapper">
-            <h1>Please sign in in here  to use the system</h1>
+            <h1>Please sign in here  to use the system</h1>
             <div class="flex-container">
                 <div class="right-form-card   sign-in-form">
                     <div id="form-container">
@@ -44,7 +44,8 @@
                             <label >Password</label>
                             <input  type="password" class="input" name ="inPassword" id="inPassword" required>
                             <input type="submit" id="submit" class="submit" value="Sign in">
-                            <div class="text-center">Not registered ? <a href="/" id="bottom-sign-in">Sign Up</a></div>
+                            <div class="text-center"><a href="/fe/reset">Forgot password ?</a></div>
+                            <div class="text-center">No User account have the Admin create one for you OR <a href="/" id="bottom-sign-in">Sign up your company</a></div>
                        </form>
                       </div>            
                 </div>
