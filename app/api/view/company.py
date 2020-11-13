@@ -70,7 +70,17 @@ def company_signup_intent():
     link will only be available for three hours.
     <br/>
     <br/>
-    <a href="{signup_url}?in={token.decode('utf-8')}">Sign Up</a>
+    <a href="{signup_url}?in={token.decode('utf-8')}"
+    style="font-weight:bold;
+    background-color: #0096D6;
+    border: 2px solid white;
+    border-radius:0.5rem;
+    text-decoration: none;
+    padding: 7px 28px;
+    color:rgb(255, 255, 255);
+    margin-bottom: 10px;
+    font-size: 120%;"
+    >Sign Up</a>
     <br/>
     <br/>
     Regards Antony,<br/>
