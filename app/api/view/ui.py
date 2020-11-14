@@ -8,8 +8,8 @@ fe - conotes frontend
 import jwt
 import os
 from app.api import rms
-from app.api.utils import token_required
-from flask import render_template, request
+from app.api.utils import token_required, custom_make_response
+from flask import render_template, request, abort
 
 
 KEY = os.getenv('SECRET_KEY')
@@ -32,6 +32,14 @@ def load_signup_ui(company):
     """
     _company = company['company']
     admin_token = request.cookies.get('admin_token')
+    if not admin_token:
+        abort(
+            custom_make_response(
+                "error",
+                "You are not authorised to signup a company",
+                401
+            )
+        )
     admin_data = jwt.decode(admin_token, KEY, algorithm="HS256")
     return render_template(
         'admin-signup.html',
@@ -61,3 +69,20 @@ def load_profile_ui(user):
         title="Profile",
         username=user['username']
     )
+
+
+@rms.route('/fe/forgot', methods=['GET'])
+def load_forgot_password_ui():
+    """
+    load the forgot password ui
+    """
+    return render_template('forgot.html', title="Forgot Password")
+
+
+@rms.route('/fe/new-password', methods=['GET'])
+@token_required
+def load_password_reset_ui(user):
+    """
+    load the password reset ui
+    """
+    return render_template('new-password.html', title="New Password")
