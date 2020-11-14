@@ -125,8 +125,13 @@ def token_required(f):
     def decorated(*args, **kwargs):
         user_token = None
         company_token = None
-        if (request.cookies.get('auth_token') or request.args.get('in')):
-            user_token = request.cookies.get('auth_token')
+        if (request.cookies.get('auth_token') or
+            request.args.get('in') or
+                request.args.get('u')):
+            user_token = (
+                request.cookies.get('auth_token') or
+                request.args.get('u')
+            )
             company_token = request.args.get('in')
         if not (user_token or company_token):
             return custom_make_response("error", "Token is missing", 401)
