@@ -180,6 +180,13 @@ font-size: 120%;
 #hack{
     padding-bottom:30px;
 }
+#forgot-img{
+  height:120px;
+  width:120px;
+  display:block;
+  margin:auto;
+  
+}
 footer
   {
   height:40px;
