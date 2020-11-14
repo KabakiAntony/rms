@@ -6,13 +6,13 @@ import jwt
 import datetime
 from app.api import rms
 from app.api.model.models import db
-from flask import request, abort, url_for, redirect,\
-     make_response, session
+from flask import request, abort, session
 from app.api.model.user import user_schema, users_schema, User
 from app.api.model.company import Company, company_schema
 from app.api.utils import check_for_whitespace, isValidEmail,\
      send_mail, custom_make_response, token_required,\
      isValidPassword
+from werkzeug.security import generate_password_hash
 
 
 # get environment variables
@@ -161,3 +161,150 @@ def signout_all_users(user):
         expires="Thu, 01 Jan 1970 00:00:00 GMT"
     )
     return resp
+
+
+@rms.route('/auth/forgot', methods=['POST'])
+def forgot_password():
+    """ send reset password email """
+    try:
+        user_data = request.get_json()
+        email = user_data['email']
+    except Exception as e:
+        abort(
+            custom_make_response(
+                "error",
+                f"{e} You have not entered an email!",
+                400
+            )
+        )
+    check_for_whitespace(user_data, ['email'])
+    isValidEmail(email)
+    user = User.query.filter_by(email=user_data['email']).first()
+    if not user:
+        abort(
+            custom_make_response(
+                "error",
+                "User not found, Please sign up to use the system!",
+                404
+            )
+        )
+    this_user = user_schema.dump(user)
+    token = jwt.encode(
+        {
+            "username": this_user['username'],
+            'exp': datetime.datetime.now() +
+            datetime.timedelta(minutes=30)
+        },
+        KEY,
+        algorithm='HS256'
+    )
+    subject = """Password reset request"""
+    content = f"""
+    Hey {this_user['username']},
+    <br/>
+    <br/>
+    You have received this email, because you requested<br/>
+    a password reset link, Click on the reset button below to proceed,<br/>
+    If you did not please ignore this email.<br/>
+    Note this link will only be active for thirty minutes.
+    <br/>
+    <br/>
+    <a href="{password_reset_url}?u={token.decode('utf-8')}"
+    style="font-weight:bold;
+    background-color: #0096D6;
+    border: 2px solid white;
+    border-radius:0.5rem;
+    text-decoration: none;
+    padding: 7px 28px;
+    color:rgb(255, 255, 255);
+    margin-top:10px;
+    margin-bottom: 10px;
+    font-size: 120%;"
+    >Reset Password</a>
+    <br/>
+    <br/>
+    Regards Antony,<br/>
+    RMS Admin.
+    """
+    send_mail(email, subject, content)
+    resp = custom_make_response(
+        "data",
+        f"Please check {email} for reset instructions.",
+        202
+    )
+    resp.set_cookie(
+        "reset_token",
+        token.decode('utf-8'),
+        httponly=True,
+        secure=True,
+        expires=datetime.datetime.now() + datetime.timedelta(minutes=30)
+    )
+    return resp
+
+
+@rms.route('/auth/newpass', methods=['PUT'])
+def set_new_password():
+    """updates a user password from the reset page"""
+    pass_reset_token = request.cookies.get('reset_token')
+    if not pass_reset_token:
+        abort(
+            custom_make_response(
+                "error",
+                "You are not authorized to carryout this request!",
+                401
+            )
+        )
+    # reset_data = jwt.decode(pass_reset_token, KEY, algorithm="HS256")
+    try:
+        data = request.get_json()
+        email = data['email']
+        new_password = data['password']
+    except KeyError:
+        abort(
+            custom_make_response(
+                "error",
+                "One or more mandatory fields has not been filled!",
+                400
+            )
+        )
+    check_for_whitespace(data, ['email', 'password'])
+    isValidEmail(email)
+    isValidPassword(new_password)
+    User.query.filter_by(email=data['email']).\
+        update(dict(
+            password=f'{generate_password_hash(str(new_password))}'))
+    db.session.commit()
+    subject = """Password reset success."""
+    content = """
+    Hey,
+    <br/>
+    <br/>
+    Your password has been reset successfully, if that was you then you
+    don't have to do anything.<br/>
+    If you did not carry out this action please click on the link below to
+    initiate account recovery.
+    <br/>
+    <br/>
+    <a href="/fe/forgot"
+    style="font-weight:bold;
+    background-color: #0096D6;
+    border: 2px solid white;
+    border-radius:0.5rem;
+    text-decoration: none;
+    padding: 7px 28px;
+    color:rgb(255, 255, 255);
+    margin-top:10px;
+    margin-bottom: 10px;
+    font-size: 120%;"
+    >Forgot Password</a>
+    <br/>
+    <br/>
+    Regards Antony,<br/>
+    RMS Admin.
+    """
+    send_mail(email, subject, content)
+    return custom_make_response(
+        "data",
+        "Your password has been reset successfully.",
+        200
+    )
