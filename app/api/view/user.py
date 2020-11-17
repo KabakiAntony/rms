@@ -1,13 +1,10 @@
-"""
-various user views will be handled here
-"""
 import os
 import jwt
 import datetime
 from app.api import rms
 from app.api.model.models import db
 from flask import request, abort, session
-from app.api.model.user import user_schema, users_schema, User
+from app.api.model.user import user_schema, User
 from app.api.model.company import Company, company_schema
 from app.api.utils import check_for_whitespace, isValidEmail,\
      send_mail, custom_make_response, token_required,\
