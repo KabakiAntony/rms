@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
   <!-- <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/gif" sizes="48x48"> -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/rms-main.css') }}">
-  <script defer src="{{ url_for('static', filename='js/forgot.js')}}"></script>
+  <script type="module" src="{{ url_for('static', filename='js/forgot.js')}}"></script>
   {% if title %}
   <title> RMS / {{ title }} </title>
   {% else %}
@@ -37,10 +37,10 @@
                     <h2 class="form-header">Forgot your passsword ?</h2>
                     <img src="{{ url_for('static', filename='images/padlock.png') }}" alt="Forgot Img" id="forgot-img">
                     <div class="text-center" id="reset-text-center">Enter your email below</div>
-                    <form  class="form" id="forgotForm" method="POST">
-                    <div class="error" id="forgot-error-email"></div>
+                    <form  class="form" id="rmsForm" method="POST">
+                    <div class="error" id="emailError"></div>
                     <label >Email</label>
-                    <input type="email" class="input" id="forgotEmail" name="forgotEmail" required>
+                    <input type="email" class="input" id="rmsEmail" name="rmsEmail" required>
                     <input type="submit" id="forgotSubmit" class="submit" value="Send reset instructions">
                    </form>
                 </div>         
