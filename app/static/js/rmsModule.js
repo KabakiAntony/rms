@@ -11,14 +11,12 @@ function isValidPassword(my_password){
 function inputReset(){
   document.getElementById('rmsForm').reset();  
 }
-function callToast() {
+function callToast(theData) {
   let snackbar = document.getElementById("signup-success");
-  snackbar.innerHTML = `
-  Success.
- `
+  snackbar.innerHTML = `${theData}`
   snackbar.className = "show";
   setTimeout(function(){ snackbar.className = snackbar.className.replace("show", "");
-  }, 5000);
+  }, 10000);
 }
 /* this function validates data on submit */
 export function validateEmailData(){
@@ -55,9 +53,9 @@ export function passwordInputListener(thePasswordInput){
   thePasswordInput.addEventListener('input',(e)=>{
     if(isValidPassword(thePasswordInput.value))
     {
-        document.getElementById("in-error-password").innerHTML = "";
+        document.getElementById("passwordError").innerHTML = "";
     }else{
-        document.getElementById("in-error-password").innerHTML = 
+        document.getElementById("passwordError").innerHTML = 
         `Password should contain atleast 
         1 uppercase character,
         1 lowercase character,
@@ -69,7 +67,7 @@ export function passwordInputListener(thePasswordInput){
 });
 }
 /* this is the fetch api for post, put, delete */
-export function rmsFetch(theUrl,theMethod,theBody){
+export function rmsFetch(theUrl,theMethod,theBody, redirectUrl=""){
     fetch(theUrl,{
             method: theMethod,
             headers: {
@@ -79,15 +77,16 @@ export function rmsFetch(theUrl,theMethod,theBody){
           })
           .then(response => response.json())
           .then(({data,status,error})=>{
-              if(status === 201 || status === 200 ){
-                callToast();
+              if(status === 201 || status === 200 || status === 202){
+                callToast(data);
                 inputReset();
+                location.href= redirectUrl;
               }
               else if(status === 400){
-                document.getElementById('commonError').innerHTML = `${error}`;
+                document.getElementById('emailError').innerHTML = `${error}`;
               }
               else if(status === 409){
-                document.getElementById('commonError').innerHTML = `${error}`;
+                document.getElementById('emailError').innerHTML = `${error}`;
               }
               else if(status === 401){
                 document.getElementById('emailError').innerHTML = `${error}`;
