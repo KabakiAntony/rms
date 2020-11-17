@@ -10,7 +10,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
         <!-- <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/gif" sizes="48x48"> -->
         <link rel="stylesheet" href="{{ url_for('static', filename='css/rms-main.css') }}">
-        <script defer src="{{ url_for('static', filename='js/admin-signup.js')}}"></script>
+        <script type="module" src="{{ url_for('static', filename='js/admin-signup.js')}}"></script>
         {% if title %}
           <title> RMS / {{ title }} </title>
           {% else %}
@@ -37,19 +37,19 @@
                 <div class="right-form-card   sign-in-form">
                     <div id="form-container">
                         <h2 class="form-header">Sign up here</h2>
-                        <form  class="form" id="adminUpForm" method="POST">
-                            <div class="error" id="admin-up-error-username"></div>
+                        <form  class="form" id="rmsForm" method="POST">
+                            <div class="error" id="usernameError"></div>
                             <label >Username</label>
-                            <input  type="text" class="input" name ="adminUsername" id="adminUsername" value="{{ username }}" required>
-                            <div class="error" id="admin-up-error-email"></div>
+                            <input  type="text" class="input" name ="rmsUsername" id="rmsUsername" value="{{ username }}" required>
+                            <div class="error" id="emailError"></div>
                             <label >Email</label>
-                            <input type="email" class="input" id="adminEmail" name="adminEmail" value="{{ email }}" required>
-                            <div class="error" id="admin-up-error-company"></div>
+                            <input type="email" class="input" id="rmsEmail" name="rmsEmail" value="{{ email }}" required>
+                            <div class="error" id="companyError"></div>
                             <label >Company</label>
-                            <input type="text" class="input" id="adminCompany" name="adminCompany" value="{{ company }}" required>
-                            <div class="error" id="admin-up-error-password"></div>
+                            <input type="text" class="input" id="rmsCompany" name="rmsCompany" value="{{ company }}" required>
+                            <div class="error" id="passwordError"></div>
                             <label >Password</label>
-                            <input  type="password" class="input" name ="adminPassword" id="adminPassword" required>
+                            <input  type="password" class="input" name ="rmsPassword" id="rmsPassword" required>
                             <input type="submit" id="submit" class="submit" value="Complete registration">
                        </form>
                       </div>            
