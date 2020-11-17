@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
   <!-- <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/gif" sizes="48x48"> -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/rms-main.css') }}">
-  <script defer src="{{ url_for('static', filename='js/intent.js')}}"></script>
+  <script type="module" src="{{ url_for('static', filename='js/intent.js')}}"></script>
   {% if title %}
     <title> RMS / {{ title }} </title>
     {% else %}
@@ -48,15 +48,15 @@
                 <div class="right-form-card">
                     <div id="form-container">
                         <h2 class="form-header">Sign up here</h2>
-                        <form  class="form" id="upForm" method="POST">
-                            <div class="error" id="up-error-company"></div>
+                        <form  class="form" id="rmsForm" method="POST">
+                            <div class="error" id="commonError"></div>
                             <label >Company</label>
-                            <input type="text" class="input" id="upCompany" name="upCompany" required>
+                            <input type="text" class="input" id="rmsCompany" name="rmsCompany" required>
                             <label >Admin username</label>
-                            <input  type="text" class="input" name ="upUsername" id="upUsername" required>
-                            <div class="error" id="up-error-email"></div>
+                            <input  type="text" class="input" name ="rmsUsername" id="rmsUsername" required>
+                            <div class="error" id="emailError"></div>
                             <label >Admin email</label>
-                            <input type="email" class="input" id="upEmail" name="upEmail" required>
+                            <input type="email" class="input" id="rmsEmail" name="rmsEmail" required>
                             <input type="submit" id="submit" class="submit" value="Sign up">
                             <div class="text-center">Already have an account? <a href="/fe/signin" id="bottom-sign-in">Sign In</a></div>
                        </form>
