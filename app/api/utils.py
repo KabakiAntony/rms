@@ -150,3 +150,59 @@ def token_required(f):
             return custom_make_response("error", f"Token {e}", 401)
         return f(_data, *args, **kwargs)
     return decorated
+
+
+def button_style():
+    """this returns the style for the button"""
+    style = """font-weight:bold;
+    background-color: #0096D6;
+    border: 2px solid white;
+    border-radius:0.5rem;
+    text-decoration: none;
+    padding: 7px 28px;
+    color:rgb(255, 255, 255);
+    margin-top:10px;
+    margin-bottom: 10px;
+    font-size: 120%;"""
+    return style
+
+
+def password_reset_success_content():
+    """return the message for password reset email"""
+    content = """
+    Hey,
+    <br/>
+    <br/>
+    Your password has been reset successfully, if that was you then you
+    don't have to do anything.<br/>
+    If you did not carry out this action please click on the link below to
+    initiate account recovery.
+    <br/>
+    <br/>"""
+    return content
+
+
+def password_reset_request_content():
+    """ return the message for reset reuest email"""
+    content = """
+    <br/>
+    <br/>
+    You have received this email, because you requested<br/>
+    a password reset link, Click on the reset button below to proceed,<br/>
+    If you did not please ignore this email.<br/>
+    Note this link will only be active for thirty minutes.
+    <br/>
+    <br/>
+    """
+    return content
+
+
+def email_signature():
+    """return email signature"""
+    signature = """
+    <br/>
+    <br/>
+    Regards Antony,<br/>
+    RMS Admin.
+    """
+    return signature
