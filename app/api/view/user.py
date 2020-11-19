@@ -8,7 +8,8 @@ from app.api.model.user import user_schema, User
 from app.api.model.company import Company, company_schema
 from app.api.utils import check_for_whitespace, isValidEmail,\
      send_mail, custom_make_response, token_required,\
-     isValidPassword
+     isValidPassword, button_style, password_reset_request_content,\
+     password_reset_success_content, email_signature
 from werkzeug.security import generate_password_hash
 
 
@@ -133,7 +134,11 @@ def signin_all_users():
     # this creates a session for the user in the
     # server so as to help us login and log out
     session['username'] = _curr_user['username']
-    resp = custom_make_response("data", "Signed in successfully", 200)
+    resp = custom_make_response(
+        "data",
+        "Signed in successfully, please hold as we get your profile",
+        200
+    )
     resp.set_cookie(
         "auth_token",
         token.decode('utf-8'),
@@ -198,30 +203,11 @@ def forgot_password():
     subject = """Password reset request"""
     content = f"""
     Hey {this_user['username']},
-    <br/>
-    <br/>
-    You have received this email, because you requested<br/>
-    a password reset link, Click on the reset button below to proceed,<br/>
-    If you did not please ignore this email.<br/>
-    Note this link will only be active for thirty minutes.
-    <br/>
-    <br/>
+    {password_reset_success_content()}
     <a href="{password_reset_url}?u={token.decode('utf-8')}"
-    style="font-weight:bold;
-    background-color: #0096D6;
-    border: 2px solid white;
-    border-radius:0.5rem;
-    text-decoration: none;
-    padding: 7px 28px;
-    color:rgb(255, 255, 255);
-    margin-top:10px;
-    margin-bottom: 10px;
-    font-size: 120%;"
+    style="{button_style()}"
     >Reset Password</a>
-    <br/>
-    <br/>
-    Regards Antony,<br/>
-    RMS Admin.
+    {email_signature()}
     """
     send_mail(email, subject, content)
     resp = custom_make_response(
@@ -247,11 +233,10 @@ def set_new_password():
         abort(
             custom_make_response(
                 "error",
-                "You are not authorized to carryout this request!",
+                "A required piece of authentication seems to be missing!",
                 401
             )
         )
-    # reset_data = jwt.decode(pass_reset_token, KEY, algorithm="HS256")
     try:
         data = request.get_json()
         email = data['email']
@@ -272,36 +257,16 @@ def set_new_password():
             password=f'{generate_password_hash(str(new_password))}'))
     db.session.commit()
     subject = """Password reset success."""
-    content = """
-    Hey,
-    <br/>
-    <br/>
-    Your password has been reset successfully, if that was you then you
-    don't have to do anything.<br/>
-    If you did not carry out this action please click on the link below to
-    initiate account recovery.
-    <br/>
-    <br/>
+    content = f"""
+    {password_reset_request_content()}
     <a href="/fe/forgot"
-    style="font-weight:bold;
-    background-color: #0096D6;
-    border: 2px solid white;
-    border-radius:0.5rem;
-    text-decoration: none;
-    padding: 7px 28px;
-    color:rgb(255, 255, 255);
-    margin-top:10px;
-    margin-bottom: 10px;
-    font-size: 120%;"
+    style="{button_style()}"
     >Forgot Password</a>
-    <br/>
-    <br/>
-    Regards Antony,<br/>
-    RMS Admin.
+    {email_signature()}
     """
     send_mail(email, subject, content)
     return custom_make_response(
         "data",
-        "Your password has been reset successfully.",
+        "Your password has been reset successfully",
         200
     )
