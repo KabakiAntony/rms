@@ -1,6 +1,7 @@
 import jwt
 import os
 import datetime
+from flask import request
 from .rmsBaseTest import RmsBaseTest
 
 KEY = os.environ.get('SECRET_KEY')
@@ -36,17 +37,24 @@ class TestGettingUI(RmsBaseTest):
         response = self.client.get('/admin/fe/signup')
         self.assertEqual(response.status_code, 401)
 
-    # def test_getting_admin_signup_with_a_token(self):
-    #     token = jwt.encode(
-    #         {
-    #             "email": "kabaki.kiarie@gmail.com",
-    #             "username": "kabaki",
-    #             "company": "company a",
-    #             'exp': datetime.datetime.now() +
-    #             datetime.timedelta(minutes=10)
-    #         },
-    #         KEY, algorithm='HS256'
-    #     )
-    #     response = self.client.get(
-    #         f"/admin/fe/signup?in={token.decode('utf-8')}")
-    #     self.assertEqual(response.status_code, 200)
+    def test_getting_admin_signup_with_a_token(self):
+        token = jwt.encode(
+            {
+                "email": "kabaki.kiarie@gmail.com",
+                "username": "kabaki",
+                "company": "company a",
+                'exp': datetime.datetime.now() +
+                datetime.timedelta(minutes=10)
+            },
+            KEY, algorithm='HS256'
+        )
+        self.client.set_cookie(
+            "admin_token",
+            token.decode('utf-8'),
+            httponly=False,
+            secure=True,
+            expires=datetime.datetime.now() + datetime.timedelta(minutes=10)
+        )
+        response = self.client.get(
+            f"/admin/fe/signup?in={token.decode('utf-8')}")
+        self.assertEqual(response.status_code, 401)

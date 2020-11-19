@@ -36,7 +36,7 @@ def load_signup_ui(company):
         abort(
             custom_make_response(
                 "error",
-                "You are not authorised to signup a company",
+                "A required piece of authentication seems to be missing!",
                 401
             )
         )

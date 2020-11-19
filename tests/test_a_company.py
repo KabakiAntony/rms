@@ -1,6 +1,4 @@
-import jwt
 import os
-import datetime
 import json
 from .rmsBaseTest import RmsBaseTest
 
@@ -41,24 +39,7 @@ class TestCompany(RmsBaseTest):
 
     def test_company_creation(self):
         """ test creating a company with real data"""
-        token = jwt.encode(
-            {
-                "email": "kabaki.kiarie@gmail.com",
-                "username": "kabaki",
-                "company": "company a",
-                'exp': datetime.datetime.now() +
-                datetime.timedelta(minutes=10)
-            },
-            KEY, algorithm='HS256'
-        )
         response = self.company_creation_post()
-        self.client.set_cookie(
-            "admin_token",
-            token.decode('utf-8'),
-            httponly=True,
-            secure=True,
-            expires=datetime.datetime.now() + datetime.timedelta(minutes=10)
-        )
         self.assertEqual(response.status_code, 201)
 
     def test_getting_all_companies(self):
