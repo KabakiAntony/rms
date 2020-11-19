@@ -11,12 +11,14 @@ function isValidPassword(my_password){
 function inputReset(){
   document.getElementById('rmsForm').reset();  
 }
-function callToast(theData) {
-  let snackbar = document.getElementById("signup-success");
-  snackbar.innerHTML = `${theData}`
-  snackbar.className = "show";
-  setTimeout(function(){ snackbar.className = snackbar.className.replace("show", "");
-  }, 10000);
+function showMessage(msg,redirectUrl){
+  document.getElementById('show-alert').innerHTML = `${msg}`;
+  document.getElementById('show-alert').style.display = 'block';
+  setTimeout(function(){
+    document.getElementById('show-alert').style.display = 'none';
+    location.href= redirectUrl;
+  },2000);
+  
 }
 /* this function validates data on submit */
 export function validateEmailData(){
@@ -78,9 +80,8 @@ export function rmsFetch(theUrl,theMethod,theBody, redirectUrl=""){
           .then(response => response.json())
           .then(({data,status,error})=>{
               if(status === 201 || status === 200 || status === 202){
-                callToast(data);
                 inputReset();
-                location.href= redirectUrl;
+                showMessage(data,redirectUrl);
               }
               else if(status === 400){
                 document.getElementById('emailError').innerHTML = `${error}`;

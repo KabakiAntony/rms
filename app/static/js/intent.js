@@ -28,3 +28,5 @@ intentData = {
 };
 rmsFetch('/intent',"POST",intentData)
 }
+
+
