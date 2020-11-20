@@ -17,7 +17,7 @@ function showMessage(msg,redirectUrl){
   setTimeout(function(){
     document.getElementById('show-alert').style.display = 'none';
     location.href= redirectUrl;
-  },2000);
+  },6000);
   
 }
 /* this function validates data on submit */

@@ -34,6 +34,8 @@ html,body{
     float: right;
     font-size:0.8rem;
     margin-top:0.1rem;
+    margin-right: 30px;
+    color:rgb(255, 255, 255);
   }
   .header a:hover {
     text-decoration: underline;
@@ -42,11 +44,6 @@ html,body{
   .header a.logo {
     font-size: 2rem;
     font-weight: bold;
-  }
-  .header a.username{
-    color:rgb(5, 5, 5);
-    font-weight: bold;
-    text-decoration: none;
   }
   h1{
     text-align: center;
@@ -92,7 +89,6 @@ html,body{
   .right-form-card{
     width: 30%;
   }
-  /* styles signup form only*/
 
 #form-container{
   background-color: rgba(239, 239, 241, 0.924);
@@ -117,6 +113,9 @@ html,body{
   font-size: 140%;
   color: rgba(255,255,255);
 }
+.create-project{
+  width: 40%;
+}
 .error{
   color: rgba(255, 0, 0, 0.719);
   font-size: 11px;
@@ -129,7 +128,6 @@ html,body{
   width:100%;
   font-weight: 700;
 }
-
 .submit:hover{
   background-color: white;
   color: rgba(2, 3, 8, 0.644);
@@ -154,6 +152,11 @@ margin-bottom: 10px;
 display: inline-block;
 width:100%;
 font-size: 120%;
+}
+.projectSubmit{
+  width:50%;
+  font-weight:normal;
+  font-size: 90%;
 }
 .signout-button{
   font-weight: normal;
@@ -191,21 +194,6 @@ font-size: 120%;
   font-weight: bold;
 }
 .alert.success {background-color: #4CAF50;}
-.closebtn {
-  margin-left: 15px;
-  color: white;
-  font-weight: bold;
-  float: right;
-  font-size: 22px;
-  line-height: 20px;
-  cursor: pointer;
-  transition: 0.3s;
-  font-weight: bold;
-}
-
-.closebtn:hover {
-  color: black;
-}
 #hack{
     padding-bottom:30px;
 }
@@ -214,7 +202,6 @@ font-size: 120%;
   width:120px;
   display:block;
   margin:auto;
-  
 }
 footer
   {
@@ -242,55 +229,41 @@ footer
   footer a:hover {
     text-decoration: underline;
   }
-  /* successful signup toast */
-#signup-success {
-  visibility: hidden;
-  width:40%;
-  left:30%;
-  background-color: #0096D6;
-  color: white;
-  text-align:center;
-  border-radius: 5px;
-  padding: 15px;
-  position: fixed; 
-  z-index: 1;
-  top: 150px;
-  font-size: 100%;
-  font-weight: 600;
-}
-
-#signup-success.show {
-  visibility: visible;
-  -webkit-animation: fadein 0.5s;
-  animation: fadein 0.5s;
-}
 span{
   color:rgb(214, 0, 160);
 }
-/* @-webkit-keyframes fadein {
-  from {top: 0; opacity: 0;} 
-  to {top: 150px; opacity: 1;}
+.actions{
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #0096D6;
 }
-
-@keyframes fadein {
-  from {top: 0; opacity: 0;}
-  to {top: 150px; opacity: 1;}
+.actions button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+  color:white;
 }
+.actions button:hover {
+  background-color: #ddd;
 
-@-webkit-keyframes fadeout {
-  from {top: 150px; opacity: 1;} 
-  to {top: 0; opacity: 0;}
 }
-
-@keyframes fadeout {
-  from {top: 150px; opacity: 1;}
-  to {top: 0; opacity: 0;}
-} */
-
-
-
-
-  /* media kueries start here */
+.actions button.active {
+  background-color: rgb(0, 0, 0);
+} 
+.actionContent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+.bigger-font{
+  font-size:120%;
+}
 @media (min-width: 576px) {
   .header {
     padding: 1rem;
@@ -398,6 +371,7 @@ span{
  .header-right {
     font-size:0.9rem;
     margin-top:0.7rem;
+    font-weight: bold;
   }
   .flex-container{
     flex-direction: row;
