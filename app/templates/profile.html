@@ -11,6 +11,7 @@
   <!-- <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/gif" sizes="48x48"> -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/rms-main.css') }}">
   <script defer src="{{ url_for('static', filename='js/signout.js')}}"></script>
+  <script defer src="{{ url_for('static', filename='js/profile.js')}}"></script>
   {% if title %}
     <title> RMS / {{ title }} </title>
     {% else %}
@@ -24,19 +25,61 @@
                 <div class="header">
                     <a href="/" class="logo">RMS</a>
                     <div class="header-right">
-                        Hi {{ username }}&nbsp;&nbsp;
                         {% if session %}
-                        <input type="button" class="signout-button" id="signout-button" value="Sign out">
+                        Hi {{ username }}
+                        <input type="button" class="signout-button" id="signout-button" value="Sign out">                    
                         {% else %}
                         <a href="{{ url_for('rms.load_signin_ui')}}">Sign In</a>
                         {% endif %}
-                        <!-- <a href="/fe/contact">Contact Us</a> -->
                     </div>
                 </div>
             </nav>
         </header>
         <div id="section-wrapper" class="index-wrapper">
-            <!-- <h1>Welcome: {{ username }}</h1> -->
+            {% if role =='Admin' %}
+              <div class="actions active">
+                <button class="action-links" onclick="openAction(event, 'createProject')">Create Projects</button>
+                <button class="action-links" onclick="openAction(event, 'editProject')">Edit Projects</button>
+                <button class="action-links" onclick="openAction(event, 'showProject')">Show Projects</button>
+                <button class="action-links" onclick="openAction(event, 'closeProject')">Close Projects</button>
+                <button class="action-links" onclick="openAction(event, 'createUsers')">Create Users</button>
+                <button class="action-links" onclick="openAction(event, 'suspendUsers')">Suspend Users</button>
+              </div>
+              <div id="createProject" class="actionContent">
+                <h3>Create a new project here</h3>
+                <p>It's easy just enter a name and the dates you expect the project to run from-to</p>
+                <form class="form create-project" id="rmsForm" method="POST">
+                  <label>Project name:</label>
+                  <input type="text" class="input project" id="rmsProject" name="rmsProject" required>
+                  <label>Date from:</label>
+                  <input type="date" class="input project" id="dateFrom" name="dateFrom" required>
+                  <label>Date to:</label>
+                  <input type="date" class="input project" id="dateTo" name="dateTo" required>
+                  <input type="submit" id="submit" class="submit projectSubmit" value="Create project">
+                </form>
+              </div>
+              <div id="editProject" class="actionContent">edit project</div>
+              <div id="showProject" class="actionContent">show Project</div>
+              <div id="closeProject" class="actionContent">close project</div>
+              <div id="createUsers" class="actionContent">create users</div>
+              <div id="suspendUsers" class="actionContent">suspend users</div>
+              <h4 class="text-center bigger-font" id="profileInst">Click on any option to carry out the task.</h4>
+            {% elif role == 'Creator' %}
+              <a href="#">create projects</a>
+              <a href="#">edit projects</a>
+              <a href="#">show projects</a>
+              <a href="#">close projects</a>
+            {% elif role == 'Reviewer' %}
+              <a href="#">create projects</a>
+              <a href="#">edit projects</a>
+              <a href="#">show projects</a>
+              <a href="#">close projects</a>
+            {% elif role == 'Authorizer' %}
+              <a href="#">create projects</a>
+              <a href="#">edit projects</a>
+              <a href="#">show projects</a>
+              <a href="#">close projects</a>
+            {% endif %}
         </div>
         <footer>
             <p>&copy; RMS 2020&nbsp;&nbsp;<a href="https://twitter.com/kabakikiarie">Find RMS Admin Here</a></p>
