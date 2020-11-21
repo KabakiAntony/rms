@@ -67,7 +67,8 @@ def load_profile_ui(user):
     return render_template(
         'profile.html',
         title="Profile",
-        username=user['username']
+        username=user['username'],
+        role=user['role']
     )
 
 
