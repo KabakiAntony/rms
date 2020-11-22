@@ -87,3 +87,11 @@ def load_password_reset_ui(user):
     load the password reset ui
     """
     return render_template('new-password.html', title="New Password")
+
+
+@rms.route('/fe/contact', methods=['GET'])
+def load_contact_ui():
+    """
+    load the contact ui
+    """
+    return render_template('contact.html', title="Contact us")
