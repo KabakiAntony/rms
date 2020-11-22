@@ -1,6 +1,7 @@
 import {validateEmailData} from './rmsModule.js'
 import {emailInputListener} from './rmsModule.js'
 import {rmsFetch} from './rmsModule.js'
+import {showLoader} from './rmsModule.js'
 
 /* variables for this form */
 let forgotForm = document.getElementById('rmsForm');
@@ -21,6 +22,7 @@ rmsFetch('/auth/forgot','POST',forgotData,'/');
 forgotForm.addEventListener('submit',(e)=>{
     e.preventDefault();
     validateEmailData();
+    showLoader();
     Forgot();
 });
 

@@ -1,6 +1,7 @@
 import {validateEmailData} from './rmsModule.js'
 import {emailInputListener} from './rmsModule.js'
 import {rmsFetch} from './rmsModule.js'
+import {showLoader} from './rmsModule.js'
 
 /* variables for this form */
 const signUpForm = document.getElementById('rmsForm');
@@ -16,6 +17,7 @@ emailInputListener(upEmail);
 signUpForm.addEventListener('submit',(e)=>{
   e.preventDefault();
   validateEmailData();
+  showLoader();
   SignUp();
 }); 
 

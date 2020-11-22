@@ -13,6 +13,7 @@ function inputReset(){
 }
 function callToast(msg,redirectUrl) {
   let x = document.getElementById("showAlert");
+  document.getElementById('showLoader').style.display = "none";
   document.getElementById('showAlert').innerHTML = `${msg}`;
   x.className = "show";
   setTimeout(function(){ 
@@ -97,4 +98,7 @@ export function rmsFetch(theUrl,theMethod,theBody, redirectUrl=""){
               }
           })
           .catch(err => console.log(`This error occured :${err}`));
+}
+export function showLoader(){
+  document.getElementById('showLoader').style.display = " block";
 }

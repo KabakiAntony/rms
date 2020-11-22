@@ -3,6 +3,7 @@ import {validatePasswordData} from './rmsModule.js'
 import {emailInputListener} from './rmsModule.js'
 import {passwordInputListener} from './rmsModule.js'
 import {rmsFetch} from './rmsModule.js'
+import {showLoader} from './rmsModule.js'
 
 let adminForm = document.getElementById('rmsForm');
 let username = document.getElementById('rmsUsername');
@@ -28,5 +29,6 @@ adminForm.addEventListener('submit',(e)=>{
     e.preventDefault();
     validateEmailData();
     validatePasswordData();
+    showLoader();
     postSignUp();
 });

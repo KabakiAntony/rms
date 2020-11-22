@@ -3,6 +3,7 @@ import {validatePasswordData} from './rmsModule.js'
 import {emailInputListener} from './rmsModule.js'
 import {passwordInputListener} from './rmsModule.js'
 import {rmsFetch} from './rmsModule.js'
+import {showLoader} from './rmsModule.js'
 
 // variables for this form
 let passwordForm = document.getElementById('rmsForm');
@@ -26,5 +27,6 @@ passwordForm.addEventListener('submit',(e)=>{
     e.preventDefault();
     validateEmailData();
     validatePasswordData();
+    showLoader();
     updatePassword();
 });
