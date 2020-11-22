@@ -13,7 +13,7 @@ function inputReset(){
 }
 function callToast(msg,redirectUrl) {
   let x = document.getElementById("showAlert");
-  document.getElementById('showLoader').style.display = "none";
+  // document.getElementById('showLoader').style.display = "none";
   document.getElementById('showAlert').innerHTML = `${msg}`;
   x.className = "show";
   setTimeout(function(){ 
@@ -83,24 +83,32 @@ export function rmsFetch(theUrl,theMethod,theBody, redirectUrl=""){
               if(status === 201 || status === 200 || status === 202){
                 inputReset();
                 callToast(data,redirectUrl);
-                document.getElementById('submit').style.display = " block";
+                exitLoader();
               }
               else if(status === 400){
                 document.getElementById('emailError').innerHTML = `${error}`;
+                exitLoader();
               }
               else if(status === 409){
                 document.getElementById('emailError').innerHTML = `${error}`;
+                exitLoader();
               }
               else if(status === 401){
                 document.getElementById('emailError').innerHTML = `${error}`;
+                exitLoader();
               }
               else if(status === 404){
                 document.getElementById('emailError').innerHTML = `${error}`;
+                exitLoader();
               }
           })
           .catch(err => console.log(`This error occured :${err}`));
 }
 export function showLoader(){
-  document.getElementById('submit').style.display = " none";
   document.getElementById('showLoader').style.display = " block";
+  document.getElementById('submit').style.display = " none";
+}
+function exitLoader(){
+  document.getElementById('showLoader').style.display = " none";
+  document.getElementById('submit').style.display = " block";
 }
