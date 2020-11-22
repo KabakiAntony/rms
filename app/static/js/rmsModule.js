@@ -83,6 +83,7 @@ export function rmsFetch(theUrl,theMethod,theBody, redirectUrl=""){
               if(status === 201 || status === 200 || status === 202){
                 inputReset();
                 callToast(data,redirectUrl);
+                document.getElementById('submit').style.display = " block";
               }
               else if(status === 400){
                 document.getElementById('emailError').innerHTML = `${error}`;
@@ -100,5 +101,6 @@ export function rmsFetch(theUrl,theMethod,theBody, redirectUrl=""){
           .catch(err => console.log(`This error occured :${err}`));
 }
 export function showLoader(){
+  document.getElementById('submit').style.display = " none";
   document.getElementById('showLoader').style.display = " block";
 }
