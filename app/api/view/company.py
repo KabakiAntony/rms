@@ -92,7 +92,7 @@ def company_signup_intent():
     db.session.commit()
     resp = custom_make_response(
         "data",
-        f"{company} Signed up successfully, see email for more...",
+        f"{company} Signed up successfully, see {email} for more...",
         201
     )
     resp.set_cookie(

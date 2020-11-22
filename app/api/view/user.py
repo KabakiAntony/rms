@@ -116,11 +116,7 @@ def signin_all_users():
                 401
             )
         )
-    # login_user(user, remember=user_data)
     _curr_user = user_schema.dump(user)
-    # return redirect(
-    #         url_for("rms.load_profile_ui")
-    #     )
     token = jwt.encode(
         {
             "username": _curr_user['username'],
@@ -131,8 +127,6 @@ def signin_all_users():
         KEY,
         algorithm='HS256'
     )
-    # this creates a session for the user in the
-    # server so as to help us login and log out
     session['username'] = _curr_user['username']
     resp = custom_make_response(
         "data",
@@ -212,7 +206,7 @@ def forgot_password():
     send_mail(email, subject, content)
     resp = custom_make_response(
         "data",
-        f"Please check {email} for reset instructions.",
+        f"Email sent successfully, head over to {email} for instructions.",
         202
     )
     resp.set_cookie(
