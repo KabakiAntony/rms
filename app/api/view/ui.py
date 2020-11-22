@@ -58,7 +58,7 @@ def load_signin_ui():
     return render_template("signin.html", title="Sign In")
 
 
-@rms.route('/fe/who', methods=['GET'])
+@rms.route('/fe/dashboard', methods=['GET'])
 @token_required
 def load_profile_ui(user):
     """

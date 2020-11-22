@@ -130,7 +130,7 @@ def signin_all_users():
     session['username'] = _curr_user['username']
     resp = custom_make_response(
         "data",
-        "Signed in successfully, please hold as we get your profile",
+        "Signed in successfully, redirecting to your dashboard...",
         200
     )
     resp.set_cookie(
