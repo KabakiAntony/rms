@@ -2,7 +2,7 @@
 this will create the user model(table)
 and its serialization.
 """
-from app.api.model.models import db, ma
+from app.api.model import db, ma
 from werkzeug.security import generate_password_hash, check_password_hash
 
 

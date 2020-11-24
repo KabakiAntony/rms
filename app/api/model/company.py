@@ -2,7 +2,7 @@
 this will handle the company
 model for the db
 """
-from app.api.model.models import db, ma
+from app.api.model import db, ma
 from datetime import datetime
 
 

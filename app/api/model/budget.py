@@ -1,4 +1,4 @@
-from app.api.model.models import db, ma
+from app.api.model import db, ma
 
 
 class Budget(db.Model):

@@ -1,5 +1,4 @@
-from app.api.model.models import db, ma
-from datetime import datetime
+from app.api.model import db, ma
 
 
 class Project(db.Model):
@@ -11,8 +10,8 @@ class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     project_name = db.Column(db.String(100), nullable=False, unique=True)
     companyId = db.Column(db.Integer, db.ForeignKey('Company.id'))
-    date_from = db.Column(db.DateTime, default=datetime.utcnow)
-    date_to = db.Column(db.DateTime)
+    date_from = db.Column(db.Date)
+    date_to = db.Column(db.Date)
 
     def __init__(self, project_name, companyId, date_from, date_to):
         """initializing inputs for this model"""
