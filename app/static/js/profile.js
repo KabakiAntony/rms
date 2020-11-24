@@ -1,14 +1,24 @@
-function openAction(evt, actionName) {
-    let i, actioncontent, actionlinks;
-    actioncontent = document.getElementsByClassName("actionContent");
-    for (i = 0; i < actioncontent.length; i++) {
-        actioncontent[i].style.display = "none";
+import {showLoader} from './rmsModule.js'
+import {rmsFetch} from './rmsModule.js'
+
+let createProjectForm = document.getElementById('rmsForm');
+let projectName = document.getElementById('rmsProject');
+let dateFrom = document.getElementById('dateFrom');
+let dateTo = document.getElementById('dateTo');
+let theBody;
+
+function createResource(){
+    theBody = {
+        project_name:projectName.value,
+        date_from:dateFrom.value,
+        date_to:dateTo.value
     }
-    actionlinks = document.getElementsByClassName("action-links");
-    for (i = 0; i < actionlinks.length; i++) {
-        actionlinks[i].className = actionlinks[i].className.replace(" active", "");
-    }
-    document.getElementById(actionName).style.display = "block";
-    document.getElementById('profileInst').style.display = "none";
-    evt.currentTarget.className += " active";
-  }
+    rmsFetch('/auth/projects',"POST",theBody)
+}
+createProjectForm.addEventListener('submit',(e)=>{
+    e.preventDefault();
+    showLoader();
+    createResource();
+});
+
+
