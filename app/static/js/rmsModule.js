@@ -1,3 +1,5 @@
+let filename= location.pathname.split('/').pop();
+
 /* this is a module that will hold all data validations*/
 function isEmail(my_email){
     let emailRegex =/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/igm;
@@ -20,6 +22,37 @@ function callToast(msg,redirectUrl) {
     x.className = x.className.replace("show", ""); 
     location.href= redirectUrl;
   }, 4000);
+}
+function exitLoader(){
+  document.getElementById('showLoader').style.display = " none";
+  document.getElementById('submit').style.display = " block";
+}
+function showError(err){
+  if (filename === 'dashboard'){
+    showAlert(err);
+  }
+  else{
+    document.getElementById('emailError').innerHTML = `${err}`;
+  }
+}
+function showAlert(myData,divId){
+  if (divId === 'success'){
+    document.getElementById('success').style.display = " block";
+    document.getElementById('success').innerHTML = `${myData} <span class="closebtn">&times;</span>`
+  }
+  else{
+    document.getElementById('error').style.display = " block";
+    document.getElementById('error').innerHTML = `${myData} <span class="closebtn">&times;</span>`
+  }
+  let close = document.getElementsByClassName("closebtn");
+  let i;
+  for (i = 0; i < close.length; i++) {
+    close[i].onclick = function(){
+      var div = this.parentElement;
+      div.style.opacity = "0";
+      setTimeout(function(){ div.style.display = "none"; }, 600);
+    }
+}
 }
 /* this function validates data on submit */
 export function validateEmailData(){
@@ -82,23 +115,32 @@ export function rmsFetch(theUrl,theMethod,theBody, redirectUrl=""){
           .then(({data,status,error})=>{
               if(status === 201 || status === 200 || status === 202){
                 inputReset();
-                callToast(data,redirectUrl);
+                if (filename === 'dashboard'){
+                  showAlert(data,'success');
+                }
+                else{
+                  callToast(data,redirectUrl);
+                }
                 exitLoader();
               }
               else if(status === 400){
-                document.getElementById('emailError').innerHTML = `${error}`;
+                showError(error,'error');
+                // document.getElementById('emailError').innerHTML = `${error}`;
                 exitLoader();
               }
               else if(status === 409){
-                document.getElementById('emailError').innerHTML = `${error}`;
+                showError(error,'error');
+                // document.getElementById('emailError').innerHTML = `${error}`;
                 exitLoader();
               }
               else if(status === 401){
-                document.getElementById('emailError').innerHTML = `${error}`;
+                showError(error,'error');
+                // document.getElementById('emailError').innerHTML = `${error}`;
                 exitLoader();
               }
               else if(status === 404){
-                document.getElementById('emailError').innerHTML = `${error}`;
+                showError(error,'error');
+                // document.getElementById('emailError').innerHTML = `${error}`;
                 exitLoader();
               }
           })
@@ -107,8 +149,4 @@ export function rmsFetch(theUrl,theMethod,theBody, redirectUrl=""){
 export function showLoader(){
   document.getElementById('showLoader').style.display = " block";
   document.getElementById('submit').style.display = " none";
-}
-function exitLoader(){
-  document.getElementById('showLoader').style.display = " none";
-  document.getElementById('submit').style.display = " block";
 }
