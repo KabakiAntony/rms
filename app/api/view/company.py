@@ -2,9 +2,8 @@ import os
 import jwt
 import datetime
 from app.api import rms
-from app.api.model.models import db
-from app.api.model.company import Company, company_schema,\
-    companies_schema
+from app.api.model import db
+from app.api.model.company import Company, companies_schema
 from flask import request, abort
 from app.api.utils import check_for_whitespace, isValidEmail,\
      send_mail, custom_make_response, token_required

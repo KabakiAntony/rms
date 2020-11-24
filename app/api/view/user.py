@@ -2,7 +2,7 @@ import os
 import jwt
 import datetime
 from app.api import rms
-from app.api.model.models import db
+from app.api.model import db
 from flask import request, abort, session
 from app.api.model.user import user_schema, User
 from app.api.model.company import Company, company_schema
