@@ -2,7 +2,7 @@
 # methods for all my test modules
 import unittest
 from app import create_app
-from app.api.model.models import db
+from app.api.model import db
 
 
 class RmsBaseTest(unittest.TestCase):

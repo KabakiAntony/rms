@@ -1,7 +1,7 @@
 # this is not a test
 # it just runs tearDown
 from .rmsBaseTest import RmsBaseTest
-from app.api.model.models import db
+from app.api.model import db
 
 
 class TestTearDown(RmsBaseTest):
