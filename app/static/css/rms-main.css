@@ -241,6 +241,32 @@ margin-top: 10px;
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+.actionNotification{
+  padding: 10px;
+  background-color: #f44336;
+  color: black;
+  opacity: 1;
+  transition: opacity 0.6s;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  display: none;
+}
+.actionNotification.success {background-color: #4CAF50;}
+.actionNotification.info {background-color: #2196F3;}
+.actionNotification.warning {background-color: #ff9800;}
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.closebtn:hover {
+  color: black;
+}
 #hack{
     padding-bottom:30px;
 }
