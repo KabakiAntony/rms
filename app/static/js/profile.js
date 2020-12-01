@@ -1,5 +1,6 @@
 import {showLoader} from './rmsModule.js'
 import {rmsFetch} from './rmsModule.js'
+import {clearErrorDivs} from './rmsModule.js'
 
 let createProjectForm = document.getElementById('rmsForm');
 let projectName = document.getElementById('rmsProject');
@@ -21,6 +22,7 @@ function createResource(){
 }
 createProjectForm.addEventListener('submit',(e)=>{
     e.preventDefault();
+    clearErrorDivs();
     showLoader();
     createResource();
 });
@@ -38,6 +40,7 @@ dateTo.addEventListener('input',(e)=>{
     else{
         document.getElementById('emailError').innerHTML =``;
         document.getElementById('submit').disabled = false;
+        clearErrorDivs();
     }
 })
 
