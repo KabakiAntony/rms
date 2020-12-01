@@ -41,11 +41,8 @@
             {% if role =='Admin' %}
               <div class="actions active">
                 <button class="action-links" onclick="openAction(event, 'createProject')">Create Projects</button>
-                <button class="action-links" onclick="openAction(event, 'editProject')">Edit Projects</button>
-                <button class="action-links" onclick="openAction(event, 'showProject')">Show Projects</button>
-                <button class="action-links" onclick="openAction(event, 'closeProject')">Close Projects</button>
                 <button class="action-links" onclick="openAction(event, 'createUsers')">Create Users</button>
-                <button class="action-links" onclick="openAction(event, 'suspendUsers')">Suspend Users</button>
+                <button class="action-links" onclick="openAction(event, 'suspendUsers')">Manage Users</button>
               </div>
               <div id="createProject" class="actionContent">
                 <div class="actionNotification" id="error"></div>
@@ -65,10 +62,8 @@
                 </form>
               </div>
               <div id="editProject" class="actionContent">edit project</div>
-              <div id="showProject" class="actionContent">show Project</div>
-              <div id="closeProject" class="actionContent">close project</div>
               <div id="createUsers" class="actionContent">create users</div>
-              <div id="suspendUsers" class="actionContent">suspend users</div>
+              <div id="suspendUsers" class="actionContent">manage users</div>
               <h4 class="text-center bigger-font" id="profileInst">Click on any option to carry out the task.</h4>
             {% elif role == 'Creator' %}
               <a href="#">create projects</a>
