@@ -76,6 +76,6 @@ def create_new_project():
     db.session.commit()
     return custom_make_response(
         "data",
-        f"Project {projectName} created successfully.",
+        f" {projectName} created successfully.",
         201
     )
