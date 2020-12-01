@@ -65,8 +65,8 @@ def load_profile_ui(user):
     load the logged in profile ui
     """
     return render_template(
-        'profile.html',
-        title="Profile",
+        'dashboard.html',
+        title="Dashboard",
         username=user['username'],
         role=user['role']
     )
