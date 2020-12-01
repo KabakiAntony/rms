@@ -7,10 +7,6 @@ let projectName = document.getElementById('rmsProject');
 let dateFrom = document.getElementById('dateFrom');
 let dateTo = document.getElementById('dateTo');
 let theBody;
-
-function compareDates(dateOne, dateTwo){
-    
-  }
   
 function createResource(){
     theBody = {
