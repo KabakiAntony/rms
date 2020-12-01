@@ -7,6 +7,10 @@ let dateFrom = document.getElementById('dateFrom');
 let dateTo = document.getElementById('dateTo');
 let theBody;
 
+function compareDates(dateOne, dateTwo){
+    
+  }
+  
 function createResource(){
     theBody = {
         project_name:projectName.value,
@@ -20,5 +24,21 @@ createProjectForm.addEventListener('submit',(e)=>{
     showLoader();
     createResource();
 });
+
+dateTo.addEventListener('input',(e)=>{
+    let startDate, endDate;
+    startDate = new Date(dateFrom.value);
+    endDate = new Date(dateTo.value);
+    startDate.setHours(0,0,0,0);
+    endDate.setHours(0,0,0,0);
+    if (endDate < startDate){
+        document.getElementById('emailError').innerHTML =` Start date cannot be later than End date`;
+        document.getElementById('submit').disabled = true;
+    }
+    else{
+        document.getElementById('emailError').innerHTML =``;
+        document.getElementById('submit').disabled = false;
+    }
+})
 
 

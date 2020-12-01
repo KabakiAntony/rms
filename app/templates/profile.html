@@ -55,9 +55,10 @@
                 <form class="form create-project" id="rmsForm" method="POST">
                   <label>Project name:</label>
                   <input type="text" class="input project" id="rmsProject" name="rmsProject" required>
-                  <label>Date from:</label>
+                  <label>Start Date:</label>
                   <input type="date" class="input project" id="dateFrom" name="dateFrom" required>
-                  <label>Date to:</label>
+                  <div class="error" id="emailError"></div>
+                  <label>End Date:</label>
                   <input type="date" class="input project" id="dateTo" name="dateTo" required>
                   <div class="loader" id="showLoader"></div>
                   <input type="submit" id="submit" class="submit projectSubmit" value="Create project">
