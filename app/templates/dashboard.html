@@ -55,14 +55,32 @@
                   <label>Start Date:</label>
                   <input type="date" class="input project" id="dateFrom" name="dateFrom" required>
                   <div class="error" id="emailError"></div>
-                  <label>End Date:</label>
+                  <label>End Date :</label>
                   <input type="date" class="input project" id="dateTo" name="dateTo" required>
                   <div class="loader" id="showLoader"></div>
                   <input type="submit" id="submit" class="submit projectSubmit" value="Create project">
                 </form>
               </div>
-              <div id="editProject" class="actionContent">edit project</div>
-              <div id="createUsers" class="actionContent">create users</div>
+              <div id="createUsers" class="actionContent">
+                <div class="actionNotification" id="error"></div>
+                <div class="actionNotification success" id="success"></div>
+                <h3>Create system users here</h3>
+                <p>It's easy choose what their role will be, send them a link and they will complete the rest.</p>
+                <form  class="form create-project" id="rmsForm" method="POST">
+                  <div class="error" id="emailError"></div>
+                  <label >Select role :</label>
+                  <select class="input project" name="userRoles" id="roles" required>
+                    <option value="creator">Creator</option>
+                    <option value="reviewer">Reviewer</option>
+                    <option value="authorizer">Authorizer</option>
+                  </select>
+                  <div class="error" id="emailError"></div>
+                  <label >User email :</label>
+                  <input type="email" class="input project" id="rmsEmail" name="rmsEmail" required>
+                  <div class="loader" id="showLoader"></div>
+                  <input type="submit" id="submit" class="submit projectSubmit" value="Send link">
+                 </form>
+              </div>
               <div id="suspendUsers" class="actionContent">manage users</div>
               <h4 class="text-center bigger-font" id="profileInst">Click on any option to carry out the task.</h4>
             {% elif role == 'Creator' %}
