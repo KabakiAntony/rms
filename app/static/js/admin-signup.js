@@ -22,7 +22,7 @@ function postSignUp(){
         username:username.value,
         company:company.value
     };
-    rmsFetch('/admin/signup','POST',signUpInfo,'/fe/signin');    
+    rmsFetch('/admin/signup','POST',signUpInfo,'/signin');    
 }
 
 adminForm.addEventListener('submit',(e)=>{

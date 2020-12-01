@@ -20,7 +20,7 @@ newPasswordData = {
     email:email.value,
     password:newPassword.value
 };
-rmsFetch('/auth/newpass','PUT',newPasswordData,'/fe/signin');
+rmsFetch('/auth/newpass','PUT',newPasswordData,'/signin');
 }
 /* reset submission */
 passwordForm.addEventListener('submit',(e)=>{

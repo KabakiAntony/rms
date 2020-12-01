@@ -1,9 +1,6 @@
 """
 this file holds all the user
 interface loading routes
-methods start as load_
-endpoints start as /fe/****
-fe - conotes frontend
 """
 import jwt
 import os
@@ -24,7 +21,7 @@ def load_welcome_ui():
     return render_template('welcome.html', title="Welcome")
 
 
-@rms.route('/admin/fe/signup', methods=['GET'])
+@rms.route('/admin/signup', methods=['GET'])
 @token_required
 def load_signup_ui(company):
     """
@@ -50,7 +47,7 @@ def load_signup_ui(company):
     )
 
 
-@rms.route('/fe/signin', methods=['GET'])
+@rms.route('/signin', methods=['GET'])
 def load_signin_ui():
     """
     load the sign in page
@@ -58,7 +55,7 @@ def load_signin_ui():
     return render_template("signin.html", title="Sign In")
 
 
-@rms.route('/fe/dashboard', methods=['GET'])
+@rms.route('/dashboard', methods=['GET'])
 @token_required
 def load_profile_ui(user):
     """
@@ -72,7 +69,7 @@ def load_profile_ui(user):
     )
 
 
-@rms.route('/fe/forgot', methods=['GET'])
+@rms.route('/forgot', methods=['GET'])
 def load_forgot_password_ui():
     """
     load the forgot password ui
@@ -80,7 +77,7 @@ def load_forgot_password_ui():
     return render_template('forgot.html', title="Forgot Password")
 
 
-@rms.route('/fe/new-password', methods=['GET'])
+@rms.route('/new-password', methods=['GET'])
 @token_required
 def load_password_reset_ui(user):
     """
@@ -89,7 +86,7 @@ def load_password_reset_ui(user):
     return render_template('new-password.html', title="New Password")
 
 
-@rms.route('/fe/contact', methods=['GET'])
+@rms.route('/contact', methods=['GET'])
 def load_contact_ui():
     """
     load the contact ui

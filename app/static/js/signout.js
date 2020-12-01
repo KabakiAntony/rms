@@ -11,7 +11,7 @@ function SignOut(){
     .then(response =>response.json())
     .then(({data,status}) => {
         if (status === 200){
-            location.href='/fe/signin';
+            location.href='/signin';
         }
     })
     .catch(err => console.log(err));
