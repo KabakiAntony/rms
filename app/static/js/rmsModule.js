@@ -15,7 +15,6 @@ function inputReset(){
 }
 function callToast(msg,redirectUrl) {
   let x = document.getElementById("showAlert");
-  // document.getElementById('showLoader').style.display = "none";
   document.getElementById('showAlert').innerHTML = `${msg}`;
   x.className = "show";
   setTimeout(function(){ 

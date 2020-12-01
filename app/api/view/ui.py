@@ -47,8 +47,8 @@ def load_signup_ui(company):
     )
 
 
-@rms.route('/signin', methods=['GET'])
-def load_signin_ui():
+@rms.route('/signin')
+def _signin_ui():
     """
     load the sign in page
     """
@@ -69,10 +69,10 @@ def load_profile_ui(user):
     )
 
 
-@rms.route('/forgot', methods=['GET'])
-def load_forgot_password_ui():
+@rms.route('/forgot')
+def _forgot_password_ui():
     """
-    load the forgot password ui
+    forgot password ui
     """
     return render_template('forgot.html', title="Forgot Password")
 
@@ -86,9 +86,9 @@ def load_password_reset_ui(user):
     return render_template('new-password.html', title="New Password")
 
 
-@rms.route('/contact', methods=['GET'])
-def load_contact_ui():
+@rms.route('/contact')
+def _contact_ui():
     """
-    load the contact ui
+    contact ui
     """
     return render_template('contact.html', title="Contact us")

@@ -30,7 +30,7 @@
                         Hi {{ username }}
                         <input type="button" class="signout-button" id="signout-button" value="Sign out">                    
                         {% else %}
-                        <a href="{{ url_for('rms.load_signin_ui')}}">Sign In</a>
+                        <a href="{{ url_for('rms._signin_ui')}}">Sign In</a>
                         {% endif %}
                     </div>
                 </div>
