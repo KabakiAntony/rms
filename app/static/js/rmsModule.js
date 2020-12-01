@@ -124,23 +124,19 @@ export function rmsFetch(theUrl,theMethod,theBody, redirectUrl=""){
                 exitLoader();
               }
               else if(status === 400){
-                showError(error,'error');
-                // document.getElementById('emailError').innerHTML = `${error}`;
+                showError(error,'error')
                 exitLoader();
               }
               else if(status === 409){
                 showError(error,'error');
-                // document.getElementById('emailError').innerHTML = `${error}`;
                 exitLoader();
               }
               else if(status === 401){
                 showError(error,'error');
-                // document.getElementById('emailError').innerHTML = `${error}`;
                 exitLoader();
               }
               else if(status === 404){
                 showError(error,'error');
-                // document.getElementById('emailError').innerHTML = `${error}`;
                 exitLoader();
               }
           })
@@ -149,4 +145,8 @@ export function rmsFetch(theUrl,theMethod,theBody, redirectUrl=""){
 export function showLoader(){
   document.getElementById('showLoader').style.display = " block";
   document.getElementById('submit').style.display = " none";
+}
+export function clearErrorDivs(){
+  document.getElementById('success').style.display = " none";
+  document.getElementById('error').style.display = " none";
 }
