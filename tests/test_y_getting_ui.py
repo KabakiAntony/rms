@@ -21,20 +21,20 @@ class TestGettingUI(RmsBaseTest):
 
     def test_getting_signin_page(self):
         """test getting the signin page"""
-        response = self.client.get('/fe/signin')
+        response = self.client.get('/signin')
         self.assertEqual(response.status_code, 200)
 
     def test_getting_forgot_password_page(self):
         """test getting forgot password page"""
-        response = self.client.get('/fe/forgot')
+        response = self.client.get('/forgot')
         self.assertEqual(response.status_code, 200)
 
     def test_getting_new_password_page_without_a_token(self):
-        response = self.client.get('/fe/new-password')
+        response = self.client.get('/new-password')
         self.assertEqual(response.status_code, 401)
 
     def test_getting_admin_signup_without_a_token(self):
-        response = self.client.get('/admin/fe/signup')
+        response = self.client.get('/admin/signup')
         self.assertEqual(response.status_code, 401)
 
     def test_getting_admin_signup_with_a_token(self):
@@ -56,5 +56,5 @@ class TestGettingUI(RmsBaseTest):
             expires=datetime.datetime.now() + datetime.timedelta(minutes=10)
         )
         response = self.client.get(
-            f"/admin/fe/signup?in={token.decode('utf-8')}")
+            f"/admin/signup?in={token.decode('utf-8')}")
         self.assertEqual(response.status_code, 401)
