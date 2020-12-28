@@ -65,7 +65,7 @@
                 <div class="actionNotification" id="error"></div>
                 <div class="actionNotification success" id="success"></div>
                 <h3>Create system users here</h3>
-                <p>It's easy choose what their role will be, send them a link and they will complete the rest.</p>
+                <p>Easy just fill the simple form below.</p>
                 <form  class="form create-project" id="rmsForm" method="POST">
                   <div class="error" id="emailError"></div>
                   <label >Select role :</label>
@@ -75,10 +75,22 @@
                     <option value="authorizer">Authorizer</option>
                   </select>
                   <div class="error" id="emailError"></div>
-                  <label >User email :</label>
+                  <label >Username :</label>
+                  <input type="text" class="input project" id="rmsUsername" name="rmsUsername" required>
+                  <div class="error" id="emailError"></div>
+                  <label >Email :</label>
                   <input type="email" class="input project" id="rmsEmail" name="rmsEmail" required>
-                  <div class="loader" id="showLoader"></div>
-                  <input type="submit" id="submit" class="submit projectSubmit" value="Send link">
+                  <div class="error" id="emailError"></div>
+                  <label >Password :</label>
+                  <input type="password" class="input project" id="rmsPassword" name="rmsPassword" required>
+                  <!-- <div class="loader" id="showLoader"></div> -->
+                  <div class="spinner" id="showLoader">
+                    <div class="bounce1"></div>
+                    <div class="bounce2"></div>
+                    <div class="bounce3"></div>
+                  </div>
+                  <input type="submit" id="submit" class="submit projectSubmit" value="Create user">
+                  <input type="hidden" id="rmsActive" name="rmsActive" value="false">
                  </form>
               </div>
               <div id="suspendUsers" class="actionContent">manage users</div>
@@ -100,9 +112,6 @@
               <a href="#">close projects</a>
             {% endif %}
         </div>
-        <footer>
-            <p>&copy; RMS 2020&nbsp;&nbsp;<a href="https://twitter.com/kabakikiarie">Find RMS Admin Here</a></p>
-          </footer>
     </div>
 </body>
 </html>

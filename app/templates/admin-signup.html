@@ -10,7 +10,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
         <!-- <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/gif" sizes="48x48"> -->
         <link rel="stylesheet" href="{{ url_for('static', filename='css/rms-main.css') }}">
-        <script type="module" src="{{ url_for('static', filename='js/admin-signup.js')}}"></script>
+        <script type="module" src="{{ url_for('static', filename='js/user-signup.js')}}"></script>
         {% if title %}
           <title> RMS / {{ title }} </title>
           {% else %}
@@ -51,6 +51,8 @@
                             <div class="error" id="passwordError"></div>
                             <label >Password</label>
                             <input  type="password" class="input" name ="rmsPassword" id="rmsPassword" required>
+                            <input type="hidden" id="rmsRole" name="rmsRole" value="Admin">
+                            <input type="hidden" id="rmsActive" name="rmsActive" value="true">
                             <div class="loader" id="showLoader"></div>
                             <input type="submit" id="submit" class="submit" value="Complete registration">
                        </form>
