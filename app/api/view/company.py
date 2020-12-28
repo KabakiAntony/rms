@@ -6,7 +6,8 @@ from app.api.model import db
 from app.api.model.company import Company, companies_schema
 from flask import request, abort
 from app.api.utils import check_for_whitespace, isValidEmail,\
-     send_mail, custom_make_response, token_required
+     send_mail, custom_make_response, token_required,\
+     button_style
 
 
 # getting environment variables
@@ -70,16 +71,7 @@ def company_signup_intent():
     <br/>
     <br/>
     <a href="{signup_url}?in={token.decode('utf-8')}"
-    style="font-weight:bold;
-    background-color: #0096D6;
-    border: 2px solid white;
-    border-radius:0.5rem;
-    text-decoration: none;
-    padding: 7px 28px;
-    color:rgb(255, 255, 255);
-    margin-bottom: 10px;
-    font-size: 120%;"
-    >Sign Up</a>
+    style="{button_style()}">Sign Up</a>
     <br/>
     <br/>
     Regards Antony,<br/>

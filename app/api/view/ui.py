@@ -12,7 +12,7 @@ from flask import render_template, request, abort
 KEY = os.getenv('SECRET_KEY')
 
 
-@rms.route('/Welcome')
+@rms.route('/welcome')
 def load_welcome_ui():
     """
     this loads the landing/welcome page of

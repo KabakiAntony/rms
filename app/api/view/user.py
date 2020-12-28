@@ -16,23 +16,16 @@ from werkzeug.security import generate_password_hash
 # get environment variables
 KEY = os.getenv('SECRET_KEY')
 signup_url = os.getenv('SIGNUP_URL')
-verification_url = os.getenv('VERIFY_EMAIL_URL')
 password_reset_url = os.getenv('PASSWORD_RESET_URL')
 
 
-@rms.route('/admin/signup', methods=['POST'])
+@rms.route('/auth/signup', methods=['POST'])
 def signup_admin_user():
     """
-    this method creates a company users admin
-    admin user does not need to verify their
-    email since they already got here by way
-    of email.
+    signup system users
     """
     try:
         admin_data = request.get_json()
-        # we have to get the company id
-        # as we only get the company name
-        # from the UI
         this_company = Company.query\
             .filter_by(company=admin_data['company']).first()
         _company = company_schema.dump(this_company)
@@ -44,7 +37,7 @@ def signup_admin_user():
         abort(
             custom_make_response(
                 "error",
-                f"{e} One or more mandatory fields has not been filled!", 400)
+                f"{e} field has not been filled!", 400)
         )
     # check data for sanity incase it bypass js on the frontend
     check_for_whitespace(
@@ -73,7 +66,7 @@ def signup_admin_user():
     db.session.commit()
     return custom_make_response(
         "data",
-        user_schema.dump(new_admin_user),
+        "Registration successful.",
         201
     )
 
@@ -253,7 +246,7 @@ def set_new_password():
     subject = """Password reset success."""
     content = f"""
     {password_reset_request_content()}
-    <a href="/fe/forgot"
+    <a href="/forgot"
     style="{button_style()}"
     >Forgot Password</a>
     {email_signature()}
