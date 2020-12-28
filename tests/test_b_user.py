@@ -77,7 +77,7 @@ class TestUser(RmsBaseTest):
         if not data:
             data = self._real_user
         response = self.client.post(
-            '/admin/signup',
+            '/auth/signup',
             data=json.dumps(self._real_user),
             content_type='application/json'
         )
@@ -97,7 +97,7 @@ class TestUser(RmsBaseTest):
     def test_signup_with_invalid_email(self):
         """test signing up with an invalid email"""
         response = self.client.post(
-            '/admin/signup',
+            '/auth/signup',
             data=json.dumps(self._user_with_invalid_email),
             content_type='application/json'
         )
@@ -106,7 +106,7 @@ class TestUser(RmsBaseTest):
     def test_signup_user_with_missing_fields(self):
         """test signing up user with some fields missing"""
         response = self.client.post(
-            '/admin/signup',
+            '/auth/signup',
             data=json.dumps(self._user_with_missing_fields),
             content_type='application/json'
         )
@@ -121,7 +121,7 @@ class TestUser(RmsBaseTest):
     def test_signup_user_with_long_password(self):
         """test signing up a user with a long password"""
         response = self.client.post(
-            '/admin/signup',
+            '/auth/signup',
             data=json.dumps(self._user_with_long_password),
             content_type='application/json'
         )
@@ -130,7 +130,7 @@ class TestUser(RmsBaseTest):
     def test_signup_user_with_short_password(self):
         """test signing up a user with a short password"""
         response = self.client.post(
-            '/admin/signup',
+            '/auth/signup',
             data=json.dumps(self._user_with_short_password),
             content_type='application/json'
         )
@@ -139,7 +139,7 @@ class TestUser(RmsBaseTest):
     def test_signup_user_with_lower_case_password(self):
         """test signing up a user with all lower case password"""
         response = self.client.post(
-            '/admin/signup',
+            '/auth/signup',
             data=json.dumps(self._user_with_lower_case_password),
             content_type='application/json'
         )
@@ -148,7 +148,7 @@ class TestUser(RmsBaseTest):
     def test_signup_user_with_upper_case_password(self):
         """test signing up a user with upper case password"""
         response = self.client.post(
-            '/admin/signup',
+            '/auth/signup',
             data=json.dumps(self._user_with_upper_case_password),
             content_type='application/json'
         )
@@ -157,7 +157,7 @@ class TestUser(RmsBaseTest):
     def test_signup_user_with_no_special_characters_password(self):
         """test signing up a user with password with no special chars"""
         response = self.client.post(
-            '/admin/signup',
+            '/auth/signup',
             data=json.dumps(
                 self._user_with_no_special_characters_password
             ),

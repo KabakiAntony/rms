@@ -16,7 +16,7 @@ class TestGettingUI(RmsBaseTest):
 
     def test_getting_homepage(self):
         """test getting the welcome page"""
-        response = self.client.get('/Welcome')
+        response = self.client.get('/welcome')
         self.assertEqual(response.status_code, 200)
 
     def test_getting_signin_page(self):
