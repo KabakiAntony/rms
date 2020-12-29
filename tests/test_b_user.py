@@ -10,49 +10,65 @@ class TestUser(RmsBaseTest):
         "company": "company a",
         "username": "kabaki",
         "email": "kabaki.kiarie@gmail.com",
-        "password": "Banuit*123"
+        "password": "Banuit*123",
+        "role": "Admin",
+        "isActive": "true"
     }
     _user_with_invalid_email = {
         "username": "kabaki",
         "email": "kabaki.kiarie@gmail",
         "password": "Banuit*123",
-        "company": "company a"
+        "company": "company a",
+        "role": "Admin",
+        "isActive": "true"
     }
     _user_with_lower_case_password = {
         "username": "kabaki",
         "email": "kabaki.kiarie@gmail.com",
         "password": "banuit*123",
-        "company": "company a"
+        "company": "company a",
+        "role": "Admin",
+        "isActive": "true"
     }
     _user_with_upper_case_password = {
         "username": "kabaki",
         "email": "kabaki.kiarie@gmail.com",
         "password": "BANUIT*123",
-        "company": "company a"
+        "company": "company a",
+        "role": "Admin",
+        "isActive": "true"
     }
     _user_with_no_special_characters_password = {
         "username": "kabaki",
         "email": "kabaki.kiarie@gmail.com",
         "password": "Banuit123",
-        "company": "company a"
+        "company": "company a",
+        "role": "Admin",
+        "isActive": "true"
     }
     _user_with_missing_fields = {
         "username": "kabaki",
         "email": "",
         "password": "Banuit*123",
-        "company": "company a"
+        "company": "company a",
+        "role": "Admin",
+        "isActive": "true"
     }
     _user_with_short_password = {
         "username": "kabaki",
         "email": "kabaki.kiarie@gmail.com",
         "password": "B*12",
-        "company": "company a"
+        "company": "company a",
+        "role": "Admin",
+        "isActive": "true"
     }
     _user_with_long_password = {
         "username": "kabaki",
         "email": "kabaki.kiarie@gmail.com",
         "password": "Banuit*123fsgsssgfr123wt34t4rg4t3$SWA$$%w^W$23tg3",
-        "company": "company a"
+        "company": "company a",
+        "role": "Admin",
+        "isActive": "true"
     }
     _user_login_with_correct_information = {
         "email": "kabaki.kiarie@gmail.com",
@@ -92,6 +108,7 @@ class TestUser(RmsBaseTest):
         """Test signing up an already admin"""
         self.user_creation_post()
         response = self.user_creation_post()
+        # change the status to  400 from 409
         self.assertEqual(response.status_code, 409)
 
     def test_signup_with_invalid_email(self):

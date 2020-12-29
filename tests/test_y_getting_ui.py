@@ -1,7 +1,6 @@
 import jwt
 import os
 import datetime
-from flask import request
 from .rmsBaseTest import RmsBaseTest
 
 KEY = os.environ.get('SECRET_KEY')
