@@ -218,7 +218,7 @@ margin-top: 10px;
   from {top: 30px; opacity: 1;}
   to {top: 0; opacity: 0;}
 }
-.loader {
+/* .loader {
   border: 3px solid  #d600a1;
   border-radius: 50%;
   border-top: 3px solid  #0096D6;
@@ -240,9 +240,9 @@ margin-top: 10px;
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
-}
+ } */
 .spinner {
-  margin: 30px auto 0;
+  margin: 10px auto;
   text-align: center;
   display:none;
 }
