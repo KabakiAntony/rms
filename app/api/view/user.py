@@ -20,19 +20,21 @@ password_reset_url = os.getenv('PASSWORD_RESET_URL')
 
 
 @rms.route('/auth/signup', methods=['POST'])
-def signup_admin_user():
+def signup_system_users():
     """
     signup system users
     """
     try:
-        admin_data = request.get_json()
+        user_data = request.get_json()
         this_company = Company.query\
-            .filter_by(company=admin_data['company']).first()
+            .filter_by(company=user_data['company']).first()
         _company = company_schema.dump(this_company)
         companyId = _company['id']
-        username = admin_data['username']
-        email = admin_data['email']
-        password = admin_data['password']
+        username = user_data['username']
+        email = user_data['email']
+        password = user_data['password']
+        role = user_data['role']
+        isActive = user_data['isActive']
     except Exception as e:
         abort(
             custom_make_response(
@@ -41,12 +43,12 @@ def signup_admin_user():
         )
     # check data for sanity incase it bypass js on the frontend
     check_for_whitespace(
-        admin_data,
-        ['companyId', 'username', 'email', 'password']
+        user_data,
+        ['companyId', 'username', 'email', 'password', 'role', 'status']
     )
     isValidEmail(email)
     # check if user is already registered
-    if User.query.filter_by(email=admin_data['email']).first():
+    if User.query.filter_by(email=user_data['email']).first():
         abort(
             custom_make_response(
                 "error",
@@ -54,15 +56,15 @@ def signup_admin_user():
             )
         )
     isValidPassword(password)
-    new_admin_user = User(
+    new_user = User(
         username=username,
         email=email,
         password=password,
         companyId=companyId,
-        role="Admin",
-        isActive="True"
+        role=role,
+        isActive=isActive
     )
-    db.session.add(new_admin_user)
+    db.session.add(new_user)
     db.session.commit()
     return custom_make_response(
         "data",
@@ -190,7 +192,7 @@ def forgot_password():
     subject = """Password reset request"""
     content = f"""
     Hey {this_user['username']},
-    {password_reset_success_content()}
+    {password_reset_request_content()}
     <a href="{password_reset_url}?u={token.decode('utf-8')}"
     style="{button_style()}"
     >Reset Password</a>
@@ -245,7 +247,7 @@ def set_new_password():
     db.session.commit()
     subject = """Password reset success."""
     content = f"""
-    {password_reset_request_content()}
+    {password_reset_success_content()}
     <a href="/forgot"
     style="{button_style()}"
     >Forgot Password</a>
