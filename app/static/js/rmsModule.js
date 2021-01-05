@@ -11,7 +11,7 @@ function isValidPassword(my_password){
 }
 /* this function gets called on a status code of 200 or 201 */
 function inputReset(){
-  document.getElementById('rmsForm').reset();  
+ document.getElementById('rmsForm').reset();  
 }
 function callToast(msg,redirectUrl) {
   let x = document.getElementById("showAlert");
@@ -37,7 +37,7 @@ function showError(err){
 function showAlert(myData,divId){
   if (divId === 'success'){
     document.getElementById('success').style.display = " block";
-    document.getElementById('success').innerHTML = `${myData} <span class="closebtn">&times;</span>`
+    document.getElementById('success').innerHTML = `${myData} <span class="closebtn">&times;</span>`;
   }
   else{
     document.getElementById('error').style.display = " block";
@@ -48,8 +48,7 @@ function showAlert(myData,divId){
   for (i = 0; i < close.length; i++) {
     close[i].onclick = function(){
       var div = this.parentElement;
-      div.style.opacity = "0";
-      setTimeout(function(){ div.style.display = "none"; }, 600);
+      setTimeout(function(){ div.style.display = "none"; });
     }
 }
 }
@@ -139,6 +138,7 @@ export function rmsFetch(theUrl,theMethod,theBody, redirectUrl=""){
                 exitLoader();
               }
           })
+          // remove console log at the end
           .catch(err => console.log(`This error occured :${err}`));
 }
 export function showLoader(){
