@@ -26,14 +26,23 @@ def signup_system_users():
     """
     try:
         user_data = request.get_json()
-        this_company = Company.query\
-            .filter_by(company=user_data['company']).first()
-        _company = company_schema.dump(this_company)
-        companyId = _company['id']
+        role = user_data['role']
+        if role == "Admin":
+            this_company = Company.query\
+                .filter_by(company=user_data['company']).first()
+            _company = company_schema.dump(this_company)
+            companyId = _company['id']
+            password = user_data['password']
+        else:
+            companyId = user_data['companyId']
+            # while this password is not used anywhere
+            # I have to find a better way to generate randomn
+            # passwords those that will be used for data sanity
+            # but the user is prompted to create a new password 
+            # on the first time they are logging in
+            password = "Banuit@123"
         username = user_data['username']
         email = user_data['email']
-        password = user_data['password']
-        role = user_data['role']
         isActive = user_data['isActive']
     except Exception as e:
         abort(
@@ -55,6 +64,14 @@ def signup_system_users():
                 "User exists, please use another email!", 409
             )
         )
+    # check if username is already used
+    if User.query.filter_by(username=user_data['username']).first():
+        abort(
+            custom_make_response(
+                "error",
+                "User exists, please use another username!", 409
+            )
+        )
     isValidPassword(password)
     new_user = User(
         username=username,
@@ -68,7 +85,7 @@ def signup_system_users():
     db.session.commit()
     return custom_make_response(
         "data",
-        "Registration successful.",
+        f"{ username } registered successfully.",
         201
     )
 
@@ -125,7 +142,7 @@ def signin_all_users():
     session['username'] = _curr_user['username']
     resp = custom_make_response(
         "data",
-        "Signed in successfully, redirecting to your dashboard...",
+        "Sign In successful, preparing your dashboard...",
         200
     )
     resp.set_cookie(
