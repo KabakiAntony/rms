@@ -1,7 +1,7 @@
 import {validateEmailData, validatePasswordData, emailInputListener} from './rmsModule.js'
 import {passwordInputListener, rmsFetch, showLoader} from './rmsModule.js'
 
-let SignUpForm = document.getElementById('rmsSignUpForm');
+let SignUpForm = document.getElementById('rmsForm');
 let username = document.getElementById('rmsUsername');
 let email = document.getElementById('rmsEmail');
 let company = document.getElementById('rmsCompany');
@@ -25,7 +25,7 @@ function postSignUp(){
     rmsFetch('/auth/signup','POST',signUpInfo,'/signin');    
 }
 
-SignUpForm.addEventListener('signUpSubmit',(e)=>{
+SignUpForm.addEventListener('submit',(e)=>{
     e.preventDefault();
     validateEmailData();
     validatePasswordData();
