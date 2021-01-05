@@ -120,7 +120,10 @@ html,body{
   color: rgba(255, 0, 0, 0.719);
   font-size: 11px;
   margin-bottom: 3px;
-
+}
+.error.dashboard{
+  font-size: 14px;
+  padding:5px;
 }
 .input{
   margin-bottom: 10px;
@@ -218,29 +221,6 @@ margin-top: 10px;
   from {top: 30px; opacity: 1;}
   to {top: 0; opacity: 0;}
 }
-/* .loader {
-  border: 3px solid  #d600a1;
-  border-radius: 50%;
-  border-top: 3px solid  #0096D6;
-  border-bottom: 3px solid  #0096D6;
-  width: 25px;
-  height: 25px;
-  -webkit-animation: spin 2s linear infinite;
-  animation: spin 2s linear infinite;
-  display:none;
-  margin: 0 auto;
-  margin-bottom: 5px;
-}
-
-@-webkit-keyframes spin {
-  0% { -webkit-transform: rotate(0deg); }
-  100% { -webkit-transform: rotate(360deg); }
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
- } */
 .spinner {
   margin: 10px auto;
   text-align: center;
@@ -251,7 +231,6 @@ margin-top: 10px;
   width: 12px;
   height: 12px;
   background-color: #0096D6;
-
   border-radius: 100%;
   display: inline-block;
   -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
@@ -284,17 +263,17 @@ margin-top: 10px;
 }
 .actionNotification{
   padding: 10px;
-  background-color: #f44336;
-  color: black;
+  background-color: #eb584e;
+  color:white;
   opacity: 1;
   transition: opacity 0.6s;
   margin-bottom: 15px;
   border-radius: 5px;
   display: none;
+  font-size: 13px;
 }
-.actionNotification.success {background-color: #4CAF50;}
-.actionNotification.info {background-color: #2196F3;}
-.actionNotification.warning {background-color: #ff9800;}
+
+.actionNotification.success {background-color: #5ee262;color: black;}
 .closebtn {
   margin-left: 15px;
   color: white;
