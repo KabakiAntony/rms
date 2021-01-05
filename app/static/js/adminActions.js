@@ -1,11 +1,18 @@
-import {showLoader} from './rmsModule.js'
-import {rmsFetch} from './rmsModule.js'
 import {clearErrorDivs} from './rmsModule.js'
+import {validateEmailData, emailInputListener} from './rmsModule.js'
+import {rmsFetch, showLoader} from './rmsModule.js'
 
 let createProjectForm = document.getElementById('rmsForm');
 let projectName = document.getElementById('rmsProject');
 let dateFrom = document.getElementById('dateFrom');
 let dateTo = document.getElementById('dateTo');
+let signUpForm = document.getElementById('rmsRegForm');
+let username = document.getElementById('rmsUsername');
+let email = document.getElementById('rmsEmail');
+let companyId = document.getElementById('rmsCompanyId');
+let isActive = document.getElementById('rmsActive');
+let role = document.getElementById('rmsRole');
+let signUpInfo;
 let theBody;
   
 function createResource(){
@@ -40,4 +47,23 @@ dateTo.addEventListener('input',(e)=>{
     }
 })
 
+emailInputListener(email);
 
+function postSignUp(){
+    signUpInfo = {
+        email:email.value,
+        username:username.value,
+        companyId:companyId.value,
+        role:role.value,
+        isActive:isActive.value
+    }
+    rmsFetch('/auth/signup','POST',signUpInfo,'')
+}
+
+signUpForm.addEventListener('submit',(e)=>{
+    e.preventDefault();
+    clearErrorDivs();
+    validateEmailData();
+    showLoader();
+    postSignUp();
+});

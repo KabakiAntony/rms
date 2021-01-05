@@ -124,11 +124,19 @@ def signin_all_users():
         abort(
             custom_make_response(
                 "error",
-                "Incorrect email and or password!",
+                "Incorrect email and or password, check & try again !",
                 401
             )
         )
     _curr_user = user_schema.dump(user)
+    if _curr_user['isActive'] != 'true':
+        abort(
+            custom_make_response(
+                "error",
+                "Your account is not in active status, contact company admin.",
+                401
+            )
+        )
     token = jwt.encode(
         {
             "username": _curr_user['username'],
