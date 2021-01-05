@@ -65,7 +65,8 @@ def load_profile_ui(user):
         'dashboard.html',
         title="Dashboard",
         username=user['username'],
-        role=user['role']
+        role=user['role'],
+        companyId=user['companyId']
     )
 
 
