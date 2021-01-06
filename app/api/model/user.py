@@ -12,16 +12,17 @@ class User(db.Model):
     """
     __tablename__ = "Users"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String(20), primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True, nullable=False)
     password = db.Column(db.String(128), nullable=False)
-    companyId = db.Column(db.Integer, db.ForeignKey('Company.id'))
+    companyId = db.Column(db.String(20), db.ForeignKey('Company.id'))
     role = db.Column(db.String(25), nullable=False)
     isActive = db.Column(db.String(25), default='False', nullable=False)
 
-    def __init__(self, username, email, password, role, companyId, isActive):
+    def __init__(self, id, username, email, password, role, companyId, isActive):
         """initilize user db values"""
+        self.id = id
         self.username = username
         self.email = email
         self.password = self.hash_password(password)

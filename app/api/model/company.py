@@ -12,14 +12,15 @@ class Company(db.Model):
     """
     __tablename__ = "Company"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String(20), primary_key=True)
     company = db.Column(db.String(64), index=True, unique=True)
     joined_at = db.Column(db.DateTime(), default=datetime.utcnow)
 
-    def __init__(self, company, joined_at):
+    def __init__(self, id, company, joined_at):
         """
         initializing company db values
         """
+        self.id = id
         self.company = company
         self.joined_at = joined_at
 

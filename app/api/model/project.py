@@ -7,14 +7,15 @@ class Project(db.Model):
     """
     __tablename__ = "Project"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String(20), primary_key=True)
     project_name = db.Column(db.String(100), nullable=False, unique=True)
-    companyId = db.Column(db.Integer, db.ForeignKey('Company.id'))
+    companyId = db.Column(db.String(20), db.ForeignKey('Company.id'))
     date_from = db.Column(db.Date)
     date_to = db.Column(db.Date)
 
-    def __init__(self, project_name, companyId, date_from, date_to):
+    def __init__(self, id, project_name, companyId, date_from, date_to):
         """initializing inputs for this model"""
+        self.id = id
         self.project_name = project_name
         self.companyId = companyId
         self.date_from = date_from
