@@ -5,6 +5,8 @@ functions.
 import re
 import os
 import jwt
+import random
+import string
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 from functools import wraps
@@ -206,3 +208,36 @@ def email_signature():
     RMS Admin.
     """
     return signature
+
+
+def generate_random_password():
+    """
+    generate random password for users
+    signed up by admin, it is not used
+    anywhere by for maintaining data 
+    sanity in the db
+    """
+    random_source = string.ascii_letters + string.digits + string.punctuation
+    password = random.choice(string.ascii_lowercase)
+    password += random.choice(string.ascii_uppercase)
+    password += random.choice(string.digits)
+    password += random.choice(string.punctuation)
+
+    for i in range(6):
+        password += random.choice(random_source)
+
+    password_list = list(password)
+    random.SystemRandom().shuffle(password_list)
+    password = ''.join(password_list)
+    return password
+
+
+def generate_db_ids():
+    """
+    we will use this function to generate unikue
+    id for the database primary keys
+    """
+    unikueId = string.ascii_letters + string.digits
+    unikueId = ''.join(random.choice(unikueId) for i in range(10))
+
+    return unikueId
