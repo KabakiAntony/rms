@@ -140,8 +140,9 @@ def token_required(f):
         try:
             if user_token:
                 data = jwt.decode(user_token, KEY, algorithm="HS256")
+                # change from using username to id
                 current_user = User.query\
-                    .filter_by(username=data['username']).first()
+                    .filter_by(id=data['id']).first()
                 _data = user_schema.dump(current_user)
             if company_token:
                 data = jwt.decode(company_token, KEY, algorithms="HS256")
@@ -199,6 +200,24 @@ def password_reset_request_content():
     return content
 
 
+def non_admin_user_registration_content():
+    """ return this message when an admin
+    creates an account for a user """
+    content = """
+    <br/>
+    <br/>
+    Welcome, an account has been created for you by the,
+    company admin, all you need to do is click of the activate
+    account button below, you will be prompted to set a password
+    for your account and once that is done you can start using
+    the account. <br/>
+    Note this link will only be active for thirty minutes.
+    <br/>
+    <br/>
+    """
+    return content
+
+
 def email_signature():
     """return email signature"""
     signature = """
@@ -214,7 +233,7 @@ def generate_random_password():
     """
     generate random password for users
     signed up by admin, it is not used
-    anywhere by for maintaining data 
+    anywhere by for maintaining data
     sanity in the db
     """
     random_source = string.ascii_letters + string.digits + string.punctuation
