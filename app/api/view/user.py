@@ -9,7 +9,8 @@ from app.api.model.company import Company, company_schema
 from app.api.utils import check_for_whitespace, isValidEmail,\
      send_mail, custom_make_response, token_required,\
      isValidPassword, button_style, password_reset_request_content,\
-     password_reset_success_content, email_signature
+     password_reset_success_content, email_signature,\
+     generate_random_password, generate_db_ids
 from werkzeug.security import generate_password_hash
 
 
@@ -35,15 +36,11 @@ def signup_system_users():
             password = user_data['password']
         else:
             companyId = user_data['companyId']
-            # while this password is not used anywhere
-            # I have to find a better way to generate randomn
-            # passwords those that will be used for data sanity
-            # but the user is prompted to create a new password 
-            # on the first time they are logging in
-            password = "Banuit@123"
+            password = generate_random_password()
         username = user_data['username']
         email = user_data['email']
         isActive = user_data['isActive']
+        id = generate_db_ids()
     except Exception as e:
         abort(
             custom_make_response(
@@ -74,6 +71,7 @@ def signup_system_users():
         )
     isValidPassword(password)
     new_user = User(
+        id=id,
         username=username,
         email=email,
         password=password,

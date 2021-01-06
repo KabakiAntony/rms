@@ -6,7 +6,8 @@ from app.api.model.project import Project, project_schema,\
     projects_schema
 from app.api.model.user import User, user_schema
 from flask import request, abort
-from app.api.utils import check_for_whitespace, custom_make_response
+from app.api.utils import check_for_whitespace, custom_make_response,\
+    generate_db_ids
 
 
 # getting environment variables
@@ -46,6 +47,7 @@ def create_new_project():
         companyId = _data['companyId']
         dateFrom = data['date_from']
         dateTo = data['date_to']
+        id = generate_db_ids()
     except Exception as e:
         abort(
             custom_make_response(
@@ -67,6 +69,7 @@ def create_new_project():
             )
         )
     new_project = Project(
+        id=id,
         project_name=projectName,
         companyId=companyId,
         date_from=dateFrom,

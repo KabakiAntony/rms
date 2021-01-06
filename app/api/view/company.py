@@ -7,7 +7,7 @@ from app.api.model.company import Company, companies_schema
 from flask import request, abort
 from app.api.utils import check_for_whitespace, isValidEmail,\
      send_mail, custom_make_response, token_required,\
-     button_style
+     button_style, generate_db_ids
 
 
 # getting environment variables
@@ -26,6 +26,7 @@ def company_signup_intent():
         username = data["username"]
         email = data["email"]
         company = data["company"]
+        id = generate_db_ids()
     except Exception:
         abort(
             custom_make_response(
@@ -78,7 +79,7 @@ def company_signup_intent():
     RMS Admin.
     """
     send_mail(email, subject, content)
-    new_company = Company(company=company, joined_at=datetime.datetime.now())
+    new_company = Company(id=id, company=company, joined_at=datetime.datetime.now())
     db.session.add(new_company)
     db.session.commit()
     resp = custom_make_response(
