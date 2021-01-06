@@ -53,7 +53,7 @@ def company_signup_intent():
             "email": email,
             "username": username,
             "company": company,
-            'exp': datetime.datetime.now() +
+            'exp': datetime.datetime.utcnow() +
             datetime.timedelta(minutes=180)
         },
         KEY,
@@ -78,10 +78,15 @@ def company_signup_intent():
     Regards Antony,<br/>
     RMS Admin.
     """
-    send_mail(email, subject, content)
-    new_company = Company(id=id, company=company, joined_at=datetime.datetime.now())
+    new_company = Company(
+        id=id,
+        company=company,
+        joined_at=datetime.datetime.utcnow() +
+        datetime.timedelta(minutes=30)
+    )
     db.session.add(new_company)
     db.session.commit()
+    send_mail(email, subject, content)
     resp = custom_make_response(
         "data",
         f"{company} Signed up successfully, see {email} for more...",
@@ -92,7 +97,7 @@ def company_signup_intent():
         token.decode('utf-8'),
         httponly=True,
         secure=True,
-        expires=datetime.datetime.now() + datetime.timedelta(minutes=180)
+        expires=datetime.datetime.utcnow() + datetime.timedelta(minutes=180)
     )
     return resp
 

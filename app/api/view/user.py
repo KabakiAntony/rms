@@ -10,7 +10,8 @@ from app.api.utils import check_for_whitespace, isValidEmail,\
      send_mail, custom_make_response, token_required,\
      isValidPassword, button_style, password_reset_request_content,\
      password_reset_success_content, email_signature,\
-     generate_random_password, generate_db_ids
+     generate_random_password, generate_db_ids,\
+     non_admin_user_registration_content
 from werkzeug.security import generate_password_hash
 
 
@@ -81,6 +82,26 @@ def signup_system_users():
     )
     db.session.add(new_user)
     db.session.commit()
+    if role != "Admin":
+        token = jwt.encode(
+            {
+                # change from using username to id
+                "id": id,
+                "exp": datetime.datetime.utcnow() +
+                datetime.timedelta(minutes=30)
+            },
+            KEY,
+            algorithm='HS256'
+        )
+        subject = """Activate your account."""
+        content = f"""
+        Hey {username},
+        {non_admin_user_registration_content()}
+        <a href="{password_reset_url}?u={token.decode('utf-8')}"
+        style="{button_style()}">Activate account</a>
+        {email_signature()}
+        """
+        send_mail(email, subject, content)
     return custom_make_response(
         "data",
         f"{ username } registered successfully.",
@@ -137,9 +158,11 @@ def signin_all_users():
         )
     token = jwt.encode(
         {
-            "username": _curr_user['username'],
+            # change from username to id
+            # "username": _curr_user['username'],
+            "id": _curr_user['id'],
             "role": _curr_user['role'],
-            'exp': datetime.datetime.now() +
+            'exp': datetime.datetime.utcnow() +
             datetime.timedelta(minutes=480)
         },
         KEY,
@@ -156,7 +179,7 @@ def signin_all_users():
         token.decode('utf-8'),
         httponly=True,
         secure=True,
-        expires=datetime.datetime.now() + datetime.timedelta(minutes=480)
+        expires=datetime.datetime.utcnow() + datetime.timedelta(minutes=480)
     )
     return resp
 
@@ -205,8 +228,9 @@ def forgot_password():
     this_user = user_schema.dump(user)
     token = jwt.encode(
         {
-            "username": this_user['username'],
-            'exp': datetime.datetime.now() +
+            # change from using username to id
+            "id": this_user['id'],
+            'exp': datetime.datetime.utcnow() +
             datetime.timedelta(minutes=30)
         },
         KEY,
@@ -232,7 +256,7 @@ def forgot_password():
         token.decode('utf-8'),
         httponly=True,
         secure=True,
-        expires=datetime.datetime.now() + datetime.timedelta(minutes=30)
+        expires=datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
     )
     return resp
 

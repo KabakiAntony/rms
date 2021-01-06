@@ -84,7 +84,11 @@ def load_password_reset_ui(user):
     """
     load the password reset ui
     """
-    return render_template('new-password.html', title="New Password")
+    return render_template(
+        'new-password.html',
+        title="New Password",
+        email=user['email']
+    )
 
 
 @rms.route('/contact')
