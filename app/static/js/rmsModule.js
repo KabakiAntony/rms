@@ -141,6 +141,44 @@ export function rmsFetch(theUrl,theMethod,theBody, redirectUrl=""){
           // remove console log at the end
           .catch(err => console.log(`This error occured :${err}`));
 }
+// this fetch uploads files
+export function rmsFileUpload(theUrl,theMethod,theBody, redirectUrl=""){
+  fetch(theUrl,{
+          method: theMethod,
+          body:theBody
+        })
+        .then(response => response.json())
+        .then(({data,status,error})=>{
+            if(status === 201 || status === 200 || status === 202){
+              inputReset();
+              if (filename === 'dashboard'){
+                showAlert(data,'success');
+              }
+              else{
+                callToast(data,redirectUrl);
+              }
+              exitLoader();
+            }
+            else if(status === 400){
+              showError(error,'error')
+              exitLoader();
+            }
+            else if(status === 409){
+              showError(error,'error');
+              exitLoader();
+            }
+            else if(status === 401){
+              showError(error,'error');
+              exitLoader();
+            }
+            else if(status === 404){
+              showError(error,'error');
+              exitLoader();
+            }
+        })
+        // remove console log at the end
+        .catch(err => console.log(`This error occured :${err}`));
+}
 export function showLoader(){
   document.getElementById('showLoader').style.display = " block";
   document.getElementById('submit').style.display = " none";
