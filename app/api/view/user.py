@@ -5,6 +5,7 @@ from app.api import rms
 from app.api.model import db
 from flask import request, abort, session
 from app.api.model.user import user_schema, User
+from app.api.model.employees import Employees
 from app.api.model.company import Company, company_schema
 from app.api.utils import check_for_whitespace, isValidEmail,\
      send_mail, custom_make_response, token_required,\
@@ -38,10 +39,10 @@ def signup_system_users():
         else:
             companyId = user_data['companyId']
             password = generate_random_password()
-        username = user_data['username']
         email = user_data['email']
         isActive = user_data['isActive']
         id = generate_db_ids()
+        username = user_data['username'] + '.' + id
     except Exception as e:
         abort(
             custom_make_response(
@@ -54,20 +55,25 @@ def signup_system_users():
         ['companyId', 'username', 'email', 'password', 'role', 'status']
     )
     isValidEmail(email)
+    # check if user is on company masterfile
+    if not Employees.query.filter_by(email=user_data['email']).first():
+        print("are we getting here")
+        abort(
+            custom_make_response(
+                "error",
+                """
+                The user you are creating an account for
+                is not on your company masterfile,
+                Please add them and try again.
+                """, 400
+            )
+        )
     # check if user is already registered
     if User.query.filter_by(email=user_data['email']).first():
         abort(
             custom_make_response(
                 "error",
                 "User exists, please use another email!", 409
-            )
-        )
-    # check if username is already used
-    if User.query.filter_by(username=user_data['username']).first():
-        abort(
-            custom_make_response(
-                "error",
-                "User exists, please use another username!", 409
             )
         )
     isValidPassword(password)
@@ -85,7 +91,6 @@ def signup_system_users():
     if role != "Admin":
         token = jwt.encode(
             {
-                # change from using username to id
                 "id": id,
                 "exp": datetime.datetime.utcnow() +
                 datetime.timedelta(minutes=30)
@@ -95,13 +100,15 @@ def signup_system_users():
         )
         subject = """Activate your account."""
         content = f"""
-        Hey {username},
+        Hey {username.split('.', 1)[0]},
         {non_admin_user_registration_content()}
         <a href="{password_reset_url}?u={token.decode('utf-8')}"
         style="{button_style()}">Activate account</a>
         {email_signature()}
         """
         send_mail(email, subject, content)
+        # get the first part of the username
+        username = username.split('.', 1)[0]
     return custom_make_response(
         "data",
         f"{ username } registered successfully.",
@@ -158,8 +165,6 @@ def signin_all_users():
         )
     token = jwt.encode(
         {
-            # change from username to id
-            # "username": _curr_user['username'],
             "id": _curr_user['id'],
             "role": _curr_user['role'],
             'exp': datetime.datetime.utcnow() +
@@ -228,7 +233,6 @@ def forgot_password():
     this_user = user_schema.dump(user)
     token = jwt.encode(
         {
-            # change from using username to id
             "id": this_user['id'],
             'exp': datetime.datetime.utcnow() +
             datetime.timedelta(minutes=30)
@@ -238,7 +242,7 @@ def forgot_password():
     )
     subject = """Password reset request"""
     content = f"""
-    Hey {this_user['username']},
+    Hey {this_user['username'].split('.', 1)[0]},
     {password_reset_request_content()}
     <a href="{password_reset_url}?u={token.decode('utf-8')}"
     style="{button_style()}"
