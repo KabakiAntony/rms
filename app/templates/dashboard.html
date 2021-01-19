@@ -118,14 +118,11 @@
                  </form>
               </div>
               <div id="suspendUsers" class="actionContent">manage users</div>
-              <h4 class="text-center bigger-font" id="profileInst">Click on any option to carry out the task.</h4>
             {% elif role =='Creator' %}
             <!-- <script type="module" src="{{ url_for('static', filename='js/creatorActions.js')}}"></script> -->
             <div class="actions active">
                 <button class="action-links" onclick="openAction(event, 'UploadBudget')">Upload Budget</button>
-                <button class="action-links" onclick="openAction(event, 'UploadEmployees')">Upload Employees</button>
-                <button class="action-links" onclick="openAction(event,'UploadPayment')">Upload Project Payment File</button>
-                <button class="action-links" onclick="openAction(event,'EditEmployeeInfo')">Edit Employee Info</button>
+                <button class="action-links" onclick="openAction(event,'UploadPayment')">Upload Payment File</button>
               </div>
               <div id="UploadBudget" class="actionContent">
                 <h3>Upload a budget for a given project</h3>
@@ -142,27 +139,25 @@
                   <input type="submit" id="submit" class="submit projectSubmit" value="Create budget">
                 </form>
               </div>
-              <div id="UploadEmployees" class="actionContent">
-                <h3>Upload your companies employees master file</h3>
-                <p>Just create a csv file, in the format given by the site administrator then upload it for saving.</p>
-                <form  class="form create-project" id="rmsRegForm" method="POST">
-                  <input type="submit" id="submit" class="submit projectSubmit" value="Upload employees">
-                 </form>
-              </div>
               <div id="UploadPayment" class="actionContent">Upload payment file</div>
-              <div id="EditEmployeeInfo" class="actionContent">Edit employee information</div>
-              <h4 class="text-center bigger-font" id="profileInst">Click on any option to carry out the task.</h4>
             {% elif role == 'Reviewer' %}
-              <a href="#">Review Files</a>
-              <a href="#">edit projects</a>
-              <a href="#">show projects</a>
-              <a href="#">close projects</a>
+            <!-- <script type="module" src="{{ url_for('static', filename='js/reviewerActions.js')}}"></script> -->
+            <div class="actions active">
+              <button class="action-links" onclick="openAction(event, 'reviewBudget')">Review Budget</button>
+              <button class="action-links" onclick="openAction(event,'reviewPayment')">Review Payment File</button>
+            </div>
+            <div id="reviewBudget" class="actionContent">Review the project  budget here</div>
+            <div id="reviewPayment" class="actionContent">Review payment file</div>
             {% elif role == 'Authorizer' %}
-              <a href="#">Authorize projects</a>
-              <a href="#">edit projects</a>
-              <a href="#">show projects</a>
-              <a href="#">close projects</a>
+            <!-- <script type="module" src="{{ url_for('static', filename='js/authorizerActions.js')}}"></script> -->
+            <div class="actions active">
+            <button class="action-links" onclick="openAction(event, 'authorizeBudget')">Authorize Budget</button>
+            <button class="action-links" onclick="openAction(event,'authorizePayment')">Authorize Payment File</button>
+            </div>
+            <div id="authorizeBudget" class="actionContent">Authorize Budget</div>
+            <div id="authorizePayment" class="actionContent">Authorize Payment</div>
             {% endif %}
+            <h4 class="text-center bigger-font" id="profileInst">Click on any option to carry out the task.</h4>
         </div>
     </div>
 </body>
