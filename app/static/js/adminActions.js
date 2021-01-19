@@ -1,6 +1,6 @@
 import {clearErrorDivs} from './rmsModule.js'
 import {validateEmailData, emailInputListener} from './rmsModule.js'
-import {rmsFetch, showLoader} from './rmsModule.js'
+import {rmsFetch, showLoader, rmsFileUpload} from './rmsModule.js'
 
 let createProjectForm = document.getElementById('rmsForm');
 let projectName = document.getElementById('rmsProject');
@@ -14,6 +14,11 @@ let isActive = document.getElementById('rmsActive');
 let role = document.getElementById('rmsRole');
 let signUpInfo;
 let theBody;
+// the following part goes into employee file upload
+let fileUploadForm = document.getElementById('rmsEmployeeFile');
+let fileInput = document.getElementById('employeeFile');
+// let theFile;
+
   
 function createResource(){
     theBody = {
@@ -66,4 +71,17 @@ signUpForm.addEventListener('submit',(e)=>{
     validateEmailData();
     showLoader();
     postSignUp();
+});
+
+function uploadEmployeeFile(){
+    const theFile = new FormData();
+    theFile.append('employeeExcelFile',fileInput.files[0]);
+    rmsFileUpload('/auth/upload/employees','POST',theFile,'')
+}
+
+fileUploadForm.addEventListener('submit',(e)=>{
+    e.preventDefault();
+    clearErrorDivs();
+    showLoader();
+    uploadEmployeeFile();
 });
