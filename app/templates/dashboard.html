@@ -50,6 +50,7 @@
             {% if role =='Admin' %}
             <script type="module" src="{{ url_for('static', filename='js/adminActions.js')}}"></script>
               <div class="actions active">
+                <button class="action-links" onclick="openAction(event, 'uploadMasterFile')">Master File</button>
                 <button class="action-links" onclick="openAction(event, 'createProject')">Create Projects</button>
                 <button class="action-links" onclick="openAction(event, 'createUsers')">Create Users</button>
                 <button class="action-links" onclick="openAction(event, 'suspendUsers')">Manage Users</button>
@@ -66,6 +67,36 @@
                   <input type="date" class="input project" id="dateTo" name="dateTo" required>
                   <input type="submit" id="submit" class="submit projectSubmit" value="Create project">
                 </form>
+              </div>
+              <div id="uploadMasterFile" class="actionContent">
+                <h3>Upload the employee master file</h3>
+                <ul>
+                  <li><p>The file should have the following format and be an excel file.</p></li>
+                  <li><p>Note the <span>Id</span> and <span>companyId</span> columns will be auto filled, leave them blank.</p></li>
+                  <table class="excelFormat">
+                    <tr>
+                      <th>id</th>
+                      <th>companyId</th>
+                      <th>firstname</th>
+                      <th>lastname</th>
+                      <th>mobile</th>
+                      <th>email</th>
+                    </tr>
+                    <tr>
+                      <td>auto filled</td>
+                      <td>auto filled</td>
+                      <td>john</td>
+                      <td>doe</td>
+                      <td>0712345678</td>
+                      <td>john.doe@example.com</td>
+                    </tr>
+                  </table>
+                  <li><p>All the other fields are mandatory.</p></li>
+                </ul> 
+                <form class="form create-project" id="rmsEmployeeFile" method="POST">
+                  <input type="file" id="employeeFile" name="employeeFile" accept=".xlsx, .xls" required/>
+                  <input id="submit" class="submit projectSubmit" type="submit" value="Upload file">
+                </form>    
               </div>
               <div id="createUsers" class="actionContent">
                 <h3>Create system users here</h3>
@@ -82,52 +113,44 @@
                   <label >Email :</label>
                   <input type="email" class="input project" id="rmsEmail" name="rmsEmail" required>
                   <input type="hidden" class="input" id="rmsCompanyId" name="rmsCompanyId" value="{{ companyId }}" required>
-                  <input type="hidden" id="rmsActive" name="rmsActive" value="false">
+                  <input type="hidden" id="rmsActive" name="rmsActive" value="true">
                   <input type="submit" id="submit" class="submit projectSubmit" value="Create user">
                  </form>
               </div>
               <div id="suspendUsers" class="actionContent">manage users</div>
               <h4 class="text-center bigger-font" id="profileInst">Click on any option to carry out the task.</h4>
             {% elif role =='Creator' %}
+            <!-- <script type="module" src="{{ url_for('static', filename='js/creatorActions.js')}}"></script> -->
             <div class="actions active">
-                <button class="action-links" onclick="openAction(event, 'createProject')">Create Projects</button>
-                <button class="action-links" onclick="openAction(event, 'createUsers')">Create Users</button>
-                <button class="action-links" onclick="openAction(event, 'suspendUsers')">Manage Users</button>
+                <button class="action-links" onclick="openAction(event, 'UploadBudget')">Upload Budget</button>
+                <button class="action-links" onclick="openAction(event, 'UploadEmployees')">Upload Employees</button>
+                <button class="action-links" onclick="openAction(event,'UploadPayment')">Upload Project Payment File</button>
+                <button class="action-links" onclick="openAction(event,'EditEmployeeInfo')">Edit Employee Info</button>
               </div>
-              <div id="createProject" class="actionContent">
-                <h3>Create a new project here</h3>
-                <p>It's easy just enter a name and the dates you expect the project to run from-to</p>
+              <div id="UploadBudget" class="actionContent">
+                <h3>Upload a budget for a given project</h3>
+                <p>Just select the project you want to upload a budget for</p>
                 <form class="form create-project" id="rmsForm" method="POST">
-                  <label>Project name:</label>
-                  <input type="text" class="input project" id="rmsProject" name="rmsProject" required>
-                  <label>Start Date:</label>
-                  <input type="date" class="input project" id="dateFrom" name="dateFrom" required>
-                  <label>End Date :</label>
-                  <input type="date" class="input project" id="dateTo" name="dateTo" required>
-                  <input type="submit" id="submit" class="submit projectSubmit" value="Create project">
-                </form>
-              </div>
-              <div id="createUsers" class="actionContent">
-                <h3>Create system users here</h3>
-                <p>Easy just fill the simple form below.</p>
-                <form  class="form create-project" id="rmsRegForm" method="POST">
-                  <label >Select role :</label>
-                  <select class="input project" name="rmsRole" id="rmsRole" required>
+                  <label >Select project :</label>
+                  <select class="input project" name="rmsProject" id="rmsProject" required>
                     <option value="Creator">Creator</option>
                     <option value="Reviewer">Reviewer</option>
                     <option value="Authorizer">Authorizer</option>
                   </select>
-                  <label >Username :</label>
-                  <input type="text" class="input project" id="rmsUsername" name="rmsUsername" required>
-                  <label >Email :</label>
-                  <input type="email" class="input project" id="rmsEmail" name="rmsEmail" required>
-                  <!-- <input  type="hidden" class="input" name ="rmsPassword" id="rmsPassword" value="Banuit@123" required> -->
-                  <input type="hidden" class="input" id="rmsCompanyId" name="rmsCompanyId" value="{}" required>
-                  <input type="hidden" id="rmsActive" name="rmsActive" value="false">
-                  <input type="submit" id="submit" class="submit projectSubmit" value="Create user">
+                  <label>Budget name:</label>
+                  <input type="text" class="input project" id="rmsBudget" name="rmsBudget" required>
+                  <input type="submit" id="submit" class="submit projectSubmit" value="Create budget">
+                </form>
+              </div>
+              <div id="UploadEmployees" class="actionContent">
+                <h3>Upload your companies employees master file</h3>
+                <p>Just create a csv file, in the format given by the site administrator then upload it for saving.</p>
+                <form  class="form create-project" id="rmsRegForm" method="POST">
+                  <input type="submit" id="submit" class="submit projectSubmit" value="Upload employees">
                  </form>
               </div>
-              <div id="suspendUsers" class="actionContent">manage users</div>
+              <div id="UploadPayment" class="actionContent">Upload payment file</div>
+              <div id="EditEmployeeInfo" class="actionContent">Edit employee information</div>
               <h4 class="text-center bigger-font" id="profileInst">Click on any option to carry out the task.</h4>
             {% elif role == 'Reviewer' %}
               <a href="#">Review Files</a>
