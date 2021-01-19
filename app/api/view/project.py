@@ -7,7 +7,7 @@ from app.api.model.project import Project, project_schema,\
 from app.api.model.user import User, user_schema
 from flask import request, abort
 from app.api.utils import check_for_whitespace, custom_make_response,\
-    generate_db_ids
+    generate_db_ids, token_required
 
 
 # getting environment variables
@@ -25,7 +25,11 @@ def create_new_project():
         abort(
             custom_make_response(
                 "error",
-                "A required piece of authorization seems to be missing!",
+                """
+                Authorization cookies for this action seem to be missing,
+                please login and try again, if the problem persists , 
+                contact site administrator.
+                """,
                 401
             )
         )
@@ -40,11 +44,12 @@ def create_new_project():
         )
     try:
         data = request.get_json()
+        # change from username to id
         current_user = User.query.\
-            filter_by(username=auth_data['username']).first()
+            filter_by(id=auth_data['id']).first()
         _data = user_schema.dump(current_user)
-        projectName = data['project_name']
         companyId = _data['companyId']
+        projectName = data['project_name'] + '.' + companyId
         dateFrom = data['date_from']
         dateTo = data['date_to']
         id = generate_db_ids()
@@ -60,11 +65,14 @@ def create_new_project():
         'dateFrom',
         'dateTo'
     ])
-    if Project.query.filter_by(project_name=data['project_name']).first():
+    if Project.query.filter_by(project_name=projectName).first():
         abort(
             custom_make_response(
                 "error",
-                "There is a conflict in project name, change & try again.",
+                """
+                You already have another project in that name,
+                Please change and try again !
+                """,
                 409
             )
         )
@@ -79,6 +87,19 @@ def create_new_project():
     db.session.commit()
     return custom_make_response(
         "data",
-        f" {projectName} created successfully.",
+        f"Project {projectName.split('.', 1)[0]} created successfully.",
         201
+    )
+
+
+@rms.route('/projects/<companyId>')
+@token_required
+def get_projects(user, companyId):
+    """ get projects for the given user company"""
+    company_projects = Project.query\
+        .filter_by(companyId=companyId).all()
+    return custom_make_response(
+        "data",
+        projects_schema.dump(company_projects),
+        200
     )
