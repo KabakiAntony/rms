@@ -10,7 +10,8 @@ import string
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 from functools import wraps
-from flask import jsonify, make_response, abort, request
+from flask import jsonify, make_response, abort, request, \
+    render_template
 from app.api.model.company import Company, company_schema
 from app.api.model.user import User, user_schema
 
@@ -140,7 +141,6 @@ def token_required(f):
         try:
             if user_token:
                 data = jwt.decode(user_token, KEY, algorithm="HS256")
-                # change from using username to id
                 current_user = User.query\
                     .filter_by(id=data['id']).first()
                 _data = user_schema.dump(current_user)
