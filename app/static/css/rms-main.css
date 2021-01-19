@@ -263,8 +263,8 @@ margin-top: 10px;
 }
 .actionNotification{
   padding: 10px;
-  background-color: #eb584e;
-  color:white;
+  background-color: #e97971;
+  color:black;
   opacity: 1;
   transition: opacity 0.6s;
   margin-bottom: 15px;
@@ -273,7 +273,7 @@ margin-top: 10px;
   font-size: 13px;
 }
 
-.actionNotification.success {background-color: #5ee262;color: black;}
+.actionNotification.success {background-color: #64fa64;color: black;}
 .closebtn {
   margin-left: 15px;
   color: white;
@@ -286,6 +286,10 @@ margin-top: 10px;
 }
 .closebtn:hover {
   color: black;
+}
+table, th, td{
+  width:70%;
+  border: 1px solid #0096D6;
 }
 #hack{
     padding-bottom:30px;
