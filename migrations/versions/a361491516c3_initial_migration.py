@@ -1,8 +1,8 @@
 """initial migration
 
-Revision ID: f305bf6150c4
+Revision ID: a361491516c3
 Revises: 
-Create Date: 2021-01-06 15:52:21.980853
+Create Date: 2021-01-20 12:41:13.876282
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'f305bf6150c4'
+revision = 'a361491516c3'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -25,6 +25,16 @@ def upgrade():
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_Company_company'), 'Company', ['company'], unique=True)
+    op.create_table('Employees',
+    sa.Column('id', sa.String(length=20), nullable=False),
+    sa.Column('companyId', sa.String(length=20), nullable=True),
+    sa.Column('firstname', sa.String(length=120), nullable=False),
+    sa.Column('lastname', sa.String(length=120), nullable=False),
+    sa.Column('mobile', sa.Integer(), nullable=False),
+    sa.Column('email', sa.String(length=120), nullable=False),
+    sa.ForeignKeyConstraint(['companyId'], ['Company.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
     op.create_table('Project',
     sa.Column('id', sa.String(length=20), nullable=False),
     sa.Column('project_name', sa.String(length=100), nullable=False),
@@ -57,6 +67,7 @@ def downgrade():
     op.drop_index(op.f('ix_Users_email'), table_name='Users')
     op.drop_table('Users')
     op.drop_table('Project')
+    op.drop_table('Employees')
     op.drop_index(op.f('ix_Company_company'), table_name='Company')
     op.drop_table('Company')
     # ### end Alembic commands ###
