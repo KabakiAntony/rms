@@ -56,17 +56,17 @@ def signup_system_users():
     )
     isValidEmail(email)
     # check if user is on company masterfile
-    if not Employees.query.filter_by(email=user_data['email']).first():
-        abort(
-            custom_make_response(
-                "error",
-                """
-                The user you are creating an account for
-                is not on your company masterfile,
-                Please add them and try again.
-                """, 400
-            )
-        )
+    # if not Employees.query.filter_by(email=user_data['email']).first():
+    #     abort(
+    #         custom_make_response(
+    #             "error",
+    #             """
+    #             The user you are creating an account for
+    #             is not on your company masterfile,
+    #             Please add them and try again.
+    #             """, 400
+    #         )
+    #     )
     # check if user is already registered
     if User.query.filter_by(email=user_data['email']).first():
         abort(
@@ -107,10 +107,9 @@ def signup_system_users():
         """
         send_mail(email, subject, content)
         # get the first part of the username
-        username = username.split('.', 1)[0]
     return custom_make_response(
         "data",
-        f"{ username } registered successfully.",
+        f"{ username.split('.', 1)[0] } registered successfully.",
         201
     )
 
