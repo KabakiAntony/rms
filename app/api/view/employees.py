@@ -67,7 +67,7 @@ def to_csv_and_insert(filePath):
     engine = create_engine(DB_URL)
     konnection = engine.raw_connection()
     kursor = konnection.cursor()
-    dataFile = read_excel(filePath)
+    dataFile = read_excel(filePath, engine='openpyxl')
     base_name = os.path.basename(filePath)
     csv_file_name = os.path.splitext(base_name)[0]
     csv_file_path = EMPLOYEE_UPLOAD_FOLDER + csv_file_name + ".csv"
