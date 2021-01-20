@@ -57,7 +57,6 @@ def signup_system_users():
     isValidEmail(email)
     # check if user is on company masterfile
     if not Employees.query.filter_by(email=user_data['email']).first():
-        print("are we getting here")
         abort(
             custom_make_response(
                 "error",
@@ -308,5 +307,71 @@ def set_new_password():
     return custom_make_response(
         "data",
         "Your password has been reset successfully",
+        200
+    )
+
+
+@rms.route('/auth/suspend', methods=['POST'])
+@token_required
+def suspend_system_user(user):
+    """
+    suspend a system user
+    """
+    try:
+        data = request.get_json()
+        email = data['email']
+    except KeyError:
+        abort(
+            custom_make_response(
+                "error",
+                "The email field has not been filled, fill and try again.",
+                400
+            )
+        )
+    check_for_whitespace(data, ['email'])
+    isValidEmail(email)
+    # always check that the user is on the master file
+    # before suspending them and also check if a user
+    # is not already suspended we do not need to do that
+    # twice
+    # add that later for now we can do without the check
+    User.query.filter_by(email=email).\
+        update(dict(isActive='false'))
+    db.session.commit()
+    return custom_make_response(
+        "data",
+        "User account suspended successfully",
+        200
+    )
+
+
+@rms.route('/auth/reactivate',  methods=['POST'])
+@token_required
+def reactivate_system_user(user):
+    """
+    reactivate a suspended user account
+    """
+    try:
+        data = request.get_json()
+        email = data['email']
+    except KeyError:
+        abort(
+            custom_make_response(
+                "error",
+                "The email field has not been filled, fill and try again.",
+                400
+            )
+        )
+    check_for_whitespace(data, ['email'])
+    isValidEmail(email)
+    # check if the account is suspended 
+    # no need to reactivate an already
+    # suspened account
+    User.query.filter_by(email=email).\
+        update(dict(isActive='true'))
+    db.session.commit()
+    return custom_make_response(
+        "data",
+        "User account activated successfully",
         200
     )
