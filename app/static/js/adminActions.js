@@ -17,24 +17,16 @@ let theBody;
 // the following part goes into employee file upload
 let fileUploadForm = document.getElementById('rmsEmployeeFile');
 let fileInput = document.getElementById('employeeFile');
-// let theFile;
+// the below variables go into suspend form
+let suspendForm = document.getElementById('rmsSuspendForm');
+let suspendEmail = document.getElementById('rmsSuspendEmail');
+let suspendBody;
+// variables for the reactivation form
+let reactivateForm = document.getElementById('rmsReactivateForm');
+let reactivateEmail = document.getElementById('rmsReactivateEmail');
+let reactivateBody;
 
-  
-function createResource(){
-    theBody = {
-        project_name:projectName.value,
-        date_from:dateFrom.value,
-        date_to:dateTo.value
-    }
-    rmsFetch('/auth/projects',"POST",theBody)
-}
-createProjectForm.addEventListener('submit',(e)=>{
-    e.preventDefault();
-    clearErrorDivs();
-    showLoader();
-    createResource();
-});
-
+// project creation  
 dateTo.addEventListener('input',(e)=>{
     let startDate, endDate;
     startDate = new Date(dateFrom.value);
@@ -52,6 +44,22 @@ dateTo.addEventListener('input',(e)=>{
     }
 })
 
+function createResource(){
+    theBody = {
+        project_name:projectName.value,
+        date_from:dateFrom.value,
+        date_to:dateTo.value
+    }
+    rmsFetch('/auth/projects',"POST",theBody)
+}
+createProjectForm.addEventListener('submit',(e)=>{
+    e.preventDefault();
+    clearErrorDivs();
+    showLoader();
+    createResource();
+});
+
+// system user creation
 emailInputListener(email);
 
 function postSignUp(){
@@ -72,7 +80,7 @@ signUpForm.addEventListener('submit',(e)=>{
     showLoader();
     postSignUp();
 });
-
+// master file upload
 function uploadEmployeeFile(){
     const theFile = new FormData();
     theFile.append('employeeExcelFile',fileInput.files[0]);
@@ -85,3 +93,32 @@ fileUploadForm.addEventListener('submit',(e)=>{
     showLoader();
     uploadEmployeeFile();
 });
+// suspend user
+emailInputListener(suspendEmail);
+
+function suspendUser(){
+    suspendBody = {
+        email:suspendEmail.value
+    }
+    rmsFetch('/auth/suspend','POST',suspendBody,'')
+}
+suspendForm.addEventListener('submit',(e)=>{
+    e.preventDefault();
+    clearErrorDivs();
+    showLoader();
+    suspendUser();
+})
+// reactivate user
+emailInputListener(reactivateEmail);
+function reactivateUser(){
+    reactivateBody = {
+        email:reactivateEmail.value
+    }
+    rmsFetch('/auth/reactivate','POST',reactivateBody,'')
+}
+reactivateForm.addEventListener('submit',(e)=>{
+    e.preventDefault();
+    clearErrorDivs();
+    showLoader();
+    reactivateUser();
+})

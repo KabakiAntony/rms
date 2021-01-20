@@ -53,17 +53,18 @@
                 <button class="action-links" onclick="openAction(event, 'uploadMasterFile')">Master File</button>
                 <button class="action-links" onclick="openAction(event, 'createProject')">Create Projects</button>
                 <button class="action-links" onclick="openAction(event, 'createUsers')">Create Users</button>
-                <button class="action-links" onclick="openAction(event, 'suspendUsers')">Manage Users</button>
+                <button class="action-links" onclick="openAction(event, 'suspendUsers')">Suspend Users</button>
+                <button class="action-links" onclick="openAction(event, 'reactivateUsers')">Reactivate Users</button>
               </div>
               <div id="createProject" class="actionContent">
                 <h3>Create a new project here</h3>
                 <p>It's easy just enter a name and the dates you expect the project to run from-to</p>
                 <form class="form create-project" id="rmsForm" method="POST">
-                  <label>Project name:</label>
+                  <label>Project name</label>
                   <input type="text" class="input project" id="rmsProject" name="rmsProject" required>
-                  <label>Start Date:</label>
+                  <label>Start Date</label>
                   <input type="date" class="input project" id="dateFrom" name="dateFrom" required>
-                  <label>End Date :</label>
+                  <label>End Date </label>
                   <input type="date" class="input project" id="dateTo" name="dateTo" required>
                   <input type="submit" id="submit" class="submit projectSubmit" value="Create project">
                 </form>
@@ -102,22 +103,41 @@
                 <h3>Create system users here</h3>
                 <p>Easy just fill the simple form below, user will recieve an email with further instructions.</p>
                 <form  class="form create-project" id="rmsRegForm" method="POST">
-                  <label >Select role :</label>
+                  <label >Select role </label>
                   <select class="input project" name="rmsRole" id="rmsRole" required>
                     <option value="Creator">Creator</option>
                     <option value="Reviewer">Reviewer</option>
                     <option value="Authorizer">Authorizer</option>
                   </select>
-                  <label >Username :</label>
+                  <label >Firstname </label>
                   <input type="text" class="input project" id="rmsUsername" name="rmsUsername" required>
-                  <label >Email :</label>
+                  <label >Email </label>
                   <input type="email" class="input project" id="rmsEmail" name="rmsEmail" required>
                   <input type="hidden" class="input" id="rmsCompanyId" name="rmsCompanyId" value="{{ companyId }}" required>
                   <input type="hidden" id="rmsActive" name="rmsActive" value="true">
                   <input type="submit" id="submit" class="submit projectSubmit" value="Create user">
                  </form>
               </div>
-              <div id="suspendUsers" class="actionContent">manage users</div>
+              <div id="suspendUsers" class="actionContent">
+                <h3>Suspend system users</h3>
+                <p>Mark system users account as suspended.</p>
+                <p>Just enter their email address below.</p>
+                <form  class="form create-project" id="rmsSuspendForm" method="POST">
+                  <label >User email</label>
+                  <input type="email" class="input" id="rmsSuspendEmail" name="rmsSuspendEmail" required>
+                  <input type="submit" id="submit" class="submit projectSubmit" value="Suspend user">
+                 </form>
+              </div>
+              <div id="reactivateUsers" class="actionContent">
+                <h3>Reactivate system users</h3>
+                <p>Reactivate a user account that had been previously suspended.</p>
+                <p>Just enter their email address below.</p>
+                <form  class="form create-project" id="rmsReactivateForm" method="POST">
+                  <label >User email</label>
+                  <input type="email" class="input" id="rmsReactivateEmail" name="rmsReactivateEmail" required>
+                  <input type="submit" id="submit" class="submit projectSubmit" value="Reactivate user">
+                 </form>
+              </div>
             {% elif role =='Creator' %}
             <!-- <script type="module" src="{{ url_for('static', filename='js/creatorActions.js')}}"></script> -->
             <div class="actions active">
