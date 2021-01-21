@@ -56,21 +56,21 @@ def signup_system_users():
     )
     isValidEmail(email)
     # check if user is on company masterfile
-    if not(
-        Employees.query.filter_by(email=user_data['email']).first()
-        and
-        role != "Admin"
-    ):
-        abort(
-            custom_make_response(
-                "error",
-                """
-                The user you are creating an account for
-                is not on your company masterfile,
-                Please add them and try again.
-                """, 400
-            )
-        )
+    # if not(
+    #     Employees.query.filter_by(email=user_data['email']).first()
+    #     and
+    #     role != "Admin"
+    # ):
+    #     abort(
+    #         custom_make_response(
+    #             "error",
+    #             """
+    #             The user you are creating an account for
+    #             is not on your company masterfile,
+    #             Please add them and try again.
+    #             """, 400
+    #         )
+    #     )
     # check if user is already registered
     if User.query.filter_by(email=user_data['email']).first():
         abort(
