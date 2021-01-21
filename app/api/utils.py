@@ -7,16 +7,82 @@ import os
 import jwt
 import random
 import string
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
+import datetime
+from openpyxl import load_workbook
+from pandas import read_excel
+from sqlalchemy import create_engine
 from functools import wraps
-from flask import jsonify, make_response, abort, request, \
-    render_template
+from flask import jsonify, make_response, abort, request
 from app.api.model.company import Company, company_schema
 from app.api.model.user import User, user_schema
 
 
 KEY = os.getenv('SECRET_KEY')
+DB_URL = os.environ.get('DATABASE_URL')
+ALLOWED_EXTENSIONS = {'xlsx', 'xls'}
+
+
+def allowed_extension(filename):
+    """check for allowed extensions"""
+    return '.' in filename and \
+        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+def rename_file(filePath, company_id, upload_dir, file_type_str):
+    """
+    rename the file and save it
+    add a company name and what the
+    file is for and a now component
+    in terms of date and time
+    upload_dir is either employee_upload_folder
+    or budget_upload_folder
+    file_type is either _employees_ or _budget_
+    """
+    current_date = datetime.datetime.now().strftime("%d%m%Y%H%M%S")
+    company_ = Company.query.filter_by(id=company_id).first()
+    this_company = company_schema.dump(company_)
+    company_name = this_company['company']
+    new_file_path = upload_dir + company_name +\
+        file_type_str + str(current_date) + '.xlsx'
+    os.rename(filePath, new_file_path)
+    return new_file_path
+
+
+def add_id_and_company_id(filePath, company_id):
+    """
+    add a user id and company id
+    to the file then save it
+    """
+    workBook = load_workbook(filePath)
+    sheet = workBook.active
+    rows = sheet.max_row
+    for row in range(2, rows+1):
+        sheet.cell(row, 1).value = generate_db_ids()
+        sheet.cell(row, 2).value = company_id
+    workBook.save(filePath)
+    return filePath
+
+
+def to_csv_and_insert(filePath, upload_dir, db_relation):
+    """
+    convert the to csv then
+    save it to database
+    db_relation is the database table we are
+    saving data to it takes the form
+    'public."Employees"'
+    """
+    engine = create_engine(DB_URL)
+    konnection = engine.raw_connection()
+    kursor = konnection.cursor()
+    dataFile = read_excel(filePath, engine='openpyxl')
+    base_name = os.path.basename(filePath)
+    csv_file_name = os.path.splitext(base_name)[0]
+    csv_file_path = upload_dir + csv_file_name + ".csv"
+    dataFile.to_csv(csv_file_path, index=False)
+    with open(csv_file_path, 'r') as f:
+        next(f)
+        kursor.copy_from(f, db_relation, sep=',')
+    konnection.commit()
 
 
 def custom_make_response(key, message, status):
@@ -45,19 +111,6 @@ def check_model_return(returned):
         status = 200
         response = custom_make_response("data", message, status)
     return response
-
-
-def isValidEmail(email):
-    """
-    checks an email for validity.
-    """
-    if not re.match(
-        r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$",
-        email
-    ):
-        abort(custom_make_response(
-            "error", "the email address provided is not valid!", 400))
-    return True
 
 
 def isValidPassword(password):
@@ -103,22 +156,6 @@ def check_for_whitespace(data, items_to_check):
     return True
 
 
-def send_mail(user_email, the_subject, the_content):
-    """ send email on relevant user action """
-    message = Mail(
-        from_email=('kabaki.antony@gmail.com', 'RMS Team'),
-        to_emails=user_email,
-        subject=the_subject,
-        html_content=the_content)
-    try:
-        sg = SendGridAPIClient(os.environ.get('SENDGRID_KEY'))
-        sg.send(message)
-    except Exception as e:
-        custom_make_response(
-                "error", f"an error occured sending email contact administrator\
-                     {e}", 500)
-
-
 def token_required(f):
     """
     this token is used to allow the user to access
@@ -153,80 +190,6 @@ def token_required(f):
             return custom_make_response("error", f"Token {e}", 401)
         return f(_data, *args, **kwargs)
     return decorated
-
-
-def button_style():
-    """this returns the style for the button"""
-    style = """font-weight:bold;
-    background-color: #0096D6;
-    border: 2px solid white;
-    border-radius:0.5rem;
-    text-decoration: none;
-    padding: 7px 28px;
-    color:rgb(255, 255, 255);
-    margin-top:10px;
-    margin-bottom: 10px;
-    font-size: 120%;"""
-    return style
-
-
-def password_reset_success_content():
-    """return the message for password reset email"""
-    content = """
-    Hey,
-    <br/>
-    <br/>
-    Your password has been reset successfully, if that was you then you
-    don't have to do anything.<br/>
-    If you did not carry out this action please click on the link below to
-    initiate account recovery.
-    <br/>
-    <br/>"""
-    return content
-
-
-def password_reset_request_content():
-    """ return the message for reset reuest email"""
-    content = """
-    <br/>
-    <br/>
-    You have received this email, because you requested<br/>
-    a password reset link, Click on the reset button below to proceed,<br/>
-    If you did not please ignore this email.<br/>
-    Note this link will only be active for thirty minutes.
-    <br/>
-    <br/>
-    """
-    return content
-
-
-def non_admin_user_registration_content():
-    """ return this message when an admin
-    creates an account for a user """
-    content = """
-    <br/>
-    <br/>
-    Welcome, an account has been created for you by the,
-    company admin, all you need to do is click of the activate
-    account button below, you will be prompted to set a password
-    for your account and once that is done you can start using
-    the account. <br/>
-    Note this link will only be active for thirty minutes.
-    <br/>
-    <br/>
-    """
-    return content
-
-
-def email_signature():
-    """return email signature"""
-    signature = """
-    <br/>
-    <br/>
-    Regards Antony,<br/>
-    RMS Admin.
-    """
-    return signature
 
 
 def generate_random_password():
