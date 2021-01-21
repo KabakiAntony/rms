@@ -132,8 +132,8 @@ def token_required(f):
             request.args.get('in') or
                 request.args.get('u')):
             user_token = (
-                request.cookies.get('auth_token') or
-                request.args.get('u')
+                request.args.get('u') or
+                request.cookies.get('auth_token')
             )
             company_token = request.args.get('in')
         if not (user_token or company_token):
