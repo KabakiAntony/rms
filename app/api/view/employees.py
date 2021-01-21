@@ -1,81 +1,14 @@
 import os
-import jwt
-import datetime
-from openpyxl import load_workbook
-from pandas import read_excel
 from app.api import rms
-# from app.api.model import db
-from sqlalchemy import create_engine
 from werkzeug.utils import secure_filename
-from app.api.model.employees import Employees, employee_schema,\
-    employees_schema
-from app.api.model.company import Company, company_schema
 from flask import request, abort
-from app.api.utils import check_for_whitespace, custom_make_response,\
-    generate_db_ids, token_required
+from app.api.utils import allowed_extension, custom_make_response,\
+     token_required, rename_file, add_id_and_company_id,\
+     to_csv_and_insert
 
 
 KEY = os.environ.get('SECRET_KEY')
 EMPLOYEE_UPLOAD_FOLDER = os.environ.get('EMPLOYEES_FOLDER')
-DB_URL = os.environ.get('DATABASE_URL')
-ALLOWED_EXTENSIONS = {'xlsx', 'xls'}
-
-
-def allowed_extension(filename):
-    """check for allowed extensions"""
-    return '.' in filename and \
-        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
-def rename_file(filePath, company_id):
-    """
-    rename the file and save it
-    add a company name and what the
-    file is for and a now component
-    in terms of date and time
-    """
-    current_date = datetime.datetime.now().strftime("%d%m%Y%H%M%S")
-    company_ = Company.query.filter_by(id=company_id).first()
-    this_company = company_schema.dump(company_)
-    company_name = this_company['company']
-    new_file_path = EMPLOYEE_UPLOAD_FOLDER + company_name +\
-        '_employees_' + str(current_date) + '.xlsx'
-    os.rename(filePath, new_file_path)
-    return new_file_path
-
-
-def add_id_and_company_id(filePath, company_id):
-    """
-    add a user id and company id
-    to the file then save it
-    """
-    workBook = load_workbook(filePath)
-    sheet = workBook.active
-    rows = sheet.max_row
-    for row in range(2, rows+1):
-        sheet.cell(row, 1).value = generate_db_ids()
-        sheet.cell(row, 2).value = company_id
-    workBook.save(filePath)
-    return filePath
-
-
-def to_csv_and_insert(filePath):
-    """
-    convert the to csv then
-    save it to database
-    """
-    engine = create_engine(DB_URL)
-    konnection = engine.raw_connection()
-    kursor = konnection.cursor()
-    dataFile = read_excel(filePath, engine='openpyxl')
-    base_name = os.path.basename(filePath)
-    csv_file_name = os.path.splitext(base_name)[0]
-    csv_file_path = EMPLOYEE_UPLOAD_FOLDER + csv_file_name + ".csv"
-    dataFile.to_csv(csv_file_path, index=False)
-    with open(csv_file_path, 'r') as f:
-        next(f)
-        kursor.copy_from(f, 'public."Employees"', sep=',')
-    konnection.commit()
 
 
 @rms.route('/auth/upload/employees', methods=['POST'])
@@ -91,12 +24,21 @@ def upload_employee_master(user):
             secureFilename = secure_filename(receivedFile.filename)
             filePath = os.path.join(EMPLOYEE_UPLOAD_FOLDER, secureFilename)
             receivedFile.save(filePath)
-            new_file_path = rename_file(filePath, user['companyId'])
+            new_file_path = rename_file(
+                filePath,
+                user['companyId'],
+                EMPLOYEE_UPLOAD_FOLDER,
+                '_employees_'
+            )
             add_id_and_company_id(new_file_path, user['companyId'])
             updated_file_path = add_id_and_company_id(
                 new_file_path, user['companyId']
             )
-            to_csv_and_insert(updated_file_path)
+            to_csv_and_insert(
+                updated_file_path,
+                EMPLOYEE_UPLOAD_FOLDER,
+                'public."Employees"'
+            )
             return custom_make_response(
                 "data",
                 "File uploaded successfully ",

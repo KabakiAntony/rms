@@ -5,14 +5,16 @@ from app.api import rms
 from app.api.model import db
 from flask import request, abort, session
 from app.api.model.user import user_schema, User
-from app.api.model.employees import Employees
+# from app.api.model.employees import Employees
 from app.api.model.company import Company, company_schema
-from app.api.utils import check_for_whitespace, isValidEmail,\
-     send_mail, custom_make_response, token_required,\
-     isValidPassword, button_style, password_reset_request_content,\
-     password_reset_success_content, email_signature,\
-     generate_random_password, generate_db_ids,\
-     non_admin_user_registration_content
+from app.api.email_utils import send_mail, isValidEmail, \
+     button_style, password_reset_success_content,\
+     email_signature, non_admin_user_registration_content,\
+     password_reset_request_content
+from app.api.utils import check_for_whitespace,\
+     custom_make_response, token_required,\
+     isValidPassword, generate_db_ids,\
+     generate_random_password
 from werkzeug.security import generate_password_hash
 
 

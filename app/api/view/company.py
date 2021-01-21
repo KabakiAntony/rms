@@ -5,9 +5,9 @@ from app.api import rms
 from app.api.model import db
 from app.api.model.company import Company, companies_schema
 from flask import request, abort
-from app.api.utils import check_for_whitespace, isValidEmail,\
-     send_mail, custom_make_response, token_required,\
-     button_style, generate_db_ids
+from app.api.email_utils import isValidEmail, send_mail, button_style
+from app.api.utils import check_for_whitespace,\
+     custom_make_response, token_required, generate_db_ids
 
 
 # getting environment variables
