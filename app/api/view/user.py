@@ -56,17 +56,21 @@ def signup_system_users():
     )
     isValidEmail(email)
     # check if user is on company masterfile
-    # if not Employees.query.filter_by(email=user_data['email']).first():
-    #     abort(
-    #         custom_make_response(
-    #             "error",
-    #             """
-    #             The user you are creating an account for
-    #             is not on your company masterfile,
-    #             Please add them and try again.
-    #             """, 400
-    #         )
-    #     )
+    if not(
+        Employees.query.filter_by(email=user_data['email']).first()
+        and
+        role != "Admin"
+    ):
+        abort(
+            custom_make_response(
+                "error",
+                """
+                The user you are creating an account for
+                is not on your company masterfile,
+                Please add them and try again.
+                """, 400
+            )
+        )
     # check if user is already registered
     if User.query.filter_by(email=user_data['email']).first():
         abort(
@@ -109,7 +113,8 @@ def signup_system_users():
         # get the first part of the username
     return custom_make_response(
         "data",
-        f"{ username.split('.', 1)[0] } registered successfully.",
+        f"{ email }\
+            registered successfully, see inbox for further instructions",
         201
     )
 
@@ -174,7 +179,7 @@ def signin_all_users():
     session['username'] = _curr_user['username']
     resp = custom_make_response(
         "data",
-        "Sign In successful, preparing your dashboard...",
+        "Signed in successfully, preparing your dashboard...",
         200
     )
     resp.set_cookie(
@@ -253,28 +258,28 @@ def forgot_password():
         f"Email sent successfully, head over to {email} for instructions.",
         202
     )
-    resp.set_cookie(
-        "reset_token",
-        token.decode('utf-8'),
-        httponly=True,
-        secure=True,
-        expires=datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
-    )
+    # resp.set_cookie(
+    #     "reset_token",
+    #     token.decode('utf-8'),
+    #     httponly=True,
+    #     secure=True,
+    #     expires=datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
+    # )
     return resp
 
 
 @rms.route('/auth/newpass', methods=['PUT'])
 def set_new_password():
     """updates a user password from the reset page"""
-    pass_reset_token = request.cookies.get('reset_token')
-    if not pass_reset_token:
-        abort(
-            custom_make_response(
-                "error",
-                "A required piece of authentication seems to be missing!",
-                401
-            )
-        )
+    # pass_reset_token = request.cookies.get('reset_token')
+    # if not pass_reset_token:
+    #     abort(
+    #         custom_make_response(
+    #             "error",
+    #             "A required piece of authentication seems to be missing!",
+    #             401
+    #         )
+    #     )
     try:
         data = request.get_json()
         email = data['email']
