@@ -133,10 +133,14 @@ html,body{
   border-radius: 15px;
   border:1px solid  rgb(51, 49, 49);
 }
+.file{
+  margin-bottom:20px;
+  margin-top:20px;
+}
 .submit:hover{
   background-color: white;
   color: rgba(2, 3, 8, 0.644);
-  border: 2px solid rgba(2, 3, 8, 0.644);
+  border: 1px solid rgba(2, 3, 8, 0.644);
   cursor: pointer;
 }
 .signout-button:hover{
@@ -149,8 +153,8 @@ html,body{
 .submit{
 font-weight:normal;
 background-color: #0096D6;
-border: 2px solid white;
 border-radius:1.5rem;
+border:none;
 text-decoration: none;
 padding: 10px 28px;
 color:rgb(255, 255, 255);
