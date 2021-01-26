@@ -20,7 +20,7 @@ function signIn(){
         email:inEmail.value,
         password:inPassword.value
     };
-    rmsFetch('/auth/signin',"POST",signInData,'/dashboard')
+    rmsFetch('/auth/signin',"POST",signInData,'/dashboard','rmsForm')
 }
 
 /* sign in submission */

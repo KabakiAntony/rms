@@ -50,7 +50,7 @@ function createResource(){
         date_from:dateFrom.value,
         date_to:dateTo.value
     }
-    rmsFetch('/auth/projects',"POST",theBody)
+    rmsFetch('/auth/projects',"POST",theBody,'','rmsForm')
 }
 createProjectForm.addEventListener('submit',(e)=>{
     e.preventDefault();
@@ -70,7 +70,7 @@ function postSignUp(){
         role:role.value,
         isActive:isActive.value
     }
-    rmsFetch('/auth/signup','POST',signUpInfo,'')
+    rmsFetch('/auth/signup','POST',signUpInfo,'','rmsRegForm')
 }
 
 signUpForm.addEventListener('submit',(e)=>{
@@ -84,7 +84,7 @@ signUpForm.addEventListener('submit',(e)=>{
 function uploadEmployeeFile(){
     const theFile = new FormData();
     theFile.append('employeeExcelFile',fileInput.files[0]);
-    rmsFileUpload('/auth/upload/employees','POST',theFile,'')
+    rmsFileUpload('/auth/upload/employees','POST',theFile,'','rmsEmployeeFile')
 }
 
 fileUploadForm.addEventListener('submit',(e)=>{
@@ -100,7 +100,7 @@ function suspendUser(){
     suspendBody = {
         email:suspendEmail.value
     }
-    rmsFetch('/auth/suspend','POST',suspendBody,'')
+    rmsFetch('/auth/suspend','POST',suspendBody,'','rmsSuspendForm')
 }
 suspendForm.addEventListener('submit',(e)=>{
     e.preventDefault();
@@ -114,7 +114,7 @@ function reactivateUser(){
     reactivateBody = {
         email:reactivateEmail.value
     }
-    rmsFetch('/auth/reactivate','POST',reactivateBody,'')
+    rmsFetch('/auth/reactivate','POST',reactivateBody,'','rmsReactivateForm')
 }
 reactivateForm.addEventListener('submit',(e)=>{
     e.preventDefault();

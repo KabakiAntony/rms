@@ -10,8 +10,8 @@ function isValidPassword(my_password){
     return my_password.match(passwordRegex);
 }
 /* this function gets called on a status code of 200 or 201 */
-function inputReset(){
- document.getElementById('rmsForm').reset();  
+function inputReset(theform){
+ document.getElementById(theform).reset();  
 }
 function callToast(msg,redirectUrl) {
   let x = document.getElementById("showAlert");
@@ -101,7 +101,7 @@ export function passwordInputListener(thePasswordInput){
 });
 }
 /* this is the fetch api for post, put, delete */
-export function rmsFetch(theUrl,theMethod,theBody, redirectUrl=""){
+export function rmsFetch(theUrl,theMethod,theBody, redirectUrl="",theForm){
     fetch(theUrl,{
             method: theMethod,
             headers: {
@@ -112,7 +112,7 @@ export function rmsFetch(theUrl,theMethod,theBody, redirectUrl=""){
           .then(response => response.json())
           .then(({data,status,error})=>{
               if(status === 201 || status === 200 || status === 202){
-                inputReset();
+                inputReset(theForm);
                 if (filename === 'dashboard'){
                   showAlert(data,'success');
                 }
@@ -142,7 +142,7 @@ export function rmsFetch(theUrl,theMethod,theBody, redirectUrl=""){
           .catch(err => console.log(`This error occured :${err}`));
 }
 // this fetch uploads files
-export function rmsFileUpload(theUrl,theMethod,theBody, redirectUrl=""){
+export function rmsFileUpload(theUrl,theMethod,theBody, redirectUrl="", theForm){
   fetch(theUrl,{
           method: theMethod,
           body:theBody
@@ -150,7 +150,7 @@ export function rmsFileUpload(theUrl,theMethod,theBody, redirectUrl=""){
         .then(response => response.json())
         .then(({data,status,error})=>{
             if(status === 201 || status === 200 || status === 202){
-              inputReset();
+              inputReset(theForm);
               if (filename === 'dashboard'){
                 showAlert(data,'success');
               }
@@ -179,6 +179,43 @@ export function rmsFileUpload(theUrl,theMethod,theBody, redirectUrl=""){
         // remove console log at the end
         .catch(err => console.log(`This error occured :${err}`));
 }
+// export function rmsFetchGet(theUrl,redirectUrl=""){
+//   fetch(theUrl,{
+//     method: "GET"
+//   })
+//   .then(response => response.json())
+//   .then(({data,status,error})=>{
+//       if(status === 201 || status === 200 || status === 202){
+//         inputReset();
+//         if (filename === 'dashboard'){
+//           showAlert(data,'success');
+//         }
+//         else{
+//           callToast(data,redirectUrl);
+//         }
+//         exitLoader();
+//       }
+//       else if(status === 400){
+//         showError(error,'error')
+//         exitLoader();
+//       }
+//       else if(status === 409){
+//         showError(error,'error');
+//         exitLoader();
+//       }
+//       else if(status === 401){
+//         showError(error,'error');
+//         exitLoader();
+//       }
+//       else if(status === 404){
+//         showError(error,'error');
+//         exitLoader();
+//       }
+//   })
+//   // remove console log at the end
+//   .catch(err => console.log(`This error occured :${err}`));
+
+// }
 export function showLoader(){
   document.getElementById('showLoader').style.display = " block";
   document.getElementById('submit').style.display = " none";
