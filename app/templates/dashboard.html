@@ -51,10 +51,10 @@
             <script type="module" src="{{ url_for('static', filename='js/adminActions.js')}}"></script>
               <div class="actions active">
                 <button class="action-links" onclick="openAction(event, 'uploadMasterFile')">Master File</button>
-                <button class="action-links" onclick="openAction(event, 'createProject')">Create Projects</button>
-                <button class="action-links" onclick="openAction(event, 'createUsers')">Create Users</button>
-                <button class="action-links" onclick="openAction(event, 'suspendUsers')">Suspend Users</button>
-                <button class="action-links" onclick="openAction(event, 'reactivateUsers')">Reactivate Users</button>
+                <button class="action-links" onclick="openAction(event, 'createProject')">Create Project</button>
+                <button class="action-links" onclick="openAction(event, 'createUsers')">Create User</button>
+                <button class="action-links" onclick="openAction(event, 'suspendUsers')">Suspend User</button>
+                <button class="action-links" onclick="openAction(event, 'reactivateUsers')">Reactivate User</button>
               </div>
               <div id="createProject" class="actionContent">
                 <h3>Create a new project here</h3>
@@ -101,7 +101,7 @@
                 </form>    
               </div>
               <div id="createUsers" class="actionContent">
-                <h3>Create system users here</h3>
+                <h3>Create system user here</h3>
                 <p>Easy just fill the simple form below, user will recieve an email with further instructions.</p>
                 <form  class="form create-project" id="rmsRegForm" method="POST">
                   <label >Select role </label>
@@ -120,7 +120,7 @@
                  </form>
               </div>
               <div id="suspendUsers" class="actionContent">
-                <h3>Suspend system users</h3>
+                <h3>Suspend system user</h3>
                 <p>Mark system users account as suspended.</p>
                 <p>Just enter their email address below.</p>
                 <form  class="form create-project" id="rmsSuspendForm" method="POST">
@@ -130,7 +130,7 @@
                  </form>
               </div>
               <div id="reactivateUsers" class="actionContent">
-                <h3>Reactivate system users</h3>
+                <h3>Reactivate system user</h3>
                 <p>Reactivate a user account that had been previously suspended.</p>
                 <p>Just enter their email address below.</p>
                 <form  class="form create-project" id="rmsReactivateForm" method="POST">
@@ -140,21 +140,37 @@
                  </form>
               </div>
             {% elif role =='Creator' %}
-            <!-- <script type="module" src="{{ url_for('static', filename='js/creatorActions.js')}}"></script> -->
+            <script type="module" src="{{ url_for('static', filename='js/creatorActions.js')}}"></script>
             <div class="actions active">
                 <button class="action-links" onclick="openAction(event, 'UploadBudget')">Budget</button>
                 <button class="action-links" onclick="openAction(event,'UploadPayment')">Payment</button>
               </div>
               <div id="UploadBudget" class="actionContent">
                 <h3>Upload a budget for a given project for review</h3>
-                <p>Just select the project you are budgeting for in the drop down</p>
-                <p>Please note the file must be in excel format, budget items are at your company's discretion</p>
+                <p>Note the file must be an excel and in the below format, budget line items are at your company's discretion</p>
+                <p>But the <span>Budget Line</span>, <span>Rate</span> and <span>Total Amount</span> must be there.</p>
+                <table class="excelFormat">
+                  <tr>
+                    <th>Budget Line</th>
+                    <th>Rate</th>
+                  </tr>
+                  <tr>
+                    <td>eg Local Transport- Urban</td>
+                    <td>300</td>                    
+                  </tr>
+                  <tr>
+                    <td>eg Interviewers Allowance</td>
+                    <td>1200</td>                    
+                  </tr>
+                  <tr>
+                    <td>Total Amount</td>
+                    <td>1500</td>                    
+                  </tr>
+                </table>
                 <form class="form create-project" id="rmsBudgetForm" method="POST">
-                  <label >Select project :</label>
-                  <select class="input project" name="rmsProject" id="rmsProject" required>
-                    <option value="Creator">Creator</option>
-                    <option value="Reviewer">Reviewer</option>
-                    <option value="Authorizer">Authorizer</option>
+                  <input type="hidden" class="input companyid" id="rmsCreatorBudgetCompanyId"  value="{{ companyId }}" required>
+                  <label >Select project </label>
+                  <select class="input project dropdown"  id="rmsCreatorBudgetTag" required>
                   </select>
                   <label>Budget file</label>
                   <input type="file" class="file" id="budgetFile" name="budgetFile" accept=".xlsx, .xls" required/>
@@ -166,13 +182,11 @@
                 <p>Just select the project you are paying for in the drop down</p>
                 <p>Please note the file must be in excel format, budget items are at your company's discretion</p>
                 <form class="form create-project" id="rmsPaymentForm" method="POST">
-                  <label >Select project</label>
-                  <select class="input project" name="rmsProject" id="rmsProject" required>
-                    <option value="Creator">Creator</option>
-                    <option value="Reviewer">Reviewer</option>
-                    <option value="Authorizer">Authorizer</option>
+                  <input type="hidden" class="input companyid" id="rmsCreatorPaymentCompanyId" value="{{ companyId }}" required>
+                  <label >Select project </label>
+                  <select class="input project dropdown" id="rmsCreatorPaymentTag" required>
                   </select>
-                  <label>Budget file</label>
+                  <label>Payment file</label>
                   <input type="file" class="file" id="paymentFile" name="paymentFile" accept=".xlsx, .xls" required/>
                   <input type="submit" id="submit" class="submit projectSubmit" value="Send for review">
                 </form>
