@@ -103,3 +103,21 @@ def get_projects(user, companyId):
         projects_schema.dump(company_projects),
         200
     )
+
+
+@rms.route('/projects/name/<companyId>')
+@token_required
+def get_projects_name(user, companyId):
+    """
+    return the project names of a given
+    company's project
+    """
+    company_projects = Project.query.with_entities(Project.project_name)\
+        .filter_by(companyId=companyId).all()
+    project_name = projects_schema.dump(company_projects)
+    # print(project_name['project_name'])
+    return custom_make_response(
+        "data",
+        project_name,
+        200
+    )
