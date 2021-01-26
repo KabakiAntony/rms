@@ -22,6 +22,7 @@ class Project(db.Model):
         self.date_to = date_to
 
 
+# user['username'].split('.', 1)[0]
 class ProjectSchema(ma.Schema):
     class Meta:
         fields = ("id", "project_name", "companyId", "date_from", "date_to")
