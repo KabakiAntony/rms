@@ -63,23 +63,30 @@ def add_id_and_company_id(filePath, company_id):
     return filePath
 
 
-def to_csv_and_insert(filePath, upload_dir, db_relation):
+def convert_to_csv(filePath, upload_dir):
+    """ convert excel file to csv """
+    # read the excel file
+    dataFile = read_excel(filePath, engine='openpyxl')
+    base_name = os.path.basename(filePath)
+    csv_file_name = os.path.splitext(base_name)[0]
+    csv_file_path = upload_dir + csv_file_name + ".csv"
+    # convert to csv
+    dataFile.to_csv(csv_file_path, index=False)
+    return csv_file_path
+
+
+def insert_csv(csv_file, db_relation):
     """
-    convert the to csv then
-    save it to database
-    db_relation is the database table we are
+    read the csv file and insert
+    contents to database db_relation
+    is the database table we are
     saving data to it takes the form
     'public."Employees"'
     """
     engine = create_engine(DB_URL)
     konnection = engine.raw_connection()
     kursor = konnection.cursor()
-    dataFile = read_excel(filePath, engine='openpyxl')
-    base_name = os.path.basename(filePath)
-    csv_file_name = os.path.splitext(base_name)[0]
-    csv_file_path = upload_dir + csv_file_name + ".csv"
-    dataFile.to_csv(csv_file_path, index=False)
-    with open(csv_file_path, 'r') as f:
+    with open(csv_file, 'r') as f:
         next(f)
         kursor.copy_from(f, db_relation, sep=',')
     konnection.commit()
