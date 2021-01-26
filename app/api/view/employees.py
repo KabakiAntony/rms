@@ -4,7 +4,7 @@ from werkzeug.utils import secure_filename
 from flask import request, abort
 from app.api.utils import allowed_extension, custom_make_response,\
      token_required, rename_file, add_id_and_company_id,\
-     to_csv_and_insert
+     convert_to_csv, insert_csv
 
 
 KEY = os.environ.get('SECRET_KEY')
@@ -34,11 +34,8 @@ def upload_employee_master(user):
             updated_file_path = add_id_and_company_id(
                 new_file_path, user['companyId']
             )
-            to_csv_and_insert(
-                updated_file_path,
-                EMPLOYEE_UPLOAD_FOLDER,
-                'public."Employees"'
-            )
+            csvFile = convert_to_csv(updated_file_path, EMPLOYEE_UPLOAD_FOLDER)
+            insert_csv(csvFile, 'public."Employees"')
             return custom_make_response(
                 "data",
                 "File uploaded successfully ",
