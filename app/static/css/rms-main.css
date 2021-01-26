@@ -20,7 +20,6 @@ html,body{
     padding: 1rem;
     height:40px;
     width: 100%;
-    margin-bottom:10px;
   }
   .header a{
     float:left;
@@ -49,6 +48,9 @@ html,body{
     text-align: center;
     color: rgb(64, 66, 60);
     font-size: 100%;
+  }
+  h3{
+   color: rgba(255, 0, 0, 0.678);
   }
   
   #section-wrapper{
@@ -193,7 +195,7 @@ margin-top: 10px;
   visibility: hidden;
   width:50%;
   background-color: rgb(175, 241, 166);
-  border: 2px solid rgb(39, 241, 12);
+  border: 2px solid rgb(26, 172, 7);
   color: rgb(0, 0, 0);
   text-align: center;
   border-radius: 15px;
@@ -270,8 +272,9 @@ margin-top: 10px;
   }
 }
 .actionNotification{
-  padding: 10px;
+  padding: 0.5rem;
   background-color: #e97971;
+  border: 2px solid rgb(231, 24, 9);
   color:black;
   opacity: 1;
   transition: opacity 0.6s;
@@ -283,7 +286,7 @@ margin-top: 10px;
 .actionNotification.success {
   background-color: #9dff8e;
   color: black;
-  border: 2px solid rgb(13, 252, 5);
+  border: 2px solid rgb(44, 148, 2);
 }
 .closebtn {
   margin-left: 15px;
@@ -351,9 +354,9 @@ span{
   border: none;
   outline: none;
   cursor: pointer;
-  padding: 14px 16px;
+  padding: 10px 12px;
   transition: 0.3s;
-  font-size: 17px;
+  font-size: 15px;
   color:white;
 }
 .actions button:hover {
