@@ -51,10 +51,12 @@
             <script type="module" src="{{ url_for('static', filename='js/adminActions.js')}}"></script>
               <div class="actions active">
                 <button class="action-links" onclick="openAction(event, 'uploadMasterFile')">Master File</button>
-                <button class="action-links" onclick="openAction(event, 'createProject')">Create Project</button>
                 <button class="action-links" onclick="openAction(event, 'createUsers')">Create User</button>
                 <button class="action-links" onclick="openAction(event, 'suspendUsers')">Suspend User</button>
                 <button class="action-links" onclick="openAction(event, 'reactivateUsers')">Reactivate User</button>
+                <button class="action-links" onclick="openAction(event, 'createProject')">Create Project</button>
+                <button class="action-links" onclick="openAction(event, 'listProjects')">List Projects</button>
+                <button class="action-links" onclick="openAction(event, 'manageProjects')">Manage Projects</button>
               </div>
               <div id="createProject" class="actionContent">
                 <h3>Create a new project here</h3>
@@ -138,6 +140,14 @@
                   <input type="email" class="input" id="rmsReactivateEmail" name="rmsReactivateEmail" required>
                   <input type="submit" id="submit" class="submit projectSubmit" value="Reactivate user">
                  </form>
+              </div>
+              <div id="listProjects" class="actionContent">
+                <h3>List Projects</h3>
+                <p>List all active projects.</p>
+              </div>
+              <div id="manageProjects" class="actionContent">
+                <h3>Manage Projects</h3>
+                <p>Manage Projects.</p>
               </div>
             {% elif role =='Creator' %}
             <script type="module" src="{{ url_for('static', filename='js/creatorActions.js')}}"></script>
