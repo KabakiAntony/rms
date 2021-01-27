@@ -20,7 +20,6 @@ class Employees(db.Model):
         self.lastname = lastname
         self.mobile = mobile
         self.email = email
-        
 
 
 class EmployeesSchema(ma.Schema):
