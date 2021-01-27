@@ -78,7 +78,8 @@ def signup_system_users():
         abort(
             custom_make_response(
                 "error",
-                "User exists, please use another email!", 409
+                "A user account with that email already exists,\
+                    please use another one and try again.", 409
             )
         )
     isValidPassword(password)
@@ -112,11 +113,10 @@ def signup_system_users():
         {email_signature()}
         """
         send_mail(email, subject, content)
-        # get the first part of the username
     return custom_make_response(
         "data",
-        f"{ email }\
-            registered successfully, see inbox for further instructions",
+        f"User registered successfully, email sent to {email}\
+            for further instructions.",
         201
     )
 
@@ -145,7 +145,10 @@ def signin_all_users():
         abort(
             custom_make_response(
                 "error",
-                "User not found, Please sign up to use system!",
+                """
+                User account not found, please register a company
+                or have your company admin create an account for you.
+                """,
                 404
             )
         )
@@ -231,7 +234,9 @@ def forgot_password():
         abort(
             custom_make_response(
                 "error",
-                "User not found, Please sign up to use the system!",
+                """
+                User not found, Please sign up to use the system!
+                """,
                 404
             )
         )
@@ -257,31 +262,15 @@ def forgot_password():
     send_mail(email, subject, content)
     resp = custom_make_response(
         "data",
-        f"Email sent successfully, head over to {email} for instructions.",
+        f"email sent successfully see {email} inbox for instructions.",
         202
     )
-    # resp.set_cookie(
-    #     "reset_token",
-    #     token.decode('utf-8'),
-    #     httponly=True,
-    #     secure=True,
-    #     expires=datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
-    # )
     return resp
 
 
 @rms.route('/auth/newpass', methods=['PUT'])
 def set_new_password():
     """updates a user password from the reset page"""
-    # pass_reset_token = request.cookies.get('reset_token')
-    # if not pass_reset_token:
-    #     abort(
-    #         custom_make_response(
-    #             "error",
-    #             "A required piece of authentication seems to be missing!",
-    #             401
-    #         )
-    #     )
     try:
         data = request.get_json()
         email = data['email']
@@ -336,11 +325,6 @@ def suspend_system_user(user):
         )
     check_for_whitespace(data, ['email'])
     isValidEmail(email)
-    # always check that the user is on the master file
-    # before suspending them and also check if a user
-    # is not already suspended we do not need to do that
-    # twice
-    # add that later for now we can do without the check
     User.query.filter_by(email=email).\
         update(dict(isActive='false'))
     db.session.commit()
@@ -356,6 +340,9 @@ def suspend_system_user(user):
 def reactivate_system_user(user):
     """
     reactivate a suspended user account
+    check if account is suspended if not
+    then notify the user no need proceeding
+    if account if already active.
     """
     try:
         data = request.get_json()
@@ -370,9 +357,6 @@ def reactivate_system_user(user):
         )
     check_for_whitespace(data, ['email'])
     isValidEmail(email)
-    # check if the account is suspended 
-    # no need to reactivate an already
-    # suspened account
     User.query.filter_by(email=email).\
         update(dict(isActive='true'))
     db.session.commit()
