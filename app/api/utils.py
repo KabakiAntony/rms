@@ -152,6 +152,8 @@ def check_for_whitespace(data, items_to_check):
     """
     for key, value in data.items():
         if key in items_to_check and not value.strip():
+        # exceptions go to site administrator log and email
+        # the user gets a friendly error notification
             abort(
                 custom_make_response(
                     "error",
@@ -194,6 +196,8 @@ def token_required(f):
                     .filter_by(company=data['company']).first()
                 _data = company_schema.dump(current_company)
         except Exception as e:
+            # exceptions go to site administrator log and email
+            # the user gets a friendly error notification
             return custom_make_response("error", f"Token {e}", 401)
         return f(_data, *args, **kwargs)
     return decorated
