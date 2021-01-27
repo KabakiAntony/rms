@@ -94,7 +94,7 @@ html,body{
 
 #form-container{
   background-color: rgba(239, 239, 241, 0.924);
-  border-radius:15px;
+  border-radius:1.5rem;
   width: 280px;
   font-size: small;
   font-weight: 500;
@@ -195,7 +195,7 @@ margin-top: 10px;
   visibility: hidden;
   width:50%;
   background-color: rgb(175, 241, 166);
-  border: 2px solid rgb(26, 172, 7);
+  border: 1px solid rgb(26, 172, 7);
   color: rgb(0, 0, 0);
   text-align: center;
   border-radius: 1.5rem;
@@ -274,7 +274,7 @@ margin-top: 10px;
 .actionNotification{
   padding: 0.5rem;
   background-color: #e97971;
-  border: 2px solid rgb(231, 24, 9);
+  border: 1px solid rgb(231, 24, 9);
   color:rgb(0, 0, 0);
   opacity: 1;
   transition: opacity 0.6s;
@@ -286,7 +286,7 @@ margin-top: 10px;
 .actionNotification.success {
   background-color: #9dff8e;
   color: black;
-  border: 2px solid rgb(44, 148, 2);
+  border: 1px solid rgb(44, 148, 2);
 }
 .closebtn {
   margin-left: 15px;
@@ -294,7 +294,7 @@ margin-top: 10px;
   font-weight: bold;
   float: right;
   font-size: 22px;
-  line-height: 20px;
+  line-height: 16px;
   cursor: pointer;
   transition: 0.3s;
 }
