@@ -38,7 +38,7 @@ def upload_employee_master(user):
             insert_csv(csvFile, 'public."Employees"')
             return custom_make_response(
                 "data",
-                "File uploaded successfully ",
+                "Employees data saved successfully.",
                 200
                 )
         else:
