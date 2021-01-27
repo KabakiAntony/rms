@@ -137,6 +137,10 @@ export function rmsFetch(theUrl,theMethod,theBody, redirectUrl="",theForm){
                 showError(error,'error');
                 exitLoader();
               }
+              else if(status === 403){
+                showError(error,'error');
+                exitLoader();
+              }
           })
           // remove console log at the end
           .catch(err => console.log(`This error occured :${err}`));
@@ -172,6 +176,10 @@ export function rmsFileUpload(theUrl,theMethod,theBody, redirectUrl="", theForm)
               exitLoader();
             }
             else if(status === 404){
+              showError(error,'error');
+              exitLoader();
+            }
+            else if(status === 403){
               showError(error,'error');
               exitLoader();
             }
