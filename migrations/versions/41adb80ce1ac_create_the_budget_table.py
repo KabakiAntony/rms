@@ -29,8 +29,7 @@ def upgrade():
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('fileUrl')
     )
-    op.drop_table('Employees')
-    # ### end Alembic commands ###
+    
 
 
 def downgrade():
