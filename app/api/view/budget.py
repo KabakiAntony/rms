@@ -5,7 +5,6 @@ from werkzeug.utils import secure_filename
 from app.api.model.budget import Budget, budget_schema,\
     budgets_schema
 from flask import request, abort
-from openpyxl import load_workbook
 from app.api.utils import allowed_extension, custom_make_response,\
      token_required, rename_file, add_id_and_company_id,\
      insert_csv, convert_to_csv, generate_db_ids
@@ -23,6 +22,12 @@ def upload_budget(user):
     upload  a budget for a given project
     only the creator can upload a budget
     """
+    if (user['role'] != "Creator"):
+        abort(custom_make_response(
+            "error",
+            "You are not authorized to carry out this action!",
+            403
+        ))
     try:
         receivedFile = request.files['budgetExcelFile']
         if allowed_extension(receivedFile.filename) and receivedFile:
@@ -49,12 +54,14 @@ def upload_budget(user):
                 400
             )
     except Exception as e:
+        print(f"{e}")
+        # exceptions go to site administrator and email
+        # the user gets a friendly error notification
         abort(
             custom_make_response(
                 "error",
-                f"{e}",
-                # "An error occured uploading file \
-                #     the administrator has been notified.",
+                "An error occured uploading file \
+                    the administrator has been notified.",
                 400
             )
         )
@@ -67,9 +74,16 @@ def get_budget_amount(budget_file_csv):
     """
     saved_csv = open(budget_file_csv, "r")
     reader_file = csv.reader(saved_csv)
-    # csv_rows = len(list(reader_file))
-    # print(csv_rows[1])
+    count_rows = 0
     for row in reader_file:
-        print(row[1])
+        count_rows += 1
+    budget_amount = row[1]
+    return budget_amount
 
 
+def inser_budget_data():
+    """
+    insert budget data into the budget
+    table for the reivewer & authorizer
+    to act accordingly
+    """

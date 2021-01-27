@@ -48,12 +48,14 @@ def upload_employee_master(user):
                 400
             )
     except Exception as e:
+        print(f"{e}")
+        # exceptions go to site administrator and email
+        # the user gets a friendly error notification
         abort(
             custom_make_response(
                 "error",
-                f"{e}",
-                # "An error occured uploading file \
-                #     the administrator has been notified.",
+                "An error occured uploading file \
+                    the administrator has been notified.",
                 400
             )
         )

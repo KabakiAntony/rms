@@ -1,9 +1,7 @@
 import os
-import jwt
 from app.api import rms
 from app.api.model import db
-from app.api.model.project import Project, project_schema,\
-    projects_schema
+from app.api.model.project import Project, projects_schema
 from app.api.model.user import User, user_schema
 from flask import request, abort
 from app.api.utils import check_for_whitespace, custom_make_response,\
@@ -15,38 +13,16 @@ KEY = os.environ.get('SECRET_KEY')
 
 
 @rms.route('/auth/projects', methods=['POST'])
-def create_new_project():
+@token_required
+def create_new_project(user):
     """
     create new project
     only the admin can create projects
     """
-    auth_token = request.cookies.get('auth_token')
-    if not auth_token:
-        abort(
-            custom_make_response(
-                "error",
-                """
-                Authorization cookies for this action seem to be missing,
-                please login and try again, if the problem persists , 
-                contact site administrator.
-                """,
-                401
-            )
-        )
-    auth_data = jwt.decode(auth_token, KEY, algorithm="HS256")
-    if (auth_data['role'] != 'Admin'):
-        abort(
-            custom_make_response(
-                "error",
-                "It seems you are not authorized to create new projects!",
-                401
-            )
-        )
     try:
         data = request.get_json()
-        # change from username to id
         current_user = User.query.\
-            filter_by(id=auth_data['id']).first()
+            filter_by(id=user['id']).first()
         _data = user_schema.dump(current_user)
         companyId = _data['companyId']
         projectName = data['project_name'] + '.' + companyId
@@ -54,6 +30,8 @@ def create_new_project():
         dateTo = data['date_to']
         id = generate_db_ids()
     except Exception as e:
+        # exceptions go to site administrator log and email
+        # the user gets a friendly error notification
         abort(
             custom_make_response(
                 "error",
@@ -115,7 +93,6 @@ def get_projects_name(user, companyId):
     company_projects = Project.query.with_entities(Project.project_name)\
         .filter_by(companyId=companyId).all()
     project_name = projects_schema.dump(company_projects)
-    # print(project_name['project_name'])
     return custom_make_response(
         "data",
         project_name,

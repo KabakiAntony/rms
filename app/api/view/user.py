@@ -46,6 +46,8 @@ def signup_system_users():
         id = generate_db_ids()
         username = user_data['username'] + '.' + id
     except Exception as e:
+        # exceptions go to site administrator and email
+        # the user gets a friendly error notification
         abort(
             custom_make_response(
                 "error",
@@ -131,6 +133,8 @@ def signin_all_users():
         email = user_data['email']
         password = user_data['password']
     except Exception as e:
+        # exceptions go to site administrator and email
+        # the user gets a friendly error notification
         abort(custom_make_response(
             "error",
             f"{e} One or more mandatory fields was not filled!",
@@ -220,6 +224,8 @@ def forgot_password():
         user_data = request.get_json()
         email = user_data['email']
     except Exception as e:
+        # exceptions go to site administrator and email
+        # the user gets a friendly error notification
         abort(
             custom_make_response(
                 "error",
@@ -275,7 +281,10 @@ def set_new_password():
         data = request.get_json()
         email = data['email']
         new_password = data['password']
-    except KeyError:
+    except KeyError :
+        # add ketError as e to get the exact error
+        # exceptions go to site administrator and email
+        # the user gets a friendly error notification
         abort(
             custom_make_response(
                 "error",
@@ -316,6 +325,9 @@ def suspend_system_user(user):
         data = request.get_json()
         email = data['email']
     except KeyError:
+        # add ketError as e to get the exact error
+        # exceptions go to site administrator and email
+        # the user gets a friendly error notification
         abort(
             custom_make_response(
                 "error",
@@ -348,6 +360,9 @@ def reactivate_system_user(user):
         data = request.get_json()
         email = data['email']
     except KeyError:
+        # add ketError as e to get the exact error
+        # exceptions go to site administrator and email
+        # the user gets a friendly error notification
         abort(
             custom_make_response(
                 "error",
