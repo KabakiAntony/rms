@@ -60,8 +60,7 @@ def upload_budget(user):
         abort(
             custom_make_response(
                 "error",
-                "An error occured uploading file \
-                    the administrator has been notified.",
+                f"The following error occured : '{e}'",
                 400
             )
         )
@@ -81,9 +80,9 @@ def get_budget_amount(budget_file_csv):
     return budget_amount
 
 
-def inser_budget_data():
-    """
-    insert budget data into the budget
-    table for the reivewer & authorizer
-    to act accordingly
-    """
+# def inser_budget_data(company_id,budgetAmt,):
+#     """
+#     insert budget data into the budget
+#     table for the reivewer & authorizer
+#     to act accordingly
+#     """
