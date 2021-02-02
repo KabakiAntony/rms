@@ -15,7 +15,7 @@ function Forgot(){
 forgotData = {
     email:forgotEmail.value
 };
-rmsFetch('/auth/forgot','POST',forgotData,'/signin','','rmsForm');
+rmsFetch('/auth/forgot','POST',forgotData,'/signin','rmsForm');
 }
 
 /* reset submission */
