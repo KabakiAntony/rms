@@ -196,7 +196,7 @@ margin-top: 10px;
 #showAlert{
   visibility: hidden;
   width:50%;
-  background-color: rgb(175, 241, 166);
+  background-color: rgb(212, 237, 218);
   border: 1px solid rgb(26, 172, 7);
   color: rgb(0, 0, 0);
   text-align: center;
@@ -286,7 +286,7 @@ margin-top: 10px;
   font-size: 13px;
 }
 .actionNotification.success {
-  background-color: #9dff8e;
+  background-color: #d4edda;
   color: black;
   border: 1px solid rgb(44, 148, 2);
 }
