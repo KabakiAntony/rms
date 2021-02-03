@@ -1,13 +1,15 @@
 import os
 from app.api import rms
+from app.api.model import db
 import csv
 from werkzeug.utils import secure_filename
 from app.api.model.budget import Budget, budget_schema,\
     budgets_schema
+from app.api.model.project import Project, project_schema
 from flask import request, abort
 from app.api.utils import allowed_extension, custom_make_response,\
      token_required, rename_file, add_id_and_company_id,\
-     insert_csv, convert_to_csv, generate_db_ids
+     insert_csv, convert_to_csv, generate_db_ids, check_for_whitespace
 
 
 # getting environment variables
@@ -41,7 +43,8 @@ def upload_budget(user):
                 '_budget_'
             )
             csvFile = convert_to_csv(new_file_path, BUDGET_UPLOAD_FOLDER)
-            get_budget_amount(csvFile)
+            budget_amount = get_budget_amount(csvFile)
+            insert_budget_data(user['companyId'], budget_amount, new_file_path)
             return custom_make_response(
                 "data",
                 "File uploaded successfully.",
@@ -80,9 +83,41 @@ def get_budget_amount(budget_file_csv):
     return budget_amount
 
 
-# def inser_budget_data(company_id,budgetAmt,):
-#     """
-#     insert budget data into the budget
-#     table for the reivewer & authorizer
-#     to act accordingly
-#     """
+def insert_budget_data(company_id, budgetAmt, fileUrl):
+    """
+    insert budget data into the budget
+    table for the authorizer
+    to act accordingly
+    """
+    try:
+        project_name = request.form['projectName']
+        projectName = project_name + '.' + company_id
+        this_project = Project.query.\
+            filter_by(project_name=projectName).first()
+        project = project_schema.dump(this_project)
+        project_id = project['id']
+        id = generate_db_ids()
+        companyId = company_id
+        amount = budgetAmt
+        fileUrl = fileUrl
+
+        new_budget = Budget(
+            id=id,
+            companyId=companyId,
+            projectId=project_id,
+            amount=amount,
+            fileUrl=fileUrl
+            )
+        # insert the data into the db
+        db.session.add(new_budget)
+        db.session.commit()
+    except Exception as e:
+        abort(
+            custom_make_response(
+                "error",
+                f"An error occured saving budget data {e}",
+               400 
+            )
+        )
+    
+
