@@ -12,7 +12,6 @@ dropDown.selectedIndex = 0;
 let budgetUploadForm = document.getElementById('rmsBudgetForm');
 let budgetInput = document.getElementById('budgetFile');
 
-
 // getting project data from the db
 const url = 'projects/name/'+companyId.value;
 
@@ -42,8 +41,10 @@ fetch(url,{
 
 // budget file upload
 function uploadBudgetFile(){
+    const theProjectName = dropDown.value;
     const theFile = new FormData();
     theFile.append('budgetExcelFile',budgetInput.files[0]);
+    theFile.append('projectName',theProjectName);
     rmsFileUpload('/auth/upload/budget','POST',theFile,'','rmsBudgetForm')
 }
 
