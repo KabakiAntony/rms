@@ -109,7 +109,7 @@
                   <label >Select role </label>
                   <select class="input project" name="rmsRole" id="rmsRole" required>
                     <option value="Creator">Creator</option>
-                    <option value="Reviewer">Reviewer</option>
+                    <!-- <option value="Reviewer">Reviewer</option> -->
                     <option value="Authorizer">Authorizer</option>
                   </select>
                   <label >Firstname </label>
@@ -201,24 +201,40 @@
                   <input type="submit" id="submit" class="submit projectSubmit" value="Send for review">
                 </form>
               </div>
-            {% elif role == 'Reviewer' %}
-            <!-- <script type="module" src="{{ url_for('static', filename='js/reviewerActions.js')}}"></script> -->
-            <div class="actions active">
-              <button class="action-links" onclick="openAction(event, 'reviewBudget')">Review Budget</button>
-              <button class="action-links" onclick="openAction(event,'reviewPayment')">Review Payment File</button>
-            </div>
-            <div id="reviewBudget" class="actionContent">Review the project  budget here</div>
-            <div id="reviewPayment" class="actionContent">Review payment file</div>
             {% elif role == 'Authorizer' %}
             <!-- <script type="module" src="{{ url_for('static', filename='js/authorizerActions.js')}}"></script> -->
             <div class="actions active">
             <button class="action-links" onclick="openAction(event, 'authorizeBudget')">Authorize Budget</button>
             <button class="action-links" onclick="openAction(event,'authorizePayment')">Authorize Payment File</button>
-            </div>
+            <button class="action-links" onclick="openAction(event, 'authorizerCreateProject')">Create Project</button>
+            <button class="action-links" onclick="openAction(event, 'authorizerListProjects')">List Projects</button>
+            <button class="action-links" onclick="openAction(event, 'authorizerManageProjects')">Manage Projects</button>
+          </div>
             <div id="authorizeBudget" class="actionContent">Authorize Budget</div>
             <div id="authorizePayment" class="actionContent">Authorize Payment</div>
+            <div id="authorizerCreateProject" class="actionContent">
+              <h3>Create a new project here</h3>
+              <p>It's easy just enter a name and the dates you expect the project to run from-to</p>
+              <form class="form create-project" id="rmsAuthorizerCreateForm" method="POST">
+                <label>Project name</label>
+                <input type="text" class="input project" id="rmsAuthorizerCreateProject" name="rmsProject" required>
+                <label>Start Date</label>
+                <input type="date" class="input project" id="authorizerCreateDateFrom" name="dateFrom" required>
+                <label>End Date </label>
+                <input type="date" class="input project" id="authorizerCreateDateTo" name="dateTo" required>
+                <input type="submit" id="submit" class="submit projectSubmit" value="Create project">
+              </form>
+            </div>
+            <div id="authorizerListProjects" class="actionContent">
+              <h3>List Projects</h3>
+              <p>List all active projects.</p>
+            </div>
+            <div id="authorizerManageProjects" class="actionContent">
+              <h3>Manage Projects</h3>
+              <p>Manage Projects.</p>
+            </div>
             {% endif %}
-            <h4 class="text-center bigger-font" id="profileInst">Click on any option to carry out the task.</h4>
+            <h4 class="text-center bigger-font" id="profileInstruction">Click on any option to carry out the task.</h4>
         </div>
     </div>
 </body>
