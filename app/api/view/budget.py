@@ -1,7 +1,8 @@
 import os
+import csv
+import psycopg2
 from app.api import rms
 from app.api.model import db
-import csv
 from werkzeug.utils import secure_filename
 from app.api.model.budget import Budget, budget_schema,\
     budgets_schema
@@ -57,16 +58,34 @@ def upload_budget(user):
                 400
             )
     except Exception as e:
-        print(f"{e}")
         # exceptions go to site administrator and email
         # the user gets a friendly error notification
-        abort(
-            custom_make_response(
-                "error",
-                f"The following error occured : '{e}'",
-                400
+        message = str(e)
+        if('InvalidTextRepresentation' in message):
+            abort(
+                custom_make_response(
+                    "error",
+                    "The file you are uploading is not in the allowed format for a budget file !",
+                    400
+                )
             )
-        )
+        elif('id' in message):
+            abort(
+                custom_make_response(
+                    "error",
+                    "Please select the project you are uploading a budget for !",
+                    400
+                )
+            )
+        else:
+            abort(
+                custom_make_response(
+                    "error",
+                    f"The following error occured :: {message}",
+                    400
+                )
+            )
+       
 
 
 def get_budget_amount(budget_file_csv):
@@ -89,35 +108,26 @@ def insert_budget_data(company_id, budgetAmt, fileUrl):
     table for the authorizer
     to act accordingly
     """
-    try:
-        project_name = request.form['projectName']
-        projectName = project_name + '.' + company_id
-        this_project = Project.query.\
-            filter_by(project_name=projectName).first()
-        project = project_schema.dump(this_project)
-        project_id = project['id']
-        id = generate_db_ids()
-        companyId = company_id
-        amount = budgetAmt
-        fileUrl = fileUrl
+    project_name = request.form['projectName']
+    projectName = project_name + '.' + company_id
+    this_project = Project.query.\
+        filter_by(project_name=projectName).first()
+    project = project_schema.dump(this_project)
+    project_id = project['id']
+    id = generate_db_ids()
+    companyId = company_id
+    amount = budgetAmt
+    fileUrl = fileUrl
 
-        new_budget = Budget(
-            id=id,
-            companyId=companyId,
-            projectId=project_id,
-            amount=amount,
-            fileUrl=fileUrl
-            )
-        # insert the data into the db
-        db.session.add(new_budget)
-        db.session.commit()
-    except Exception as e:
-        abort(
-            custom_make_response(
-                "error",
-                f"An error occured saving budget data {e}",
-               400 
-            )
+    new_budget = Budget(
+        id=id,
+        companyId=companyId,
+        projectId=project_id,
+        amount=amount,
+        fileUrl=fileUrl
         )
+    # insert the data into the db
+    db.session.add(new_budget)
+    db.session.commit()
     
 
