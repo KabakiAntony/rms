@@ -11,6 +11,7 @@ function isValidPassword(my_password){
 }
 /* this function gets called on a status code of 200 or 201 */
 function inputReset(theform){
+  // console.log(theForm)
  document.getElementById(theform).reset();  
 }
 function callToast(msg,redirectUrl) {
@@ -112,7 +113,7 @@ export function rmsFetch(theUrl,theMethod,theBody, redirectUrl="",theForm){
           .then(response => response.json())
           .then(({data,status,error})=>{
               if(status === 201 || status === 200 || status === 202){
-                inputReset(theForm);
+                // inputReset(theForm);
                 if (filename === 'dashboard'){
                   showAlert(data,'success');
                 }

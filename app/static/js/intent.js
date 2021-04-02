@@ -28,7 +28,7 @@ intentData = {
     email:upEmail.value,
     company:company.value
 };
-rmsFetch('/intent',"POST",intentData,'','rmsForm','/signin','rmsForm')
+rmsFetch('/intent',"POST",intentData,'/signin','rmsForm');
 }
 
 

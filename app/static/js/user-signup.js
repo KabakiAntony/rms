@@ -22,7 +22,7 @@ function postSignUp(){
         role:role.value,
         isActive:isActive.value
     };
-    rmsFetch('/auth/signup','POST',signUpInfo,'/signin');    
+    rmsFetch('/auth/signup','POST',signUpInfo,'/signin','rmsForm');    
 }
 
 SignUpForm.addEventListener('submit',(e)=>{
