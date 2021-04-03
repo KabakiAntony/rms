@@ -171,6 +171,23 @@ margin-top: 10px;
   width:50%;
   font-size: 90%;
 }
+.view-employees{
+  width:20%;
+  font-size: 90%;
+}
+table.employee-data-holder{
+  table-layout: fixed;
+  width: 80%;
+  border: none;
+  margin:0 auto;
+  background-color: #0096D6;
+  color: rgb(255, 254, 254);
+  font: bold;
+}
+table.tbody.tr.td{
+  border: none;
+}
+
 .signout-button{
   font-weight: normal;
   background-color: #464849da;

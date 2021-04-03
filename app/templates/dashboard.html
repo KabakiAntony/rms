@@ -51,6 +51,7 @@
             <script type="module" src="{{ url_for('static', filename='js/adminActions.js')}}"></script>
               <div class="actions active">
                 <button class="action-links" onclick="openAction(event, 'uploadMasterFile')">Master File</button>
+                <button class="action-links" onclick="openAction(event, 'viewEmployees')">View Employees</button>
                 <button class="action-links" onclick="openAction(event, 'createUsers')">Create User</button>
                 <button class="action-links" onclick="openAction(event, 'suspendUsers')">Suspend User</button>
                 <button class="action-links" onclick="openAction(event, 'reactivateUsers')">Reactivate User</button>
@@ -70,6 +71,11 @@
                   <input type="date" class="input project" id="dateTo" name="dateTo" required>
                   <input type="submit" id="submit" class="submit projectSubmit" value="Create project">
                 </form>
+              </div>
+              <div id="viewEmployees" class="actionContent">
+                 <h3>Employees on the master file</h3>
+                 <div id="employeesView" class="employeesView"></div>
+                 <input type="submit" id="fetchButton" class="submit view-employees" value="View Employees">
               </div>
               <div id="uploadMasterFile" class="actionContent">
                 <h3>Upload the employee master file</h3>
