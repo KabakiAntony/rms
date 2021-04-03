@@ -6,8 +6,9 @@ from flask import request, abort
 from app.api.utils import allowed_extension, custom_make_response,\
      token_required, rename_file, add_id_and_company_id,\
      convert_to_csv, insert_csv
+from app.api.model.employees import Employees, employee_schema, employees_schema
 
-
+ 
 KEY = os.environ.get('SECRET_KEY')
 EMPLOYEE_UPLOAD_FOLDER = os.environ.get('EMPLOYEES_FOLDER') 
 
@@ -55,7 +56,8 @@ def upload_employee_master(user):
             abort(
                 custom_make_response(
                     "error",
-                    "The record(s) you are trying to upload already exist in the database !",
+                    "The record(s) you are trying to upload\
+                        already exist in the database !",
                     400
                 )
             )
@@ -63,7 +65,8 @@ def upload_employee_master(user):
             abort(
                 custom_make_response(
                     "error",
-                    "The file you are uploading is not in the allowed format for employees file!",
+                    "The file you are uploading is not in the\
+                        allowed format for employees file!",
                     400
                     )
                 )
@@ -77,4 +80,46 @@ def upload_employee_master(user):
                 )
 
 
+@rms.route('/employees/<companyId>', methods=['GET'])
+@token_required
+def  get_employees(user,companyId):
+    """
+    return the employees of a given company
+    """
+    if user['companyId'] == companyId:
+        company_employees = Employees.query\
+            .filter_by(companyId=companyId).all()
+        if not company_employees:
+            return abort(
+                custom_make_response(
+                    "error",
+                    "No employees have been found for your company !,\
+                        please upload & try again.",
+                    404
+                )
+            )
+        else:
+            return custom_make_response(
+                "data",
+                employees_schema.dump(company_employees),
+                200
+            )
+    elif user['companyId'] != companyId:
+        return abort(
+            custom_make_response(
+                "error",
+                "There appears to be a mismatch in the authorization\
+                     data,Please logout, login and try again, if problem\
+                          persists,contact the site administrator.",
+                400
+            )
+        )
+    else:
+        return abort(
+            custom_make_response(
+                "error",
+                "Bummer a database error occurred.",
+                400
+            )
+        )
         
