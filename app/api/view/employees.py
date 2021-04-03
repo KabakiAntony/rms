@@ -93,7 +93,7 @@ def  get_employees(user,companyId):
             return abort(
                 custom_make_response(
                     "error",
-                    "No employees have been found for your company !,\
+                    "No employees have been found for your company !\
                         please upload & try again.",
                     404
                 )
