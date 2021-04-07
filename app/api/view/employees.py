@@ -98,13 +98,23 @@ def  get_employees(user,companyId):
                     404
                 )
             )
-        else:
+        elif company_employees:
             return custom_make_response(
                 "data",
                 employees_schema.dump(company_employees),
                 200
             )
-    elif user['companyId'] != companyId:
+        else:
+            return abort(
+                custom_make_response(
+                    "error",
+                    "Bummer an error occured fetching the records,\
+                        please refresh and try again.",
+                    500
+                )
+            )
+
+    else:
         return abort(
             custom_make_response(
                 "error",
@@ -114,12 +124,4 @@ def  get_employees(user,companyId):
                 400
             )
         )
-    else:
-        return abort(
-            custom_make_response(
-                "error",
-                "Bummer a database error occurred.",
-                400
-            )
-        )
-        
+    
