@@ -53,9 +53,9 @@ function showAlert(myData,divId){
     }
 }
 }
-function showEmployeeData(employee_data){
+function showEmployeeData(employee_data,viewDiv){
   for (let i = 0; i < employee_data.length; i++) {
-    employeesView.innerHTML=`
+    viewDiv.innerHTML=`
       ${employee_data.map(function(employeeData){
         return `
           <ul class="employeeList">
@@ -69,6 +69,24 @@ function showEmployeeData(employee_data){
           }).join('')}
         `
     }
+}
+function showProjectData(project_data,viewDiv){
+  for (let i = 0; i < project_data.length; i++) {
+    viewDiv.innerHTML=`
+      ${project_data.map(function(projectData){
+        return `
+          <ul class="employeeList">
+            <li class="employeeName">${projectData.project_name.split('.')[0]}</li>
+              <ul>
+                <li class="employeeNest">${projectData.date_from}</li>
+                <li class="employeeNest">${projectData.date_to}</li>
+              </ul>
+          </ul>
+                    `
+          }).join('')}
+        `
+    }
+
 }
 /* this function validates data on submit */
 export function validateEmailData(){
@@ -173,7 +191,7 @@ export function rmsFileUpload(theUrl,theMethod,theBody, redirectUrl="", theForm)
         // remove console log at the end
         .catch(err => console.log(`This error occured :${err}`));
 }
-export function rmsFetchGet(theUrl,redirectUrl=""){
+export function rmsFetchGet(theUrl,redirectUrl="",theDiv,theFn){
   fetch(theUrl,{
     method: "GET"
   })
@@ -181,7 +199,13 @@ export function rmsFetchGet(theUrl,redirectUrl=""){
   .then(({data,status,error})=>{
       if(status === 201 || status === 200 || status === 202){
         if (filename === 'dashboard'){
-          showEmployeeData(data)
+          if (theDiv.id == "employeesView"){
+            showEmployeeData(data,theDiv);
+          }
+          else{
+            showProjectData(data,theDiv)
+          }
+          
         }
         else{
           callToast(data,redirectUrl);

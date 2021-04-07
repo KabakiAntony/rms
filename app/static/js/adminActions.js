@@ -12,8 +12,10 @@ let email = document.getElementById('rmsEmail');
 let companyId = document.getElementById('rmsCompanyId');
 let isActive = document.getElementById('rmsActive');
 let role = document.getElementById('rmsRole');
-let fetchButton = document.getElementById("fetchButton");
-// let employeesView = document.getElementById("employeesView");
+let fetchEmployeesButton = document.getElementById("fetchButton");
+let employeesView = document.getElementById("employeesView");
+let fetchProjectsButton = document.getElementById("fetchProjectsButton");
+let projectsView = document.getElementById("projectsView");
 let signUpInfo;
 let theBody;
 // the following part goes into employee file upload
@@ -125,7 +127,15 @@ reactivateForm.addEventListener('submit',(e)=>{
     reactivateUser();
 })
 // fetch the employee master file from the database 
-// and display it for the user to view
-const url = '/employees/'+companyId.value;
-fetchButton.addEventListener("click", rmsFetchGet.bind(fetchButton, url));
+const employeesUrl = '/employees/'+companyId.value;
+fetchEmployeesButton.addEventListener(
+    "click", 
+    rmsFetchGet.bind(fetchEmployeesButton, employeesUrl,'',employeesView)
+    );
 
+//fetch projects
+const projectsUrl = '/projects/'+companyId.value
+fetchProjectsButton.addEventListener(
+    "click", 
+    rmsFetchGet.bind(fetchProjectsButton,projectsUrl,'',projectsView)
+    );
