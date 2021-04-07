@@ -74,13 +74,43 @@ def create_new_project(user):
 @token_required
 def get_projects(user, companyId):
     """ get projects for the given user company"""
-    company_projects = Project.query\
-        .filter_by(companyId=companyId).all()
-    return custom_make_response(
-        "data",
-        projects_schema.dump(company_projects),
-        200
-    )
+    if user['companyId'] == companyId:
+        company_projects = Project.query\
+            .filter_by(companyId=companyId).all()
+        if not company_projects:
+            return abort(
+                custom_make_response(
+                    "error",
+                    "No projects exist for your company, Once you\
+                        create some they will appear here.",
+                    404
+                )
+            )
+        elif company_projects:
+            return custom_make_response(
+                "data",
+                projects_schema.dump(company_projects),
+                200
+            )
+        else:
+            return abort(
+                custom_make_response(
+                    "error",
+                    "Bummer an error occured fetching the records,\
+                        please refresh and try again.",
+                    500
+                )
+            )
+    else:
+        return abort(
+            custom_make_response(
+                "error",
+                "There appears to be a mismatch in the authorization\
+                     data,Please logout, login & try again, if the problem\
+                          persists,contact the site administrator.",
+                400
+            )
+        )
 
 
 @rms.route('/projects/name/<companyId>')
