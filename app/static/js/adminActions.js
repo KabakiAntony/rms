@@ -1,6 +1,6 @@
 import {clearErrorDivs} from './rmsModule.js'
 import {validateEmailData, emailInputListener} from './rmsModule.js'
-import {rmsFetch, showLoader, rmsFileUpload } from './rmsModule.js'
+import {rmsFetch, showLoader, rmsFileUpload, rmsFetchGet } from './rmsModule.js'
 
 let createProjectForm = document.getElementById('rmsForm');
 let projectName = document.getElementById('rmsProject');
@@ -13,7 +13,7 @@ let companyId = document.getElementById('rmsCompanyId');
 let isActive = document.getElementById('rmsActive');
 let role = document.getElementById('rmsRole');
 let fetchButton = document.getElementById("fetchButton");
-let employeesView = document.getElementById("employeesView");
+// let employeesView = document.getElementById("employeesView");
 let signUpInfo;
 let theBody;
 // the following part goes into employee file upload
@@ -126,48 +126,6 @@ reactivateForm.addEventListener('submit',(e)=>{
 })
 // fetch the employee master file from the database 
 // and display it for the user to view
+const url = '/employees/'+companyId.value;
+fetchButton.addEventListener("click", rmsFetchGet.bind(fetchButton, url));
 
-fetchButton.addEventListener("click", getEmployees);
-
-function getEmployees(){
-    showLoader();
-    const url = '/employees/'+companyId.value;
-
-    fetch(url,{
-        method: "GET"
-      })
-      .then(response => response.json())
-      .then(({data,status,error})=>{
-          if (status == 200)
-          {
-            document.getElementById('showLoader').style.display = " none";
-            document.getElementById('fetchButton').style.display = " none";
-            for (let i = 0; i < data.length; i++) {
-                employeesView.innerHTML=`
-                ${data.map(function(employeeData){
-                    return `
-                    <table class="employee-data-holder">
-                    <tbody>
-                    <tr>
-                    <td id="td-firstname">${employeeData.firstname +" "+ employeeData.lastname}</td>
-                    <td id="td-email">${employeeData.email}</td>
-                    <td id="td-mobile">${'0'+employeeData.mobile}</td>
-                    </tr>
-                    </tbody>
-                    </table>
-                    `
-                }).join('')}
-                `
-              }
-          }
-          else
-          {
-            document.getElementById('showLoader').style.display = " none";
-            employeesView.innerHTML=`${error}`
-            document.getElementById('fetchButton').style.display = " none";
-          }
-    
-      })
-    .catch(err => console.log(`This error occured :${err}`));
-    
-}

@@ -53,6 +53,23 @@ function showAlert(myData,divId){
     }
 }
 }
+function showEmployeeData(employee_data){
+  for (let i = 0; i < employee_data.length; i++) {
+    employeesView.innerHTML=`
+      ${employee_data.map(function(employeeData){
+        return `
+          <ul class="employeeList">
+            <li class="employeeName">${employeeData.firstname +" "+ employeeData.lastname}</li>
+              <ul>
+                <li class="employeeNest">${employeeData.email}</li>
+                <li class="employeeNest">${'0'+employeeData.mobile}</li>
+              </ul>
+          </ul>
+                    `
+          }).join('')}
+        `
+    }
+}
 /* this function validates data on submit */
 export function validateEmailData(){
     if(!isEmail(rmsEmail.value)){
@@ -122,24 +139,8 @@ export function rmsFetch(theUrl,theMethod,theBody, redirectUrl="",theForm){
                 }
                 exitLoader();
               }
-              else if(status === 400){
+              else {
                 showError(error,'error')
-                exitLoader();
-              }
-              else if(status === 409){
-                showError(error,'error');
-                exitLoader();
-              }
-              else if(status === 401){
-                showError(error,'error');
-                exitLoader();
-              }
-              else if(status === 404){
-                showError(error,'error');
-                exitLoader();
-              }
-              else if(status === 403){
-                showError(error,'error');
                 exitLoader();
               }
           })
@@ -164,67 +165,38 @@ export function rmsFileUpload(theUrl,theMethod,theBody, redirectUrl="", theForm)
               }
               exitLoader();
             }
-            else if(status === 400){
+            else {
               showError(error,'error')
-              exitLoader();
-            }
-            else if(status === 409){
-              showError(error,'error');
-              exitLoader();
-            }
-            else if(status === 401){
-              showError(error,'error');
-              exitLoader();
-            }
-            else if(status === 404){
-              showError(error,'error');
-              exitLoader();
-            }
-            else if(status === 403){
-              showError(error,'error');
               exitLoader();
             }
         })
         // remove console log at the end
         .catch(err => console.log(`This error occured :${err}`));
 }
-// export function rmsFetchGet(theUrl,redirectUrl=""){
-//   fetch(theUrl,{
-//     method: "GET"
-//   })
-//   .then(response => response.json())
-//   .then(({data,status,error})=>{
-//       if(status === 201 || status === 200 || status === 202){
-//         inputReset();
-//         if (filename === 'dashboard'){
-//           showAlert(data,'success');
-//         }
-//         else{
-//           callToast(data,redirectUrl);
-//         }
-//         exitLoader();
-//       }
-//       else if(status === 400){
-//         showError(error,'error')
-//         exitLoader();
-//       }
-//       else if(status === 409){
-//         showError(error,'error');
-//         exitLoader();
-//       }
-//       else if(status === 401){
-//         showError(error,'error');
-//         exitLoader();
-//       }
-//       else if(status === 404){
-//         showError(error,'error');
-//         exitLoader();
-//       }
-//   })
-//   // remove console log at the end
-//   .catch(err => console.log(`This error occured :${err}`));
+export function rmsFetchGet(theUrl,redirectUrl=""){
+  fetch(theUrl,{
+    method: "GET"
+  })
+  .then(response => response.json())
+  .then(({data,status,error})=>{
+      if(status === 201 || status === 200 || status === 202){
+        if (filename === 'dashboard'){
+          showEmployeeData(data)
+        }
+        else{
+          callToast(data,redirectUrl);
+        }
+        exitLoader();
+      }
+      else {
+        showError(error,'error')
+        exitLoader();
+      }
+  })
+  // remove console log at the end
+  .catch(err => console.log(`This error occured :${err}`));
 
-// }
+}
 export function showLoader(){
   document.getElementById('showLoader').style.display = " block";
   document.getElementById('submit').style.display = " none";
