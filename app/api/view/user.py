@@ -239,11 +239,11 @@ def forgot_password():
     if not user:
         abort(
             custom_make_response(
-                "error",
-                """
-                User not found, Please sign up to use the system!
-                """,
-                404
+                "data",
+                "An email has been sent to the address on record,\
+                    If you don't receive one shortly, please contact\
+                        the site admin.",
+                200
             )
         )
     this_user = user_schema.dump(user)
@@ -268,7 +268,9 @@ def forgot_password():
     send_mail(email, subject, content)
     resp = custom_make_response(
         "data",
-        f"email sent successfully see {email} inbox for instructions.",
+        "An email has been sent to the address on record,\
+            If you don't receive one shortly, please contact\
+                the site admin.",
         202
     )
     return resp
