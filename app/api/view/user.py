@@ -4,8 +4,8 @@ import datetime
 from app.api import rms
 from app.api.model import db
 from flask import request, abort, session
+from app.api.model.employees import Employees, employee_schema
 from app.api.model.user import user_schema, User
-# from app.api.model.employees import Employees
 from app.api.model.company import Company, company_schema
 from app.api.email_utils import send_mail, isValidEmail, \
      button_style, password_reset_success_content,\
@@ -43,38 +43,43 @@ def signup_system_users():
             password = generate_random_password()
         email = user_data['email']
         isActive = user_data['isActive']
-        id = generate_db_ids()
-        username = user_data['username'] + '.' + id
+
+        this_employee = Employees.query\
+            .filter_by(email=user_data['email']).\
+                filter_by(companyId=user_data['companyId']).first()
+        employee = employee_schema.dump(this_employee)
+        id = employee['id']
+        username = employee['firstname'] + '.' + id
+
     except Exception as e:
         # exceptions go to site administrator and email
         # the user gets a friendly error notification
-        abort(
-            custom_make_response(
-                "error",
-                f"{e} field has not been filled!", 400)
-        )
+        message = str(e)
+        if 'id' in message:
+            abort(
+                custom_make_response(
+                    "error",
+                    "The user you are creating an account for\
+                    is not on your company masterfile,\
+                        Please add them and try again.",
+                    400
+                    )
+                )
+        else:
+            abort(
+                custom_make_response(
+                    "error",
+                    f"The following error occurred :{e}",
+                    500
+                    )
+                )       
+                
     # check data for sanity incase it bypass js on the frontend
     check_for_whitespace(
         user_data,
         ['companyId', 'username', 'email', 'password', 'role', 'status']
     )
     isValidEmail(email)
-    # check if user is on company masterfile
-    # if not(
-    #     Employees.query.filter_by(email=user_data['email']).first()
-    #     and
-    #     role != "Admin"
-    # ):
-    #     abort(
-    #         custom_make_response(
-    #             "error",
-    #             """
-    #             The user you are creating an account for
-    #             is not on your company masterfile,
-    #             Please add them and try again.
-    #             """, 400
-    #         )
-    #     )
     # check if user is already registered
     if User.query.filter_by(email=user_data['email']).first():
         abort(
@@ -94,8 +99,10 @@ def signup_system_users():
         role=role,
         isActive=isActive
     )
+
     db.session.add(new_user)
     db.session.commit()
+
     if role != "Admin":
         token = jwt.encode(
             {
@@ -115,6 +122,7 @@ def signup_system_users():
         {email_signature()}
         """
         send_mail(email, subject, content)
+
     return custom_make_response(
         "data",
         f"User registered successfully, email sent to {email}\

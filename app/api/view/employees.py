@@ -1,12 +1,18 @@
 import os
 import psycopg2
 from app.api import rms
+from app.api.model import db
 from werkzeug.utils import secure_filename
 from flask import request, abort
+from app.api.model.company import Company, company_schema
 from app.api.utils import allowed_extension, custom_make_response,\
      token_required, rename_file, add_id_and_company_id,\
-     convert_to_csv, insert_csv
-from app.api.model.employees import Employees, employee_schema, employees_schema
+     convert_to_csv, insert_csv, generate_db_ids,\
+         check_for_whitespace, isValidPassword
+from app.api.email_utils import isValidEmail
+from app.api.model.employees import Employees, employee_schema,\
+     employees_schema
+from app.api.model.user import User
 
  
 KEY = os.environ.get('SECRET_KEY')
@@ -58,7 +64,7 @@ def upload_employee_master(user):
                     "error",
                     "The record(s) you are trying to upload\
                         already exist in the database !",
-                    400
+                    409
                 )
             )
         elif e.pgcode == ('22P04'):
@@ -121,7 +127,137 @@ def  get_employees(user,companyId):
                 "There appears to be a mismatch in the authorization\
                      data,Please logout, login and try again, if problem\
                           persists,contact the site administrator.",
-                400
+                401
             )
         )
+
+
+@rms.route('/auth/admin/employees',methods=['POST'])
+def insert_admin_employee():
+    """
+    insert admin details to the employee
+    table.
+    """
+    try:
+        user_data = request.get_json()
+        id = generate_db_ids()
+        this_company = Company.query\
+                .filter_by(company=user_data['company']).first()
+        _company = company_schema.dump(this_company)
+        companyId = _company['id']
+        firstname = user_data['firstname']
+        lastname = user_data['lastname']
+        mobile = user_data['mobile']
+        email = user_data['email']
+        password = user_data['password']
+        role = user_data['role']
+        isActive = user_data['isActive']
+
+        # check data for sanity incase it bypass js on the frontend
+        check_for_whitespace(
+            user_data,
+            [
+                'companyId', 
+                'firstname',
+                'lastname', 
+                'email', 
+                'mobile',
+                'password',
+                'role',
+                'isActive'])
+            
+        isValidEmail(email)
+
+        new_employee = Employees(
+            id=id,
+            companyId=companyId,
+            firstname=firstname,
+            lastname=lastname,
+            mobile=mobile,
+            email=email
+            )
+
+        db.session.add(new_employee)
+        db.session.commit()
+        # once you have created an admin as an employee
+        # let create them as user in the system.
+        isValidPassword(password)
+
+        new_user = User(
+            id=id,
+            username = user_data['firstname'] + '.' + id,
+            email=email,
+            password=password,
+            role=role,
+            companyId=companyId,
+            isActive=isActive)
+        
+        db.session.add(new_user)
+        db.session.commit()
+
+        return custom_make_response(
+            "data",
+            "Your details have bee saved successfully,\
+                please login to start using the system.",
+            201
+        )
+    except Exception as e:
+        message = str(e)
+        if("UniqueViolation" and "Employees_mobile_key" in message):
+            abort(
+                custom_make_response(
+                    "error",
+                    "The mobile number you have entered seems\
+                        to have been registered to another user,\
+                            please change and try again. ",
+                    409
+                )
+            )
+        elif("Employees_email_key" and "UniqueViolation" in message):
+            abort(
+                custom_make_response(
+                    "error",
+                    "The email address you have entered seems\
+                        to have been registered to another user,\
+                            please change and try again. ",
+                    409
+                    )
+                )
+        else:
+            abort(
+                custom_make_response(
+                    "error",
+                    "Bummer an internal error occured, please reload and try again.",
+                    500
+                )
+            )
+
+# @rms.route('/test/employees/<email>', methods=['GET'])
+# def get_single_employee(email):
+#     """get a single employee, this
+#     route is not used on the front end it is
+#     basically made to assist in testing"""
+#     _employee = Employees.query\
+#         .filter_by(email=email).all()
+#     this_employee = employee_schema.dump(_employee)
+#     if not this_employee:
+#         abort(
+#             custom_make_response(
+#                 "error",
+#                 "No employee bears that email.",
+#                 404
+#             )
+#         )
+#     else:
+#         return custom_make_response(
+#             "data",
+#             this_employee,
+#             200
+#         )
+
+
+    
+
+    
+
     
