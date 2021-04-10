@@ -24,7 +24,6 @@
                 <div class="header">
                     <a href="/" class="logo">RMS</a>
                     <div class="header-right">
-                        <a href="#" class="username">Hi {{ username }}</a>
                         <a href="/contact">Contact Us</a>
                     </div>
                 </div>
@@ -39,10 +38,13 @@
                     <div id="form-container">
                         <h2 class="form-header">Sign up here</h2>
                         <form  class="form" id="rmsForm" method="POST">
-                            <div class="error" id="usernameError"></div>
-                            <label >Username</label>
-                            <input  type="text" class="input" name ="rmsUsername" id="rmsUsername" value="{{ username }}" required>
                             <div class="error" id="emailError"></div>
+                            <label >Firstname</label>
+                            <input  type="text" class="input"  name ="rmsFirstName" id="rmsFirstName" required>
+                            <label >Lastname</label>
+                            <input  type="text" class="input" name ="rmsLastName" id="rmsLastName" required>
+                            <label >Mobile</label>
+                            <input type="tel" class="input" id="rmsMobile" name="rmsMobile" pattern="[0-9]{3}[0-9]{3}[0-9]{3}[0-9]{3}" placeholder="254712345678" required>
                             <label >Email</label>
                             <input type="email" class="input" id="rmsEmail" name="rmsEmail" value="{{ email }}" required>
                             <div class="error" id="companyError"></div>
@@ -64,9 +66,9 @@
                 </div>
             </div>
         </div>
-        <footer>
+        <!-- <footer>
             <p>&copy; RMS 2020&nbsp;&nbsp;<a href="https://twitter.com/kabakikiarie">Find RMS Admin Here</a></p>
-          </footer>
+          </footer> -->
           <div id="hack">.</div>
     </div>
 </body>
