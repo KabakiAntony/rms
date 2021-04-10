@@ -6,7 +6,7 @@ import {showLoader} from './rmsModule.js'
 /* variables for this form */
 const signUpForm = document.getElementById('rmsForm');
 const upEmail = document.getElementById('rmsEmail');
-const username = document.getElementById('rmsUsername');
+// const username = document.getElementById('rmsUsername');
 const company = document.getElementById('rmsCompany');
 let intentData;
 
@@ -24,11 +24,11 @@ signUpForm.addEventListener('submit',(e)=>{
 /* this function sends data to the server */
 function SignUp(){
 intentData = {
-    username:username.value,
+    // username:username.value,
     email:upEmail.value,
     company:company.value
 };
-rmsFetch('/intent',"POST",intentData,'/signin','rmsForm');
+rmsFetch('/intent',"POST",intentData,'','rmsForm');
 }
 
 
