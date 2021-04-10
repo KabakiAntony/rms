@@ -62,7 +62,7 @@ function showEmployeeData(employee_data,viewDiv){
             <li class="employeeName">${employeeData.firstname +" "+ employeeData.lastname}</li>
               <ul>
                 <li class="employeeNest">${employeeData.email}</li>
-                <li class="employeeNest">${'0'+employeeData.mobile}</li>
+                <li class="employeeNest">${'+'+employeeData.mobile}</li>
               </ul>
           </ul>
                     `
