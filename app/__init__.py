@@ -8,14 +8,14 @@ from flask import Flask
 from config import Config
 from flask_migrate import Migrate
 from app.api.view.company import rms as company_blueprint
-from app.api.view.user import rms as user_blueprint
 from app.api.view.ui import rms as ui_blueprint
 from app.api.view.project import rms as project_blueprint
 from app.api.view.budget import rms as budget_blueprint
 from app.api.view.employees import rms as employee_blueprint
+from app.api.view.user import rms as user_blueprint
 
 
-migrate = Migrate()
+migrate = Migrate(compare_type=True)
 
 
 def create_app():
@@ -30,11 +30,11 @@ def create_app():
     ma.init_app(app)
     migrate.init_app(app, db)
     app.register_blueprint(company_blueprint)
-    app.register_blueprint(user_blueprint)
     app.register_blueprint(ui_blueprint)
     app.register_blueprint(project_blueprint)
     app.register_blueprint(budget_blueprint)
     app.register_blueprint(employee_blueprint)
+    app.register_blueprint(user_blueprint)
     app.app_context().push()
 
     return app
