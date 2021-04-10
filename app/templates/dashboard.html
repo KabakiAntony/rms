@@ -57,7 +57,7 @@
                 <button class="action-links" onclick="openAction(event, 'reactivateUsers')">Reactivate User</button>
                 <button class="action-links" onclick="openAction(event, 'createProject')">Create Project</button>
                 <button class="action-links" onclick="openAction(event, 'listProjects')">List Projects</button>
-                <button class="action-links" onclick="openAction(event, 'manageProjects')">Manage Projects</button>
+                <!-- <button class="action-links" onclick="openAction(event, 'manageProjects')">Manage Projects</button> -->
               </div>
               <div id="createProject" class="actionContent">
                 <h3>Create a new project here</h3>
@@ -119,8 +119,6 @@
                     <!-- <option value="Reviewer">Reviewer</option> -->
                     <option value="Authorizer">Authorizer</option>
                   </select>
-                  <label >Firstname </label>
-                  <input type="text" class="input project" id="rmsUsername" name="rmsUsername" required>
                   <label >Email </label>
                   <input type="email" class="input project" id="rmsEmail" name="rmsEmail" required>
                   <input type="hidden" class="input" id="rmsCompanyId" name="rmsCompanyId" value="{{ companyId }}" required>
