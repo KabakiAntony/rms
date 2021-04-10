@@ -26,9 +26,9 @@ fetch(url,{
           {
             for (let i = 0; i < data.length; i++) {
                 option = document.createElement('option');
-                  name_only = data[i].project_name.split('.')[0] 
-                  option.text = name_only;
-                  dropDown.add(option);
+                name_only = data[i].project_name.split('.')[0] 
+                option.text = name_only;
+                dropDown.add(option);
               }
           }
           else
