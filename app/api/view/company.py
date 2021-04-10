@@ -23,7 +23,7 @@ def company_signup_intent():
     """
     try:
         data = request.get_json()
-        username = data["username"]
+        # username = data["username"]
         email = data["email"]
         company = data["company"]
         id = generate_db_ids()
@@ -34,7 +34,7 @@ def company_signup_intent():
                 "One or more mandatory fields has not been filled!", 400)
         )
     # check data for sanity
-    check_for_whitespace(data, ['username', 'email', 'company'])
+    check_for_whitespace(data, ['email', 'company'])
     isValidEmail(email)
     # check if the company is already registered
     # the feedback message when a company is already
@@ -51,24 +51,24 @@ def company_signup_intent():
     token = jwt.encode(
         {
             "email": email,
-            "username": username,
+            # "username": username,
             "company": company,
             'exp': datetime.datetime.utcnow() +
-            datetime.timedelta(minutes=180)
+            datetime.timedelta(minutes=30)
         },
         KEY,
         algorithm='HS256'
     )
     # send signup intent email
-    subject = f"""Thank you for registering {company}."""
+    subject = f"""Thank you for requesting to register {company}."""
     content = f"""
-    Welcome {username},
+    Welcome ,
     <br/>
     <br/>
     We are grateful to have you.<br/>
     Please click on sign up below to register your personal
     information to start using the system.<br/>Kindly note this
-    link will only be available for three hours.
+    link will only be active for thirty minutes.
     <br/>
     <br/>
     <a href="{signup_url}?in={token.decode('utf-8')}"
@@ -89,7 +89,7 @@ def company_signup_intent():
     send_mail(email, subject, content)
     resp = custom_make_response(
         "data",
-        f"{company} Signed up successfully, see {email} for more...",
+        f"Request to register {company} successful, see {email} for more information.",
         201
     )
     resp.set_cookie(
