@@ -42,8 +42,7 @@ def load_signup_ui(company):
         'admin-signup.html',
         title="Admin Signup",
         company=_company,
-        email=admin_data['email'],
-        username=admin_data['username']
+        email=admin_data['email']
     )
 
 
