@@ -9,7 +9,7 @@ class Employees(db.Model):
     companyId = db.Column(db.String(20), db.ForeignKey('Company.id'))
     firstname = db.Column(db.String(120), nullable=False)
     lastname = db.Column(db.String(120), nullable=False)
-    mobile = db.Column(db.Integer(), nullable=False, unique=True)
+    mobile = db.Column(db.String(12), nullable=False, unique=True)
     email = db.Column(db.String(120), nullable=False, unique=True)
 
     def __init__(self, id, companyId, firstname, lastname, mobile, email):
