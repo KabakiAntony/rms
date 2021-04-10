@@ -8,7 +8,6 @@ KEY = os.environ.get('SECRET_KEY')
 
 class TestGettingUI(RmsBaseTest):
     _real_company = {
-        "username": "kabaki",
         "email": "kabaki.kiarie@gmail.com",
         "company": "company a"
     }
@@ -40,7 +39,7 @@ class TestGettingUI(RmsBaseTest):
         token = jwt.encode(
             {
                 "email": "kabaki.kiarie@gmail.com",
-                "username": "kabaki",
+                # "username": "kabaki",
                 "company": "company a",
                 'exp': datetime.datetime.now() +
                 datetime.timedelta(minutes=10)

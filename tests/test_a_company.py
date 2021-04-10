@@ -8,17 +8,18 @@ KEY = os.environ.get('SECRET_KEY')
 class TestCompany(RmsBaseTest):
     # initiliaze company info for testing
     _real_company = {
-        "username": "kabaki",
         "email": "kabaki.kiarie@gmail.com",
         "company": "company a"
     }
+    _real_company_b = {
+        "email": "wapi.niwapi@gmail.com",
+        "company": "company b"
+    }
     _company_with_missing_fields = {
-        "username": "kabaki",
         "email": "",
         "company": "company a"
     }
     _company_with_invalid_email = {
-        "username": "kabaki",
         "email": "kabaki.gmail.com",
         "company": "company a"
     }
@@ -42,6 +43,15 @@ class TestCompany(RmsBaseTest):
         response = self.company_creation_post()
         self.assertEqual(response.status_code, 201)
 
+    def test_company_b_creation(self):
+        """ test creating another company b"""
+        response = self.client.post(
+            '/intent',
+            data=json.dumps(self._real_company_b),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 201)
+        
     def test_getting_all_companies(self):
         """test getting all companies"""
         self.company_creation_post()
