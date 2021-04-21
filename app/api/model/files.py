@@ -6,41 +6,43 @@ class Files(db.Model):
     __tablename__ = "Files"
 
     id = db.Column(db.String(20), primary_key=True)
-    # fileName = db.Column(db.String(120), unique=True, nullable=False)
     companyId = db.Column(db.String(20), db.ForeignKey('Company.id'))
     projectId = db.Column(db.String(20), db.ForeignKey('Project.id'))
+    fileType = db.Column(db.String(10), nullable=False)
+    # fileVersion = db.Column(db.String(2), nullable=False)
+    fileAmount = db.Column(db.Float,nullable=False)
     createdBy = db.Column(db.String(20), db.ForeignKey('Users.id'))
-    dateCreated = db.Column(db.DateTime)
-    # reviewedBy = db.Column(db.String(20), db.ForeignKey('Users.id'))
-    # dateReviewed = db.Column(db.DateTime)
-    authorizedBy = db.Column(db.String(20), db.ForeignKey('Users.id'))
-    dateAuthorizedOrRejected = db.Column(db.DateTime)
+    dateCreated = db.Column(db.Date)
+    authorizedOrRejectedBy = db.Column(db.String(20), db.ForeignKey('Users.id'))
+    dateAuthorizedOrRejected = db.Column(db.Date)
     fileStatus = db.Column(db.String(25), nullable=False)
     fileUrl = db.Column(db.String(250), nullable=False)
 
     def __init__(
         self,
-        # fileName,
+        id,
         companyId,
         projectId,
+        fileType,
+        # fileVersion,
+        fileAmount,
         createdBy,
         dateCreated,
-        # dateReviewed,
-        # reviewedBy,
-        authorizedBy,
+        authorizedOrRejectedBy,
         dateAuthorizedOrRejected,
         fileStatus,
         fileUrl
     ):
         """intilizing files model items"""
-        # self.fileName = fileName
+        self.id = id
         self.companyId = companyId
         self.projectId = projectId
+        self.fileType = fileType
+        # self.fileVersion = fileVersion
+        self.fileAmount = fileAmount
         self.createdBy = createdBy
-        self.dateCreated = dateCreated
-        # self.reviewedBy = reviewedBy
-        # self.dateReviewed = dateReviewed
-        self.authorizedBy = authorizedBy
+        self.dateCreated = dateCreated 
+        self.authorizedOrRejectedBy = authorizedOrRejectedBy
         self.dateAuthorizedOrRejected = dateAuthorizedOrRejected
         self.fileStatus = fileStatus
         self.fileUrl = fileUrl
@@ -50,14 +52,14 @@ class FilesSchema(ma.Schema):
     class Meta:
         files = (
             "id",
-            # "fileName",
             "companyId",
             "projectid",
+            "fileType",
+            # "fileVersion",
+            "fileAmount",
             "createdBy",
             "dateCreated",
-            # "reviewedBy",
-            # "dateReviewed",
-            "authorizedBy",
+            "authorizedOrRejectedBy",
             "dateAuthorizedOrRejected",
             "fileStatus",
             "fileUrl"
