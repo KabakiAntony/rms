@@ -1,56 +1,35 @@
 import {showLoader, rmsFileUpload} from './rmsModule.js'
 import {clearErrorDivs} from './rmsModule.js'
 
-let companyId = document.getElementById('rmsCreatorBudgetCompanyId');
-let dropDown = document.getElementById('rmsCreatorBudgetTag');
-let defaultOption = document.createElement('option');
-defaultOption.text = 'Select project';
-dropDown.length = 0 ;
-dropDown.add(defaultOption);
-dropDown.selectedIndex = 0;
+let budgetDropDown = document.getElementById('rmsCreatorBudgetTag');
+let paymentDropDown = document.getElementById('rmsCreatorPaymentTag');
+
 // variables for budget file upload
 let budgetUploadForm = document.getElementById('rmsBudgetForm');
 let budgetInput = document.getElementById('budgetFile');
+// payment file upload
+let paymentUploadForm = document.getElementById('rmsPaymentForm');
+let paymentInput = document.getElementById('paymentFile');
 
-// getting project data from the db
-const url = 'projects/name/'+companyId.value;
 
-fetch(url,{
-        method: "GET"
-      })
-      .then(response => response.json())
-      .then(({data,status,error})=>{
-          let option;
-          let name_only;
-          if (status == 200)
-          {
-            for (let i = 0; i < data.length; i++) {
-                option = document.createElement('option');
-                name_only = data[i].project_name.split('.')[0] 
-                option.text = name_only;
-                dropDown.add(option);
-              }
-          }
-          else
-          {
-              console.log(`an error occured ${error}`)
-          }
-
-      })
-    .catch(err => console.log(`This error occured :${err}`));
-
-// budget file upload
-function uploadBudgetFile(){
-    const theProjectName = dropDown.value;
+function uploadFile(drop_down,file_input,url,excelFile,theForm){
+    const theProjectName = drop_down.value;
     const theFile = new FormData();
-    theFile.append('budgetExcelFile',budgetInput.files[0]);
+    theFile.append(excelFile,file_input.files[0]);
     theFile.append('projectName',theProjectName);
-    rmsFileUpload('/auth/upload/budget','POST',theFile,'','rmsBudgetForm')
+    rmsFileUpload(url,'POST',theFile,'',theForm)
 }
 
 budgetUploadForm.addEventListener('submit',(e)=>{
     e.preventDefault();
     clearErrorDivs();
     showLoader();
-    uploadBudgetFile();
+    uploadFile(budgetDropDown,budgetInput,'/auth/upload/budget','budgetExcelFile','rmsBudgetForm');
 });
+
+paymentUploadForm.addEventListener('submit',(e)=>{
+    e.preventDefault();
+    clearErrorDivs();
+    showLoader();
+    uploadFile(paymentDropDown,paymentInput,'/auth/upload/payments','paymentExcelFile','rmsPaymentForm');
+})
