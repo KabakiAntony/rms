@@ -163,7 +163,7 @@
                 <button class="action-links" onclick="openAction(event,'UploadPayment')">Payment</button>
               </div>
               <div id="UploadBudget" class="actionContent">
-                <h3>Upload a budget for a given project for review</h3>
+                <h3>Upload a budget for a given project for authorization.</h3>
                 <p>Note the file must be an excel and in the below format, budget line items are at your company's discretion</p>
                 <p>But the <span>Budget Line</span>, <span>Rate</span> and <span>Total Amount</span> must be there.</p>
                 <table class="excelFormat">
@@ -191,21 +191,44 @@
                   </select>
                   <label>Budget file</label>
                   <input type="file" class="file" id="budgetFile" name="budgetFile" accept=".xlsx, .xls" required/>
-                  <input type="submit" id="submit" class="submit projectSubmit" value="Send for review">
+                  <input type="submit" id="submit" class="submit projectSubmit" value="Send to authorizer">
                 </form>
               </div>
               <div id="UploadPayment" class="actionContent">
-                <h3>Upload a payment file for a given project for review</h3>
-                <p>Just select the project you are paying for in the drop down</p>
-                <p>Please note the file must be in excel format, budget items are at your company's discretion</p>
+                <h3>Upload a payment file for a given project for authorization.</h3>
+                <p>Select the project for which the payment file is for.</p>
+                <!-- <p>Then select the payment file from your computer.</p> -->
+                <p>Note the payment file must be in the below format.</p>
+                <!-- <p>The mobile number to in the below format but now insert the full number.</p> -->
+                <table class="excelFormat">
+                  <tr>
+                    <th>fullname</th>
+                    <th>mobile</th>
+                    <th>email</th>
+                    <th>to pay</th>
+                  </tr>
+                  <tr>
+                    <td>john doe</td>
+                    <td>+2547*****678</td>
+                    <td>john.doe@example.com</td>
+                    <td>1300</td>
+                  </tr>
+                  <tr>
+                    <td>Total Amount</td>
+                    <td></td>
+                    <td></td>
+                    <td>1300</td>
+                  </tr>
+
+                </table>
                 <form class="form create-project" id="rmsPaymentForm" method="POST">
                   <input type="hidden" class="input companyid" id="rmsCreatorPaymentCompanyId" value="{{ companyId }}" required>
                   <label >Select project </label>
-                  <select class="input project dropdown" id="rmsCreatorPaymentTag" required>
+                  <select class="input project dropdown" id="rmsCreatorPaymentTag" placeholder="Select Project" required>
                   </select>
                   <label>Payment file</label>
                   <input type="file" class="file" id="paymentFile" name="paymentFile" accept=".xlsx, .xls" required/>
-                  <input type="submit" id="submit" class="submit projectSubmit" value="Send for review">
+                  <input type="submit" id="submit" class="submit projectSubmit" value="Send to authorizer">
                 </form>
               </div>
             {% elif role == 'Authorizer' %}
