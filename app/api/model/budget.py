@@ -11,35 +11,35 @@ class Budget(db.Model):
     companyId = db.Column(db.String(20), db.ForeignKey('Company.id'))
     projectId = db.Column(db.String(20), db.ForeignKey('Project.id'))
     amount = db.Column(db.Float, nullable=False)
-    fileUrl = db.Column(db.String(256), nullable=False, unique=True)
+    # fileUrl = db.Column(db.String(256), nullable=False, unique=True)
 
     def __init__(
         self,
         id,
         companyId,
         projectId,
-        amount,
-        fileUrl
+        amount
+        # fileUrl
     ):
         """initializing objects for budget model"""
         self.id = id
         self.companyId = companyId
         self.projectId = projectId
         self.amount = amount
-        self.fileUrl = fileUrl
+        # self.fileUrl = fileUrl
 
 
 class BudgetSchema(ma.Schema):
     class Meta:
         fields = ("id", "companyId", "projectId", "amount")
-        fields = (
-            "id",
-            "budgetVersion"
-            "companyId",
-            "projectId",
-            "amount",
-            "fileUrl"
-        )
+        # fields = (
+        #     "id",
+        #     "budgetVersion"
+        #     "companyId",
+        #     "projectId",
+        #     "amount",
+        #     "fileUrl"
+        # )
 
 
 budget_schema = BudgetSchema()
