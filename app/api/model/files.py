@@ -50,10 +50,10 @@ class Files(db.Model):
 
 class FilesSchema(ma.Schema):
     class Meta:
-        files = (
+        fields = (
             "id",
             "companyId",
-            "projectid",
+            "projectId",
             "fileType",
             # "fileVersion",
             "fileAmount",
