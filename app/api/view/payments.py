@@ -11,7 +11,7 @@ from flask import request, abort
 from app.api.utils import allowed_extension, custom_make_response,\
      token_required, rename_file, add_id_and_company_id,\
      insert_csv, convert_to_csv, generate_db_ids, check_for_whitespace
-from .files import insert_file_data, file_operation
+from .files import insert_file_data, file_operation,error_messages
 
 
 # getting environment variables
@@ -42,32 +42,4 @@ def upload_payment(user):
             400
         )
     except Exception as e:
-        # exceptions go to site administrator and email
-        # the user gets a friendly error notification
-        db.session.rollback()
-        message = str(e)
-        if('InvalidTextRepresentation' in message or 'list index out of range' in message):
-            abort(
-                custom_make_response(
-                    "error",
-                    "The file you are uploading is not in the allowed format for a payment file,\
-                        please check & try again.",
-                    400
-                )
-            )
-        elif('id' in message):
-            abort(
-                custom_make_response(
-                    "error",
-                    "Please select the project you are uploading a payment file for.",
-                    400
-                )
-            )
-        else:
-            abort(
-                custom_make_response(
-                    "error",
-                    f"The following error occured :: {message}",
-                    400
-                )
-            )
+        error_messages(e,"payment")
