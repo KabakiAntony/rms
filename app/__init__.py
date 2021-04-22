@@ -2,10 +2,8 @@
 this is my application
 factory
 """
-from flask import Flask
-# this is to force config
-# to be loaded on startup
 from config import Config
+from flask import Flask
 from flask_migrate import Migrate
 from app.api.view.company import rms as company_blueprint
 from app.api.view.ui import rms as ui_blueprint
