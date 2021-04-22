@@ -161,6 +161,8 @@
             <div class="actions active">
                 <button class="action-links" onclick="openAction(event, 'UploadBudget')">Budget</button>
                 <button class="action-links" onclick="openAction(event,'UploadPayment')">Payment</button>
+                <button class="action-links" onclick="openAction(event, 'BudgetFiles')">Budget Actions</button>
+                <button class="action-links" onclick="openAction(event,'PaymentFiles')">Payment Actions</button>
               </div>
               <div id="UploadBudget" class="actionContent">
                 <h3>Upload a budget for a given project for authorization.</h3>
@@ -230,6 +232,18 @@
                   <input type="file" class="file" id="paymentFile" name="paymentFile" accept=".xlsx, .xls" required/>
                   <input type="submit" id="submit" class="submit projectSubmit" value="Send to authorizer">
                 </form>
+              </div>
+              <div id="BudgetFiles" class="actionContent">
+                <h3>Budget files actions.</h3>
+                <p>Below is a list of all budget files for your company for various projects.</p>
+                <p>The table shows pending/rejected and authorized accordingly</p>
+                <div id="viewBudgetFiles" class="viewBudgetFiles">the table goes here</div>
+              </div>
+              <div id="PaymentFiles" class="actionContent">
+                <h3>Budget files actions.</h3>
+                <p>Below is a list of all payment files for your company for various projects.</p>
+                <p>The table shows pending/rejected and authorized accordingly</p>
+                <div id="viewPaymentFiles" class="viewPaymentFiles">the table goes here</div>
               </div>
             {% elif role == 'Authorizer' %}
             <!-- <script type="module" src="{{ url_for('static', filename='js/authorizerActions.js')}}"></script> -->
