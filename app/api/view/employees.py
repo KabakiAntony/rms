@@ -232,28 +232,6 @@ def insert_admin_employee():
                 )
             )
 
-# @rms.route('/test/employees/<email>', methods=['GET'])
-# def get_single_employee(email):
-#     """get a single employee, this
-#     route is not used on the front end it is
-#     basically made to assist in testing"""
-#     _employee = Employees.query\
-#         .filter_by(email=email).all()
-#     this_employee = employee_schema.dump(_employee)
-#     if not this_employee:
-#         abort(
-#             custom_make_response(
-#                 "error",
-#                 "No employee bears that email.",
-#                 404
-#             )
-#         )
-#     else:
-#         return custom_make_response(
-#             "data",
-#             this_employee,
-#             200
-#         )
 
 
     
