@@ -81,8 +81,7 @@ def company_signup_intent():
     new_company = Company(
         id=id,
         company=company,
-        joined_at=datetime.datetime.utcnow() +
-        datetime.timedelta(minutes=30)
+        joined_at=datetime.datetime.utcnow()
     )
     db.session.add(new_company)
     db.session.commit()

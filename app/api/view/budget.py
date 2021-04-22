@@ -43,6 +43,7 @@ def upload_budget(user):
         )
 
     except Exception as e:
+        db.session.rollback()
         # exceptions go to site administrator and email
         # the user gets a friendly error notification
         message = str(e)

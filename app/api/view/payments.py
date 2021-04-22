@@ -44,6 +44,7 @@ def upload_payment(user):
     except Exception as e:
         # exceptions go to site administrator and email
         # the user gets a friendly error notification
+        db.session.rollback()
         message = str(e)
         if('InvalidTextRepresentation' in message or 'list index out of range' in message):
             abort(
