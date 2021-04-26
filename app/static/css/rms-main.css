@@ -72,7 +72,8 @@ html,body{
     width:70%;
     margin:0 auto;
     margin-bottom:10px;
-    background-color: rgba(239, 239, 241, 0.924);
+    /* background-color: rgba(239, 239, 241, 0.924); */
+    background-color: rgba(138, 180, 214, 0.37);
   }
   .left-text-card p{
     font-size: 100%;
@@ -93,7 +94,8 @@ html,body{
   }
 
 #form-container{
-  background-color: rgba(239, 239, 241, 0.924);
+  /* background-color: rgba(239, 239, 241, 0.924); */
+  background-color: rgba(138, 180, 214, 0.37);
   border-radius:1.5rem;
   width: 280px;
   font-size: small;
@@ -388,7 +390,8 @@ span{
   padding: 6px 12px;
   border-top: none;
   border-radius: 1.5rem;
-  background-color: rgba(239, 239, 241, 0.924);
+  /* background-color: rgba(239, 239, 241, 0.924); */
+  background-color: rgba(138, 180, 214, 0.37);
 }
 .bigger-font{
   font-size:120%;
