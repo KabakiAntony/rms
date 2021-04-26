@@ -35,35 +35,36 @@ def file_operation(received_file,upload_folder,file_src,company_id,user_id):
     else:
         _amount = get_payment_amount(csvFile)
 
-        budget_file = get_budget_file(company_id)
+        budget_file = get_project_file(company_id, "Budget")
         if not budget_file:
-            # add code to delete file from server we don't need it 
-            # if its information is not being used
+            remove_unused_duplicates(csvFile)
+            remove_unused_duplicates(renamed_file_path)
             abort(404,"No Budget For Project")
 
+        budget_amount = budget_file['fileAmount']
+        if (budget_amount < float(_amount)):
+            remove_unused_duplicates(csvFile)
+            remove_unused_duplicates(renamed_file_path)
+            abort(400,"Project Amount Greater Than")
+        
         status = budget_file['fileStatus']
         if not (status == "Authorized"):
-            # add code to delete file from server we don't need it 
-            # if its information is not being used
+            remove_unused_duplicates(csvFile)
+            remove_unused_duplicates(renamed_file_path)
             abort(400,"Budget  Unauthorized")
-
-        budget_amount = budget_file['fileAmount']
-        if (budget_amount <= float(_amount)):
-            # add code to delete file from server we don't need it 
-            # if its information is not being used
-            abort(400,"Project Amount Greater Than")
   
     # check if file is pending
-    if check_if_file_exists_and_status(company_id, _amount,file_src,"Pending"):
+    project_file = get_project_file(company_id, file_src)
+    if project_file and project_file['fileStatus'] == "Pending":
+        remove_unused_duplicates(csvFile)
+        remove_unused_duplicates(renamed_file_path)
         abort(409,"File Pending")
-
+    
     insert_file_data(company_id, _amount,file_src,renamed_file_path,user_id)
-
     return custom_make_response(
         "data",
         f"{file_src} file successfully sent for authorization.",
-        200
-    )
+        200)
 
 def get_project_id(company_id):
     """get the projectId for use in various functions"""
@@ -131,49 +132,17 @@ def get_budget_amount(budget_file_csv):
     budget_amount = row[1]
     return budget_amount
 
-def check_if_file_exists_and_status(company_id, file_amount, file_type,file_status):
-    """
-    given a file check if the file is still in pending
-    status , compare the project id and amount of files 
-    already uploaded and the status if the status is pending
-    then don't allow for the file to be uploaded again 
-    but if the status if rejected then you can upload the file again
-    but if the file has been approved then it means the project has already
-    been paid for so also don't allow for upload again so
-    we return the status to notify the user 
-    that is approved then already paid for so we are not paying again
-    pending wait for the authorizer to reject or authorize the file so 
-    we also can upload the file again but if the return is rejected then we 
-    can always upload the file again.
-    if there is no file in the db that meets any of the above requirements 
-    then go ahead and upload so the return is none
-    """
+def get_project_file(company_id, file_type):
     project_id = get_project_id(company_id)
     the_file = Files.query.\
         filter_by(projectId=project_id).\
-            filter_by(fileType=file_type).\
-                filter_by(fileAmount=file_amount).\
-                    filter_by(fileStatus=file_status).first()
+            filter_by(fileType=file_type).first()
     _file = file_schema.dump(the_file)
     return _file
 
-
-def get_budget_file(company_id):
-    """
-    want to see if the payment amount file exceeds the amount in
-    the budget file if not go ahead and upload and if yes go ahead
-    reject the file and prompt them to adjust or if there is even 
-    a budget for the project
-    """
-    project_id = get_project_id(company_id)
-    file_type = "Budget"
-    the_budget_file = Files.query.\
-        filter_by(projectId=project_id).\
-            filter_by(fileType=file_type).first()
-    budget_file = file_schema.dump(the_budget_file)
-    return budget_file
-
-
+def remove_unused_duplicates(file_path):
+    """remove unused files from server"""
+    os.remove(file_path)
 
 def error_messages(msg,file_src):
     """cascade the error to the correct code"""

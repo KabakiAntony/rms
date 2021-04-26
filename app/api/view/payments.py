@@ -38,7 +38,7 @@ def upload_payment(user):
             return file_operation(receivedFile,PAYMENTS_UPLOAD_FOLDER,'Payment',user['companyId'],user['id'])
         return custom_make_response(
             "error",
-            "Only excel files are allowed, please select a budget excel file & try again.",
+            "Only excel files are allowed, please select a payment excel file & try again.",
             400
         )
     except Exception as e:
