@@ -5,17 +5,12 @@ from app.api.model import db
 from flask import request, abort
 from app.api.utils import generate_db_ids
 from app.api.model.project import Project, project_schema
-from app.api.model.files import Files,file_schema
+from app.api.model.files import Files, file_schema, files_schema
 from werkzeug.utils import secure_filename
-from app.api.model.budget import Budget, budget_schema,\
-    budgets_schema
-from flask import request, abort
-from app.api.utils import allowed_extension, custom_make_response,\
-     token_required, rename_file, add_id_and_company_id,\
-     insert_csv, convert_to_csv, generate_db_ids, check_for_whitespace
+from app.api.utils import rename_file, convert_to_csv, custom_make_response
 
 
-def file_operation(received_file,upload_folder,file_src,company_id,user_id):
+def file_operation(received_file, upload_folder, file_src, company_id, user_id):
     """
     takes a file from payments/budget uploads ,
     convert the file to a csv , extract an amount
@@ -27,11 +22,17 @@ def file_operation(received_file,upload_folder,file_src,company_id,user_id):
         filePath,
         company_id,
         upload_folder,
-        '_'+request.form['projectName'] +'_'+file_src+'_'
+        "_" + request.form["projectName"] + "_" + file_src + "_",
     )
     csvFile = convert_to_csv(renamed_file_path, upload_folder)
-    if(file_src == 'Budget'):
+    if file_src == "Budget":
         _amount = get_budget_amount(csvFile)
+
+        # project_file = get_project_file(company_id, file_src)
+        # if project_file and project_file["fileStatus"] == "Pending":
+        #     remove_unused_duplicates(csvFile)
+        #     remove_unused_duplicates(renamed_file_path)
+        #     abort(409, "File Pending")
     else:
         _amount = get_payment_amount(csvFile)
 
@@ -39,52 +40,51 @@ def file_operation(received_file,upload_folder,file_src,company_id,user_id):
         if not budget_file:
             remove_unused_duplicates(csvFile)
             remove_unused_duplicates(renamed_file_path)
-            abort(404,"No Budget For Project")
+            abort(404, "No Budget For Project")
 
-        budget_amount = budget_file['fileAmount']
-        if (budget_amount < float(_amount)):
+        budget_amount = budget_file["fileAmount"]
+        if budget_amount < float(_amount):
             remove_unused_duplicates(csvFile)
             remove_unused_duplicates(renamed_file_path)
-            abort(400,"Project Amount Greater Than")
-        
-        status = budget_file['fileStatus']
+            abort(400, "Project Amount Greater Than")
+
+        status = budget_file["fileStatus"]
         if not (status == "Authorized"):
             remove_unused_duplicates(csvFile)
             remove_unused_duplicates(renamed_file_path)
-            abort(400,"Budget  Unauthorized")
-  
+            abort(400, "Budget  Unauthorized")
+
     # check if file is pending
-    project_file = get_project_file(company_id, file_src)
-    if project_file and project_file['fileStatus'] == "Pending":
-        remove_unused_duplicates(csvFile)
-        remove_unused_duplicates(renamed_file_path)
-        abort(409,"File Pending")
-    
-    insert_file_data(company_id, _amount,file_src,renamed_file_path,user_id)
+    # project_file = get_project_file(company_id, file_src)
+    # if project_file and project_file["fileStatus"] == "Pending":
+    #     remove_unused_duplicates(csvFile)
+    #     remove_unused_duplicates(renamed_file_path)
+    #     abort(409, "File Pending")
+
+    insert_file_data(company_id, _amount, file_src, renamed_file_path, user_id)
     return custom_make_response(
-        "data",
-        f"{file_src} file successfully sent for authorization.",
-        200)
+        "data", f"{file_src} file successfully sent for authorization.", 200
+    )
+
 
 def get_project_id(company_id):
     """get the projectId for use in various functions"""
-    project_name = request.form['projectName']
-    projectName = project_name + '.' + company_id
-    this_project = Project.query.\
-        filter_by(project_name=projectName).first()
+    project_name = request.form["projectName"]
+    projectName = project_name + "." + company_id
+    this_project = Project.query.filter_by(project_name=projectName).first()
     project = project_schema.dump(this_project)
-    return project['id']
+    return project["id"]
 
 
-def insert_file_data(company_id, file_amt, file_typ,file_url,created_by):
-    """ given an excel file after it has gone
-    under all conversions the prepare all the 
+def insert_file_data(company_id, file_amt, file_typ, file_url, created_by):
+    """given an excel file after it has gone
+    under all conversions the prepare all the
     details and insert them into the files table.
     """
     project_id = get_project_id(company_id)
     id = generate_db_ids()
     date_created = datetime.datetime.utcnow()
-    todays_date = date_created.strftime('%Y-%m-%d')
+    todays_date = date_created.strftime("%Y-%m-%d")
     file_status = "Pending"
 
     new_file = Files(
@@ -98,8 +98,8 @@ def insert_file_data(company_id, file_amt, file_typ,file_url,created_by):
         authorizedOrRejectedBy=created_by,
         dateAuthorizedOrRejected=todays_date,
         fileStatus=file_status,
-        fileUrl=file_url
-        )
+        fileUrl=file_url,
+    )
     # insert the data into the db
     db.session.add(new_file)
     db.session.commit()
@@ -132,93 +132,98 @@ def get_budget_amount(budget_file_csv):
     budget_amount = row[1]
     return budget_amount
 
+
 def get_project_file(company_id, file_type):
     project_id = get_project_id(company_id)
-    the_file = Files.query.\
-        filter_by(projectId=project_id).\
-            filter_by(fileType=file_type).first()
+    the_file = (
+        Files.query.filter_by(projectId=project_id)
+        .filter_by(fileType=file_type)
+        .first()
+    )
     _file = file_schema.dump(the_file)
     return _file
+
+
+def get_company_files(company_id, file_type):
+    """return the files for a given company"""
+    the_files = (
+        Files.query.filter_by(companyId=company_id)
+        .filter_by(fileType=file_type).all()
+    )
+    _the_files = files_schema.dump(the_files)
+    return _the_files
+
 
 def remove_unused_duplicates(file_path):
     """remove unused files from server"""
     os.remove(file_path)
 
-def error_messages(msg,file_src):
+
+def error_messages(msg, file_src):
     """cascade the error to the correct code"""
     db.session.rollback()
     message = str(msg)
-    if('InvalidTextRepresentation' in message \
-        or 'list index out of range' in message):
-            abort(
-                custom_make_response(
-                    "error",
-                    f"The file you are uploading is not in \
+    if "InvalidTextRepresentation" in message\
+       or "list index out of range" in message:
+        abort(
+            custom_make_response(
+                "error",
+                f"The file you are uploading is not in \
                         the allowed format for a {file_src} file,\
                             please check & try again.",
-                    400
-                )
+                400,
             )
-    elif('id' in message):
-            abort(
-                custom_make_response(
-                    "error",
-                    f"Please select the project \
+        )
+    elif "id" in message:
+        abort(
+            custom_make_response(
+                "error",
+                f"Please select the project \
                         you are uploading a {file_src} file for.",
-                    400
-                )
+                400,
             )
-    elif('File Pending' in message):
-            abort(
-                custom_make_response(
-                    "error",
-                    f"A {file_src} file with similar info is available\
+        )
+    elif "File Pending" in message:
+        abort(
+            custom_make_response(
+                "error",
+                f"A {file_src} file with similar info is available\
                          & marked as pending in the system,\
                               kindly ask your authorizer to act on it.",
-                    409
-                )
+                409,
             )
-    elif('No Budget For Project' in message):
-            abort(
-                custom_make_response(
-                    "error",
-                    "A budget was not found for this project please upload\
+        )
+    elif "No Budget For Project" in message:
+        abort(
+            custom_make_response(
+                "error",
+                "A budget was not found for this project please upload\
                         one for authorization before proceeding.",
-                    404
-                )
+                404,
             )
-    elif('Budget  Unauthorized' in message):
-            abort(
-                custom_make_response(
-                    "error",
-                    "The budget for this project has not been authorized,\
+        )
+    elif "Budget  Unauthorized" in message:
+        abort(
+            custom_make_response(
+                "error",
+                "The budget for this project has not been authorized,\
                         Kindly ask the authorizer to act on it.",
-                    400
-                )
+                400,
             )
-    
-    elif('Project Amount Greater Than' in message):
-            abort(
-                custom_make_response(
-                    "error",
-                    "The payment file amount exceeds the budget for this project,\
+        )
+
+    elif "Project Amount Greater Than" in message:
+        abort(
+            custom_make_response(
+                "error",
+                "The payment file amount exceeds the budget for this project,\
                         please review your file & try again.",
-                    400
-                )
+                400,
             )
+        )
     else:
-            abort(
-                custom_make_response(
-                    "error",
-                    f"The following error occured :: {message}",
-                    400
-                )
+        abort(
+            custom_make_response(
+                "error", f"The following error occured :: {message}", 400
             )
-        
-   
-    
-
-
-
-
-    
+        )

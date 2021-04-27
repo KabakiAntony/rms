@@ -8,19 +8,23 @@ from sendgrid.helpers.mail import Mail
 
 
 def send_mail(user_email, the_subject, the_content):
-    """ send email on relevant user action """
+    """send email on relevant user action"""
     message = Mail(
-        from_email=('kabaki.antony@gmail.com', 'RMS Team'),
+        from_email=("kabaki.antony@gmail.com", "RMS Team"),
         to_emails=user_email,
         subject=the_subject,
-        html_content=the_content)
+        html_content=the_content,
+    )
     try:
-        sg = SendGridAPIClient(os.environ.get('SENDGRID_KEY'))
+        sg = SendGridAPIClient(os.environ.get("SENDGRID_KEY"))
         sg.send(message)
     except Exception as e:
         custom_make_response(
-                "error", f"an error occured sending email contact administrator\
-                     {e}", 500)
+            "error",
+            f"an error occured sending email contact administrator\
+                     {e}",
+            500,
+        )
 
 
 def button_style():
@@ -53,7 +57,7 @@ def password_reset_success_content():
 
 
 def password_reset_request_content():
-    """ return the message for reset reuest email"""
+    """return the message for reset reuest email"""
     content = """
     <br/>
     <br/>
@@ -68,8 +72,8 @@ def password_reset_request_content():
 
 
 def non_admin_user_registration_content():
-    """ return this message when an admin
-    creates an account for a user """
+    """return this message when an admin
+    creates an account for a user"""
     content = """
     <br/>
     <br/>
@@ -100,10 +104,10 @@ def isValidEmail(email):
     """
     checks an email for validity.
     """
-    if not re.match(
-        r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$",
-        email
-    ):
-        abort(custom_make_response(
-            "error", "the email address provided is not valid!", 400))
+    if not re.match(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$", email):
+        abort(
+            custom_make_response(
+                "error", "the email address provided is not valid!", 400
+            )
+        )
     return True

@@ -17,15 +17,14 @@ from app.api.model.company import Company, company_schema
 from app.api.model.user import User, user_schema
 
 
-KEY = os.getenv('SECRET_KEY')
-DB_URL = os.environ.get('DATABASE_URL')
-ALLOWED_EXTENSIONS = {'xlsx', 'xls'}
+KEY = os.getenv("SECRET_KEY")
+DB_URL = os.environ.get("DATABASE_URL")
+ALLOWED_EXTENSIONS = {"xlsx", "xls"}
 
 
 def allowed_extension(filename):
     """check for allowed extensions"""
-    return '.' in filename and \
-        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 def rename_file(filePath, company_id, upload_dir, file_type_str):
@@ -41,9 +40,10 @@ def rename_file(filePath, company_id, upload_dir, file_type_str):
     current_date = datetime.datetime.now().strftime("%d%m%Y%H%M%S")
     company_ = Company.query.filter_by(id=company_id).first()
     this_company = company_schema.dump(company_)
-    company_name = this_company['company']
-    new_file_path = upload_dir + company_name +\
-        file_type_str + str(current_date) + '.xlsx'
+    company_name = this_company["company"]
+    new_file_path = (
+        upload_dir + company_name + file_type_str + str(current_date) + ".xlsx"
+    )
     os.rename(filePath, new_file_path)
     return new_file_path
 
@@ -56,7 +56,7 @@ def add_id_and_company_id(filePath, company_id):
     workBook = load_workbook(filePath)
     sheet = workBook.active
     rows = sheet.max_row
-    for row in range(2, rows+1):
+    for row in range(2, rows + 1):
         sheet.cell(row, 1).value = generate_db_ids()
         sheet.cell(row, 2).value = company_id
     workBook.save(filePath)
@@ -64,9 +64,9 @@ def add_id_and_company_id(filePath, company_id):
 
 
 def convert_to_csv(filePath, upload_dir):
-    """ convert excel file to csv """
+    """convert excel file to csv"""
     # read the excel file
-    dataFile = read_excel(filePath, engine='openpyxl')
+    dataFile = read_excel(filePath, engine="openpyxl")
     base_name = os.path.basename(filePath)
     csv_file_name = os.path.splitext(base_name)[0]
     csv_file_path = upload_dir + csv_file_name + ".csv"
@@ -86,9 +86,9 @@ def insert_csv(csv_file, db_relation):
     engine = create_engine(DB_URL)
     konnection = engine.raw_connection()
     kursor = konnection.cursor()
-    with open(csv_file, 'r') as f:
+    with open(csv_file, "r") as f:
         next(f)
-        kursor.copy_from(f, db_relation, sep=',')
+        kursor.copy_from(f, db_relation, sep=",")
     konnection.commit()
 
 
@@ -130,7 +130,8 @@ def isValidPassword(password):
             custom_make_response(
                 "error",
                 "Password should be atleast 6 characters & not more than 20",
-                400)
+                400,
+            )
         )
 
     lowercase_reg = re.search("[a-z]", password)
@@ -138,11 +139,13 @@ def isValidPassword(password):
     number_reg = re.search("[0-9]", password)
 
     if not lowercase_reg or not uppercase_reg or not number_reg:
-        abort(custom_make_response(
-            "error",
-            "Password should contain at least 1 number,\
+        abort(
+            custom_make_response(
+                "error",
+                "Password should contain at least 1 number,\
                  1 small letter & 1 Capital letter",
-            400)
+                400,
+            )
         )
 
 
@@ -152,16 +155,9 @@ def check_for_whitespace(data, items_to_check):
     """
     for key, value in data.items():
         if key in items_to_check and not value.strip():
-        # exceptions go to site administrator log and email
-        # the user gets a friendly error notification
-            abort(
-                custom_make_response(
-                    "error",
-                    f"{key} cannot be left blank!",
-                    400
-                )
-
-            )
+            # exceptions go to site administrator log and email
+            # the user gets a friendly error notification
+            abort(custom_make_response("error", f"{key} cannot be left blank!", 400))
     return True
 
 
@@ -170,36 +166,37 @@ def token_required(f):
     this token is used to allow the user to access
     certain routes
     """
+
     @wraps(f)
     def decorated(*args, **kwargs):
         user_token = None
         company_token = None
-        if (request.cookies.get('auth_token') or
-            request.args.get('in') or
-                request.args.get('u')):
-            user_token = (
-                request.args.get('u') or
-                request.cookies.get('auth_token')
-            )
-            company_token = request.args.get('in')
+        if (
+            request.cookies.get("auth_token")
+            or request.args.get("in")
+            or request.args.get("u")
+        ):
+            user_token = request.args.get("u") or request.cookies.get("auth_token")
+            company_token = request.args.get("in")
         if not (user_token or company_token):
             return custom_make_response("error", "Token is missing", 401)
         try:
             if user_token:
                 data = jwt.decode(user_token, KEY, algorithm="HS256")
-                current_user = User.query\
-                    .filter_by(id=data['id']).first()
+                current_user = User.query.filter_by(id=data["id"]).first()
                 _data = user_schema.dump(current_user)
             if company_token:
                 data = jwt.decode(company_token, KEY, algorithms="HS256")
-                current_company = Company.query\
-                    .filter_by(company=data['company']).first()
+                current_company = Company.query.filter_by(
+                    company=data["company"]
+                ).first()
                 _data = company_schema.dump(current_company)
         except Exception as e:
             # exceptions go to site administrator log and email
             # the user gets a friendly error notification
             return custom_make_response("error", f"Token {e}", 401)
         return f(_data, *args, **kwargs)
+
     return decorated
 
 
@@ -221,7 +218,7 @@ def generate_random_password():
 
     password_list = list(password)
     random.SystemRandom().shuffle(password_list)
-    password = ''.join(password_list)
+    password = "".join(password_list)
     return password
 
 
@@ -231,6 +228,6 @@ def generate_db_ids():
     id for the database primary keys
     """
     unikueId = string.ascii_letters + string.digits
-    unikueId = ''.join(random.choice(unikueId) for i in range(10))
+    unikueId = "".join(random.choice(unikueId) for i in range(10))
 
     return unikueId
