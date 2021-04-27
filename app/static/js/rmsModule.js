@@ -29,7 +29,8 @@ function exitLoader(){
 }
 function showError(err){
   if (filename === 'dashboard'){
-    showAlert(err);
+    let thisDiv = document.getElementById('error');
+    showAlert(err,'error');
   }
   else{
     document.getElementById('emailError').innerHTML = `${err}`;
@@ -37,22 +38,47 @@ function showError(err){
 }
 function showAlert(myData,divId){
   if (divId === 'success'){
-    document.getElementById('success').style.display = " block";
     document.getElementById('success').innerHTML = `${myData} <span class="closebtn">&times;</span>`;
+    document.getElementById('success').style.display = " block";
+    closeDiv(divId);
   }
-  else{
+  else {
+    document.getElementById('error').innerHTML = `${myData} <span class="closebtn">&times;</span>`;
     document.getElementById('error').style.display = " block";
-    document.getElementById('error').innerHTML = `${myData} <span class="closebtn">&times;</span>`
+    closeDiv(divId);
   }
   let close = document.getElementsByClassName("closebtn");
   let i;
   for (i = 0; i < close.length; i++) {
     close[i].onclick = function(){
-      var div = this.parentElement;
+      let div = this.parentElement;
       setTimeout(function(){ div.style.display = "none"; });
     }
 }
+
 }
+function closeDiv(myDivId){
+  setTimeout(function(){ 
+    document.getElementById(myDivId).style.display = "none";
+  }, 10000);
+}
+// function showFiles(_data,viewDiv){
+//   for(let i=0; i < _data.length,i++){
+//     viewDiv.innerHTML=`
+//     ${_data.map(function(Data){
+//       return `
+//         <ul class="employeeList">
+//           <li class="employeeName">${employeeData. +" "+ employeeData.lastname}</li>
+//             <ul>
+//               <li class="employeeNest">${employeeData.email}</li>
+//               <li class="employeeNest">${'+'+employeeData.mobile}</li>
+//             </ul>
+//         </ul>
+//                   `
+//         }).join('')}
+//     `
+//   }
+// }
 function showEmployeeData(employee_data,viewDiv){
   for (let i = 0; i < employee_data.length; i++) {
     viewDiv.innerHTML=`
@@ -158,7 +184,7 @@ export function rmsFetch(theUrl,theMethod,theBody, redirectUrl="",theForm){
                 exitLoader();
               }
               else {
-                showError(error,'error')
+                showAlert(error,'error')
                 exitLoader();
               }
           })
