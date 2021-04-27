@@ -204,6 +204,7 @@ def signin_all_users():
         token.decode('utf-8'),
         httponly=True,
         secure=True,
+        samesite='Lax',
         expires=datetime.datetime.utcnow() + datetime.timedelta(minutes=480)
     )
     return resp
@@ -220,6 +221,7 @@ def signout_all_users(user):
         "session over",
         httponly=True,
         secure=True,
+        samesite='Lax',
         expires="Thu, 01 Jan 1970 00:00:00 GMT"
     )
     return resp
