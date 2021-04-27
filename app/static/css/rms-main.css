@@ -209,7 +209,7 @@ margin-top: 10px;
   color:rgb(214, 0, 160);
 }
 #showAlert{
-  visibility: hidden;
+  visibility: hidden; 
   width:50%;
   background-color: rgb(212, 237, 218);
   border: 1px solid rgb(26, 172, 7);
@@ -291,7 +291,7 @@ margin-top: 10px;
 .actionNotification{
   padding: 0.5rem;
   background-color: #e97971;
-  border: 1px solid rgb(231, 24, 9);
+  border: 2px solid rgb(231, 24, 9);
   color:rgb(0, 0, 0);
   opacity: 1;
   transition: opacity 0.6s;
@@ -299,11 +299,12 @@ margin-top: 10px;
   border-radius: 0.5rem;
   display: none;
   font-size: 13px;
+  font-weight: bold;
 }
 .actionNotification.success {
   background-color: #d4edda;
   color: black;
-  border: 1px solid rgb(44, 148, 2);
+  border: 2px solid rgb(44, 148, 2);
 }
 .closebtn {
   margin-left: 15px;
