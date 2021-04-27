@@ -5,11 +5,12 @@ class Budget(db.Model):
     """
     this creates the  budget model
     """
+
     __tablename__ = "Budget"
 
     id = db.Column(db.String(20), primary_key=True)
-    companyId = db.Column(db.String(20), db.ForeignKey('Company.id'))
-    projectId = db.Column(db.String(20), db.ForeignKey('Project.id'))
+    companyId = db.Column(db.String(20), db.ForeignKey("Company.id"))
+    projectId = db.Column(db.String(20), db.ForeignKey("Project.id"))
     amount = db.Column(db.Float, nullable=False)
     # fileUrl = db.Column(db.String(256), nullable=False, unique=True)
 

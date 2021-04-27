@@ -5,11 +5,12 @@ class Project(db.Model):
     """
     this creates the project model
     """
+
     __tablename__ = "Project"
 
     id = db.Column(db.String(20), primary_key=True)
     project_name = db.Column(db.String(100), nullable=False, unique=True)
-    companyId = db.Column(db.String(20), db.ForeignKey('Company.id'))
+    companyId = db.Column(db.String(20), db.ForeignKey("Company.id"))
     date_from = db.Column(db.Date)
     date_to = db.Column(db.Date)
 

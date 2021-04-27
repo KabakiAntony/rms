@@ -10,6 +10,7 @@ class Company(db.Model):
     """
     this creates the company model
     """
+
     __tablename__ = "Company"
 
     id = db.Column(db.String(20), primary_key=True)

@@ -3,10 +3,11 @@ from app.api.model import db, ma
 
 class Employees(db.Model):
     """this  creates the employees model"""
+
     __tablename__ = "Employees"
 
     id = db.Column(db.String(20), primary_key=True)
-    companyId = db.Column(db.String(20), db.ForeignKey('Company.id'))
+    companyId = db.Column(db.String(20), db.ForeignKey("Company.id"))
     firstname = db.Column(db.String(120), nullable=False)
     lastname = db.Column(db.String(120), nullable=False)
     mobile = db.Column(db.String(12), nullable=False, unique=True)
@@ -24,15 +25,7 @@ class Employees(db.Model):
 
 class EmployeesSchema(ma.Schema):
     class Meta:
-        fields = (
-            "id",
-            "companyId",
-            "firstname",
-            "lastname",
-            "mobile",
-            "email"
-            
-        )
+        fields = ("id", "companyId", "firstname", "lastname", "mobile", "email")
 
 
 employee_schema = EmployeesSchema()
