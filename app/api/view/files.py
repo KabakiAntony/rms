@@ -24,17 +24,20 @@ def file_operation(received_file, upload_folder, file_src, company_id, user_id):
         upload_folder,
         "_" + request.form["projectName"] + "_" + file_src + "_",
     )
+
     csvFile = convert_to_csv(renamed_file_path, upload_folder)
     if file_src == "Budget":
-        _amount = get_budget_amount(csvFile)
-
-        # project_file = get_project_file(company_id, file_src)
-        # if project_file and project_file["fileStatus"] == "Pending":
-        #     remove_unused_duplicates(csvFile)
-        #     remove_unused_duplicates(renamed_file_path)
-        #     abort(409, "File Pending")
+        _amount = get_budget_amount(csvFile, renamed_file_path)
+        if check_pending_files(company_id, file_src, _amount):
+            remove_unused_duplicates(csvFile)
+            remove_unused_duplicates(renamed_file_path)
+            abort(409, "File Pending")
     else:
-        _amount = get_payment_amount(csvFile)
+        _amount = get_payment_amount(csvFile, renamed_file_path)
+        if check_pending_files(company_id, file_src, _amount):
+            remove_unused_duplicates(csvFile)
+            remove_unused_duplicates(renamed_file_path)
+            abort(409, "File Pending")
 
         budget_file = get_project_file(company_id, "Budget")
         if not budget_file:
@@ -53,13 +56,6 @@ def file_operation(received_file, upload_folder, file_src, company_id, user_id):
             remove_unused_duplicates(csvFile)
             remove_unused_duplicates(renamed_file_path)
             abort(400, "Budget  Unauthorized")
-
-    # check if file is pending
-    # project_file = get_project_file(company_id, file_src)
-    # if project_file and project_file["fileStatus"] == "Pending":
-    #     remove_unused_duplicates(csvFile)
-    #     remove_unused_duplicates(renamed_file_path)
-    #     abort(409, "File Pending")
 
     insert_file_data(company_id, _amount, file_src, renamed_file_path, user_id)
     return custom_make_response(
@@ -105,7 +101,7 @@ def insert_file_data(company_id, file_amt, file_typ, file_url, created_by):
     db.session.commit()
 
 
-def get_payment_amount(payment_csv_file):
+def get_payment_amount(payment_csv_file, renamed_file):
     """
     given a payment csv file extract the payment
     amount and return it
@@ -116,10 +112,14 @@ def get_payment_amount(payment_csv_file):
     for row in reader_file:
         count_rows += 1
     payment_amount = row[3]
+    if not payment_amount:
+        remove_unused_duplicates(payment_csv_file)
+        remove_unused_duplicates(renamed_file)
+        abort(400, "Wrong file format")
     return payment_amount
 
 
-def get_budget_amount(budget_file_csv):
+def get_budget_amount(budget_file_csv, renamed_file):
     """
     get the budget amount from
     from the just uploaded file
@@ -130,6 +130,10 @@ def get_budget_amount(budget_file_csv):
     for row in reader_file:
         count_rows += 1
     budget_amount = row[1]
+    if not budget_amount:
+        remove_unused_duplicates(budget_file_csv)
+        remove_unused_duplicates(renamed_file)
+        abort(400, "Wrong file format")
     return budget_amount
 
 
@@ -138,6 +142,19 @@ def get_project_file(company_id, file_type):
     the_file = (
         Files.query.filter_by(projectId=project_id)
         .filter_by(fileType=file_type)
+        .first()
+    )
+    _file = file_schema.dump(the_file)
+    return _file
+
+
+def check_pending_files(company_id, file_type, amount):
+    project_id = get_project_id(company_id)
+    the_file = (
+        Files.query.filter_by(projectId=project_id)
+        .filter_by(fileType=file_type)
+        .filter_by(fileAmount=amount)
+        .filter_by(fileStatus="Pending")
         .first()
     )
     _file = file_schema.dump(the_file)
@@ -164,7 +181,8 @@ def error_messages(msg, file_src):
     db.session.rollback()
     message = str(msg)
     if "InvalidTextRepresentation" in message\
-       or "list index out of range" in message:
+       or "list index out of range" in message\
+       or "Wrong file format" in message:
         abort(
             custom_make_response(
                 "error",
