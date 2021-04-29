@@ -75,6 +75,11 @@ def convert_to_csv(filePath, upload_dir):
     return csv_file_path
 
 
+def get_file_name(file_path):
+    """ return the file name from a file path"""
+    base_name = os.path.basename(file_path)
+    return base_name
+
 def insert_csv(csv_file, db_relation):
     """
     read the csv file and insert
