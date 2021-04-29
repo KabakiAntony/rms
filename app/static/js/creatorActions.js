@@ -1,6 +1,9 @@
 import {showLoader, rmsFileUpload} from './rmsModule.js'
-import {clearErrorDivs} from './rmsModule.js'
+import {clearErrorDivs, rmsFetchGet} from './rmsModule.js'
 
+let companyId = document.getElementById('rmsCompanyId');
+let fetchFiles = document.getElementById('fetchFilesButton');
+let viewFiles = document.getElementById('viewFiles');
 let budgetDropDown = document.getElementById('rmsCreatorBudgetTag');
 let paymentDropDown = document.getElementById('rmsCreatorPaymentTag');
 
@@ -33,3 +36,10 @@ paymentUploadForm.addEventListener('submit',(e)=>{
     showLoader();
     uploadFile(paymentDropDown,paymentInput,'/auth/upload/payments','paymentExcelFile','rmsPaymentForm');
 })
+
+const filesUrl = '/files/'+companyId.value;
+fetchFiles.addEventListener(
+    "click", 
+    rmsFetchGet.bind(fetchFiles, filesUrl,'',viewFiles)
+    );
+

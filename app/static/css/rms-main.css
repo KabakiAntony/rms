@@ -185,6 +185,7 @@ margin-top: 10px;
 .view-employees{
   width:20%;
   font-size: 90%;
+  margin-top: 25px;
 }
 .signout-button{
   font-weight: normal;
@@ -319,9 +320,26 @@ margin-top: 10px;
 .closebtn:hover {
   color: black;
 }
-table, th, td{
-  width:70%;
+table{
+  border-collapse: collapse;
+  width: 80%;
+  table-layout: fixed ;
+  border-radius: 0.5rem;
+}
+td{
   border: 1px solid #000000;
+}
+#employeesView tr:hover{background-color: #82c3df;}
+#projectsView tr:hover{background-color: #82c3df;} 
+.viewFiles tr:hover{background-color: #82c3df;} 
+th{
+    /* border: 1px solid #000000; */
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-align: left;
+    background-color: #0096D6;
+    color: white;
+    font-weight: bold;
 }
 #hack{
     padding-bottom:30px;

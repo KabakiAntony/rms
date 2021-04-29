@@ -77,6 +77,13 @@
               <div id="viewEmployees" class="actionContent">
                  <h3>Employees list</h3>
                  <p>Shows a list of all company employees.</p>
+                 <div><table>
+                  <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Mobile No.</th>
+                  </tr>
+                </table></div>
                  <div id="employeesView" class="employeesView"></div>
                  <input type="submit" id="fetchButton" class="submit view-employees" value="List Employees">
               </div>
@@ -99,7 +106,7 @@
                       <td>auto filled</td>
                       <td>john</td>
                       <td>doe</td>
-                      <td>0712345678</td>
+                      <td>+254712***678</td>
                       <td>john.doe@example.com</td>
                     </tr>
                   </table>
@@ -151,6 +158,13 @@
               <div id="listProjects" class="actionContent">
                 <h3>All your projects</h3>
                 <p>Shows a list of all projects active/closed</p>
+                <div><table>
+                  <tr>
+                  <th>Project Name</th>
+                  <th>Date From</th>
+                  <th>Date To</th>
+                  </tr>
+                </table></div>
                 <div id="projectsView" class="projectsView"></div>
                 <input type="submit" id="fetchProjectsButton" class="submit view-employees" value="List Projects">
               </div>
@@ -160,11 +174,11 @@
               </div>
             {% elif role =='Creator' %}
             <script type="module" src="{{ url_for('static', filename='js/creatorActions.js')}}"></script>
+            <input type="hidden" class="input" id="rmsCompanyId" name="rmsCompanyId" value="{{ companyId }}" required>
             <div class="actions active">
                 <button class="action-links" onclick="openAction(event, 'UploadBudget')">Budget</button>
                 <button class="action-links" onclick="openAction(event,'UploadPayment')">Payment</button>
-                <button class="action-links" onclick="openAction(event, 'BudgetFiles')">Budget Actions</button>
-                <button class="action-links" onclick="openAction(event,'PaymentFiles')">Payment Actions</button>
+                <button class="action-links" onclick="openAction(event, 'ViewFiles')">File Actions</button>
               </div>
               <div id="UploadBudget" class="actionContent">
                 <h3>Upload a budget for a given project for authorization.</h3>
@@ -235,18 +249,23 @@
                   <input type="submit" id="submit" class="submit projectSubmit" value="Send to authorizer">
                 </form>
               </div>
-              <div id="BudgetFiles" class="actionContent">
-                <h3>Budget files actions.</h3>
-                <p>Below is a list of all budget files for your company for various projects.</p>
+              <div id="ViewFiles" class="actionContent">
+                <h3>File actions.</h3>
+                <p>Below is a list of all files for your company for various projects.</p>
                 <p>The table shows pending/rejected and authorized accordingly</p>
-                <div id="viewBudgetFiles" class="viewBudgetFiles">the table goes here</div>
+                <div><table>
+                  <tr>
+                  <th>File Type</th>
+                  <th>File Status</th>
+                  <th>File Amount</th>
+                  <th>Date of Upload</th>
+                  <th>View File</th>
+                  </tr>
+                </table></div>
+                <div id="viewFiles" class="viewFiles"></div>
+                <input type="submit" id="fetchFilesButton" class="submit view-employees" value="List Files">
               </div>
-              <div id="PaymentFiles" class="actionContent">
-                <h3>Budget files actions.</h3>
-                <p>Below is a list of all payment files for your company for various projects.</p>
-                <p>The table shows pending/rejected and authorized accordingly</p>
-                <div id="viewPaymentFiles" class="viewPaymentFiles">the table goes here</div>
-              </div>
+
             {% elif role == 'Authorizer' %}
             <!-- <script type="module" src="{{ url_for('static', filename='js/authorizerActions.js')}}"></script> -->
             <div class="actions active">

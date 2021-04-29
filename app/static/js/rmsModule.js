@@ -11,7 +11,6 @@ function isValidPassword(my_password){
 }
 /* this function gets called on a status code of 200 or 201 */
 function inputReset(theform){
-  // console.log(theForm)
  document.getElementById(theform).reset();  
 }
 function callToast(msg,redirectUrl) {
@@ -62,35 +61,38 @@ function closeDiv(myDivId){
     document.getElementById(myDivId).style.display = "none";
   }, 10000);
 }
-// function showFiles(_data,viewDiv){
-//   for(let i=0; i < _data.length,i++){
-//     viewDiv.innerHTML=`
-//     ${_data.map(function(Data){
-//       return `
-//         <ul class="employeeList">
-//           <li class="employeeName">${employeeData. +" "+ employeeData.lastname}</li>
-//             <ul>
-//               <li class="employeeNest">${employeeData.email}</li>
-//               <li class="employeeNest">${'+'+employeeData.mobile}</li>
-//             </ul>
-//         </ul>
-//                   `
-//         }).join('')}
-//     `
-//   }
-// }
+function showFilesData(files_data,viewDiv){
+  
+  for(let i=0; i < files_data.length;i++){
+    viewDiv.innerHTML=`
+    ${files_data.map(function(filesData){
+      return `
+        <table>
+          <tr>
+          <td>${filesData.fileType}</td>
+          <td>${filesData.fileStatus}</td>
+          <td>${filesData.fileAmount}</td>
+          <td>${filesData.dateCreated}</td>
+          <td><a href="${filesData.fileUrl}">${filesData.fileType} file</a></td>
+          </tr>
+        </table>
+                  `
+        }).join('')}
+    `
+  }
+}
 function showEmployeeData(employee_data,viewDiv){
   for (let i = 0; i < employee_data.length; i++) {
     viewDiv.innerHTML=`
       ${employee_data.map(function(employeeData){
         return `
-          <ul class="employeeList">
-            <li class="employeeName">${employeeData.firstname +" "+ employeeData.lastname}</li>
-              <ul>
-                <li class="employeeNest">${employeeData.email}</li>
-                <li class="employeeNest">${'+'+employeeData.mobile}</li>
-              </ul>
-          </ul>
+      <table>
+          <tr>
+          <td>${employeeData.firstname +" "+ employeeData.lastname}</td>
+          <td>${employeeData.email}</td>
+          <td>${'+'+employeeData.mobile}</td>
+          </tr>
+        </table>
                     `
           }).join('')}
         `
@@ -101,14 +103,14 @@ function showProjectData(project_data,viewDiv){
     viewDiv.innerHTML=`
       ${project_data.map(function(projectData){
         return `
-          <ul class="employeeList">
-            <li class="employeeName">${projectData.project_name.split('.')[0]}</li>
-              <ul>
-                <li class="employeeNest">${projectData.date_from}</li>
-                <li class="employeeNest">${projectData.date_to}</li>
-              </ul>
-          </ul>
-                    `
+            <table>
+              <tr>
+              <td>${projectData.project_name.split('.')[0]}</td>
+              <td>${projectData.date_from}</td>
+              <td>${projectData.date_to}</td>
+              </tr>
+            </table>     
+            `
           }).join('')}
         `
     }
@@ -228,8 +230,11 @@ export function rmsFetchGet(theUrl,redirectUrl="",theDiv,theFn){
           if (theDiv.id == "employeesView"){
             showEmployeeData(data,theDiv);
           }
+          else if(theDiv.id == "projectsView"){
+            showProjectData(data,theDiv);
+          }
           else{
-            showProjectData(data,theDiv)
+            showFilesData(data,theDiv);
           }
           
         }
