@@ -4,7 +4,6 @@ from flask import request, abort
 from .files import file_operation, error_messages
 from app.api.utils import token_required, custom_make_response,\
      allowed_extension
-from .files import get_company_files
 
 
 # getting environment variables
@@ -44,14 +43,3 @@ def upload_payment(user):
         )
     except Exception as e:
         error_messages(e, "payment")
-
-
-@rms.route("/payments/<companyId>")
-@token_required
-def get_payments(user, companyId):
-    """return all the payments for a given company"""
-    payment_files = get_company_files(companyId, "Payment")
-    if payment_files:
-        return custom_make_response("data", payment_files, 200)
-    return custom_make_response(
-        "error", "No payment files have been found for your company.", 404)
