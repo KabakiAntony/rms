@@ -17,7 +17,7 @@ class Files(db.Model):
     authorizedOrRejectedBy = db.Column(db.String(20), db.ForeignKey("Users.id"))
     dateAuthorizedOrRejected = db.Column(db.Date)
     fileStatus = db.Column(db.String(25), nullable=False)
-    fileUrl = db.Column(db.String(250), nullable=False)
+    fileName = db.Column(db.String(100), nullable=False)
 
     def __init__(
         self,
@@ -32,7 +32,7 @@ class Files(db.Model):
         authorizedOrRejectedBy,
         dateAuthorizedOrRejected,
         fileStatus,
-        fileUrl,
+        fileName,
     ):
         """intilizing files model items"""
         self.id = id
@@ -46,7 +46,7 @@ class Files(db.Model):
         self.authorizedOrRejectedBy = authorizedOrRejectedBy
         self.dateAuthorizedOrRejected = dateAuthorizedOrRejected
         self.fileStatus = fileStatus
-        self.fileUrl = fileUrl
+        self.fileName = fileName
 
 
 class FilesSchema(ma.Schema):
@@ -63,7 +63,7 @@ class FilesSchema(ma.Schema):
             "authorizedOrRejectedBy",
             "dateAuthorizedOrRejected",
             "fileStatus",
-            "fileUrl",
+            "fileName",
         )
 
 
