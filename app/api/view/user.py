@@ -345,6 +345,37 @@ def suspend_system_user(user):
         )
     check_for_whitespace(data, ["email"])
     isValidEmail(email)
+    employee = employee_schema.dump(
+        Employees.query.filter_by(
+            companyId=user['companyId']).filter_by(email=email).first())
+    if not employee:
+        abort(
+            custom_make_response(
+                "error",
+                "The user you are trying to suspend \
+                    is not a member of your company",
+                400
+            )
+        )
+    user = user_schema.dump(
+        User.query.filter_by(email=email)
+        .filter_by(companyId=user['companyId']).first()
+    )
+    if employee and not user:
+        abort(
+            custom_make_response(
+                "error",
+                "The employee you are trying to suspend is not a system user.",
+                400
+            )
+        )
+    if user['isActive'] == 'false':
+        abort(
+            custom_make_response(
+                "error",
+                "The user account is already suspended.", 400
+            )
+        )
     User.query.filter_by(email=email).update(dict(isActive="false"))
     db.session.commit()
     return custom_make_response(
@@ -375,6 +406,38 @@ def reactivate_system_user(user):
         )
     check_for_whitespace(data, ["email"])
     isValidEmail(email)
+    employee = employee_schema.dump(
+        Employees.query.filter_by(
+            companyId=user['companyId']).filter_by(email=email).first())
+    if not employee:
+        abort(
+            custom_make_response(
+                "error",
+                "The user whose account you are trying to activate \
+                    is not a member of your company",
+                401
+            )
+        )
+    user = user_schema.dump(
+        User.query.filter_by(email=email)
+        .filter_by(companyId=user['companyId']).first()
+    )
+    if employee and not user:
+        abort(
+            custom_make_response(
+                "error",
+                "You are trying to activate an account\
+                    that does not exist, Please create one.",
+                404
+            )
+        )
+    if user['isActive'] == 'true':
+        abort(
+            custom_make_response(
+                "error",
+                "The user account is already active.", 400
+            )
+        )
     User.query.filter_by(email=email).update(dict(isActive="true"))
     db.session.commit()
     return custom_make_response(
