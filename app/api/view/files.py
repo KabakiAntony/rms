@@ -1,13 +1,15 @@
 import os
 import csv
 import datetime
+from app.api import rms
 from app.api.model import db
 from flask import request, abort
 from app.api.utils import generate_db_ids
 from app.api.model.project import Project, project_schema
 from app.api.model.files import Files, file_schema, files_schema
 from werkzeug.utils import secure_filename
-from app.api.utils import rename_file, convert_to_csv, custom_make_response
+from app.api.utils import rename_file, convert_to_csv, custom_make_response, \
+    token_required
 
 
 def file_operation(received_file, upload_folder, file_src, company_id, user_id):
@@ -161,16 +163,6 @@ def check_pending_files(company_id, file_type, amount):
     return _file
 
 
-def get_company_files(company_id, file_type):
-    """return the files for a given company"""
-    the_files = (
-        Files.query.filter_by(companyId=company_id)
-        .filter_by(fileType=file_type).all()
-    )
-    _the_files = files_schema.dump(the_files)
-    return _the_files
-
-
 def remove_unused_duplicates(file_path):
     """remove unused files from server"""
     os.remove(file_path)
@@ -245,3 +237,23 @@ def error_messages(msg, file_src):
                 "error", f"The following error occured :: {message}", 400
             )
         )
+   
+
+@rms.route('/files/<companyId>', methods=["GET"])
+@token_required
+def get_company_files(user, companyId):
+    """return the files for a given company"""
+    the_files = Files.query.filter_by(companyId=user['companyId']).all()
+    _the_files = files_schema.dump(the_files)
+    if not _the_files:
+        return abort(
+            custom_make_response(
+                "error",
+                "No files have been found for your \
+                    company, upload some & try again.",
+                404
+            )
+        )
+    return custom_make_response(
+        "data", _the_files, 200
+    )
