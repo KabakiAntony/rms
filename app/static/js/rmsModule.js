@@ -26,10 +26,9 @@ function exitLoader(){
   document.getElementById('showLoader').style.display = " none";
   document.getElementById('submit').style.display = " block";
 }
-function showError(err){
+function showError(err, errDiv){
   if (filename === 'dashboard'){
-    let thisDiv = document.getElementById('error');
-    showAlert(err,'error');
+    showAlert(err,errDiv);
   }
   else{
     document.getElementById('emailError').innerHTML = `${err}`;
@@ -73,7 +72,7 @@ function showFilesData(files_data,viewDiv){
           <td>${filesData.fileStatus}</td>
           <td>${filesData.fileAmount}</td>
           <td>${filesData.dateCreated}</td>
-          <td><a href="${filesData.fileUrl}">${filesData.fileType} file</a></td>
+          <td><a href="uploads/${filesData.fileType.toLowerCase()}/${filesData.fileName}">${filesData.fileType} file</a></td>
           </tr>
         </table>
                   `
@@ -186,7 +185,7 @@ export function rmsFetch(theUrl,theMethod,theBody, redirectUrl="",theForm){
                 exitLoader();
               }
               else {
-                showAlert(error,'error')
+                showError(error,'error')
                 exitLoader();
               }
           })
