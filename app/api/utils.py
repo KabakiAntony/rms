@@ -80,6 +80,7 @@ def get_file_name(file_path):
     base_name = os.path.basename(file_path)
     return base_name
 
+
 def insert_csv(csv_file, db_relation):
     """
     read the csv file and insert
@@ -236,3 +237,8 @@ def generate_db_ids():
     unikueId = "".join(random.choice(unikueId) for i in range(10))
 
     return unikueId
+
+
+def remove_unused_duplicates(file_path):
+    """remove unused files from server"""
+    os.remove(file_path)

@@ -16,6 +16,7 @@ from app.api.utils import (
     generate_db_ids,
     check_for_whitespace,
     isValidPassword,
+    remove_unused_duplicates
 )
 from app.api.email_utils import isValidEmail
 from app.api.model.employees import Employees, employees_schema
@@ -58,6 +59,8 @@ def upload_employee_master(user):
         # exceptions go to site administrator and email
         # the user gets a friendly error notification
         if e.pgcode == ("23505"):
+            remove_unused_duplicates(updated_file_path)
+            remove_unused_duplicates(csvFile)
             abort(
                 custom_make_response(
                     "error",
@@ -67,6 +70,8 @@ def upload_employee_master(user):
                 )
             )
         elif e.pgcode == ("22P04"):
+            remove_unused_duplicates(updated_file_path)
+            remove_unused_duplicates(csvFile)
             abort(
                 custom_make_response(
                     "error",

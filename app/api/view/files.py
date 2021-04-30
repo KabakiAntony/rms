@@ -3,13 +3,17 @@ import csv
 import datetime
 from app.api import rms
 from app.api.model import db
-from flask import request, abort
+from flask import request, abort, send_from_directory
 from app.api.utils import generate_db_ids
 from app.api.model.project import Project, project_schema
 from app.api.model.files import Files, file_schema, files_schema
 from werkzeug.utils import secure_filename
 from app.api.utils import rename_file, convert_to_csv, custom_make_response, \
-    token_required
+    token_required, get_file_name, remove_unused_duplicates
+
+
+PAYMENTS_UPLOAD_FOLDER = os.environ.get("PAYMENTS_FOLDER")
+BUDGET_UPLOAD_FOLDER = os.environ.get("BUDGET_FOLDER")
 
 
 def file_operation(received_file, upload_folder, file_src, company_id, user_id):
@@ -59,7 +63,8 @@ def file_operation(received_file, upload_folder, file_src, company_id, user_id):
             remove_unused_duplicates(renamed_file_path)
             abort(400, "Budget  Unauthorized")
 
-    insert_file_data(company_id, _amount, file_src, renamed_file_path, user_id)
+    renamed_file = get_file_name(renamed_file_path)
+    insert_file_data(company_id, _amount, file_src, renamed_file, user_id)
     return custom_make_response(
         "data", f"{file_src} file successfully sent for authorization.", 200
     )
@@ -74,7 +79,7 @@ def get_project_id(company_id):
     return project["id"]
 
 
-def insert_file_data(company_id, file_amt, file_typ, file_url, created_by):
+def insert_file_data(company_id, file_amt, file_typ, file_name, created_by):
     """given an excel file after it has gone
     under all conversions the prepare all the
     details and insert them into the files table.
@@ -96,7 +101,7 @@ def insert_file_data(company_id, file_amt, file_typ, file_url, created_by):
         authorizedOrRejectedBy=created_by,
         dateAuthorizedOrRejected=todays_date,
         fileStatus=file_status,
-        fileUrl=file_url,
+        fileName=file_name,
     )
     # insert the data into the db
     db.session.add(new_file)
@@ -161,11 +166,6 @@ def check_pending_files(company_id, file_type, amount):
     )
     _file = file_schema.dump(the_file)
     return _file
-
-
-def remove_unused_duplicates(file_path):
-    """remove unused files from server"""
-    os.remove(file_path)
 
 
 def error_messages(msg, file_src):
@@ -257,3 +257,14 @@ def get_company_files(user, companyId):
     return custom_make_response(
         "data", _the_files, 200
     )
+
+
+@rms.route('/uploads/<path:fileType>/<path:fileName>', methods=['GET'])
+@token_required
+def download(user, fileType, fileName):
+    downloaded_file = ""
+    print("are we getting here")
+    downloaded_file = send_from_directory(
+        BUDGET_UPLOAD_FOLDER, fileName, as_attachment=True)
+    print(downloaded_file)
+    return downloaded_file
