@@ -107,6 +107,7 @@ function showProjectData(project_data,viewDiv){
               <td>${projectData.project_name.split('.')[0]}</td>
               <td>${projectData.date_from}</td>
               <td>${projectData.date_to}</td>
+              <td>${projectData.project_status}</td>
               </tr>
             </table>     
             `
