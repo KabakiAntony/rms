@@ -320,9 +320,15 @@ margin-top: 10px;
 .closebtn:hover {
   color: black;
 }
+hr{
+  width: 90%;
+  margin:0 auto;
+  margin-bottom: 5px;
+}
 table{
+  margin:0 auto;
   border-collapse: collapse;
-  width: 80%;
+  width: 90%;
   table-layout: fixed ;
   border-radius: 0.5rem;
 }
