@@ -13,7 +13,6 @@ from app.api.view.employees import rms as employee_blueprint
 from app.api.view.user import rms as user_blueprint
 from app.api.view.payments import rms as payment_blueprint
 
-
 migrate = Migrate(compare_type=True)
 
 
