@@ -60,6 +60,7 @@ def create_new_project(user):
         companyId=companyId,
         date_from=dateFrom,
         date_to=dateTo,
+        project_status="Active"
     )
     db.session.add(new_project)
     db.session.commit()
