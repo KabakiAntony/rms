@@ -3,7 +3,7 @@ import csv
 import datetime
 from app.api import rms
 from app.api.model import db
-from flask import request, abort, send_from_directory
+from flask import request, abort, send_from_directory, current_app
 from app.api.utils import generate_db_ids
 from app.api.model.project import Project, project_schema
 from app.api.model.files import Files, file_schema, files_schema
@@ -22,7 +22,8 @@ def file_operation(received_file, upload_folder, file_src, company_id, user_id):
     convert the file to a csv , extract an amount
     """
     secureFilename = secure_filename(received_file.filename)
-    filePath = os.path.join(upload_folder, secureFilename)
+    filePath = os.path.join(
+        current_app.root_path, upload_folder, secureFilename)
     received_file.save(filePath)
     renamed_file_path = rename_file(
         filePath,
@@ -30,7 +31,7 @@ def file_operation(received_file, upload_folder, file_src, company_id, user_id):
         upload_folder,
         "_" + request.form["projectName"] + "_" + file_src + "_",
     )
-
+    print(renamed_file_path)
     csvFile = convert_to_csv(renamed_file_path, upload_folder)
     if file_src == "Budget":
         _amount = get_budget_amount(csvFile, renamed_file_path)
@@ -237,7 +238,7 @@ def error_messages(msg, file_src):
                 "error", f"The following error occured :: {message}", 400
             )
         )
-   
+
 
 @rms.route('/files/<companyId>', methods=["GET"])
 @token_required
@@ -263,8 +264,10 @@ def get_company_files(user, companyId):
 @token_required
 def download(user, fileType, fileName):
     downloaded_file = ""
-    print("are we getting here")
-    downloaded_file = send_from_directory(
-        BUDGET_UPLOAD_FOLDER, fileName, as_attachment=True)
-    print(downloaded_file)
+    if fileType == "budget":
+        downloaded_file = send_from_directory(
+            BUDGET_UPLOAD_FOLDER, fileName, as_attachment=True)
+    else:
+        downloaded_file = send_from_directory(
+            PAYMENTS_UPLOAD_FOLDER, fileName, as_attachment=True)
     return downloaded_file

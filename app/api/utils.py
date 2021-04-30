@@ -12,7 +12,7 @@ from openpyxl import load_workbook
 from pandas import read_excel
 from sqlalchemy import create_engine
 from functools import wraps
-from flask import jsonify, make_response, abort, request
+from flask import jsonify, make_response, abort, request, current_app
 from app.api.model.company import Company, company_schema
 from app.api.model.user import User, user_schema
 
@@ -24,7 +24,8 @@ ALLOWED_EXTENSIONS = {"xlsx", "xls"}
 
 def allowed_extension(filename):
     """check for allowed extensions"""
-    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
+    return "." in filename and \
+        filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 def rename_file(filePath, company_id, upload_dir, file_type_str):
@@ -41,8 +42,9 @@ def rename_file(filePath, company_id, upload_dir, file_type_str):
     company_ = Company.query.filter_by(id=company_id).first()
     this_company = company_schema.dump(company_)
     company_name = this_company["company"]
+    new_upload_dir_path = os.path.join(current_app.root_path, upload_dir)
     new_file_path = (
-        upload_dir + company_name + file_type_str + str(current_date) + ".xlsx"
+        new_upload_dir_path + company_name + file_type_str + str(current_date) + ".xlsx"
     )
     os.rename(filePath, new_file_path)
     return new_file_path
@@ -69,7 +71,8 @@ def convert_to_csv(filePath, upload_dir):
     dataFile = read_excel(filePath, engine="openpyxl")
     base_name = os.path.basename(filePath)
     csv_file_name = os.path.splitext(base_name)[0]
-    csv_file_path = upload_dir + csv_file_name + ".csv"
+    new_upload_dir_path = os.path.join(current_app.root_path, upload_dir)
+    csv_file_path = new_upload_dir_path + csv_file_name + ".csv"
     # convert to csv
     dataFile.to_csv(csv_file_path, index=False)
     return csv_file_path
