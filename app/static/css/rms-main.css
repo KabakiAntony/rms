@@ -329,14 +329,14 @@ table{
   border-collapse: collapse;
   width: 90%;
   table-layout: fixed ;
-  border-radius: 0.5rem;
+  background-color: #d8a5a1;
 }
 td{
   border: 1px solid #000000;
 }
 #employeesView tr:hover{background-color: #82c3df;}
 #projectsView tr:hover{background-color: #82c3df;} 
-.viewFiles tr:hover{background-color: #82c3df;} 
+.viewFiles tr:hover{background-color: #82c3df;}
 th{
     padding-top: 5px;
     padding-bottom: 5px;

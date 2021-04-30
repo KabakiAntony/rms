@@ -109,7 +109,7 @@ function showProjectData(project_data,viewDiv){
               <td>${projectData.date_to}</td>
               <td>${projectData.project_status}</td>
               </tr>
-            </table>     
+            </table>   
             `
           }).join('')}
         `
