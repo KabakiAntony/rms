@@ -7,12 +7,9 @@
   <meta name="description" content="This is rekuisition management system">
   <meta name="Keywords" content="rekuisition management, register your company here">
   <meta name="author" content="kabaki.antony@gmail.com">
-  <!-- <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet"> -->
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet"> 
+  <link href="http://fonts.cdnfonts.com/css/sofia-pro" rel="stylesheet">
   <!-- <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/gif" sizes="48x48"> -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/rms-main.css') }}">
-  <!-- <script type="module" src="{{ url_for('static', filename='js/user-signup.js')}}"></script> -->
   <script defer src="{{ url_for('static', filename='js/signout.js')}}"></script>
   <script defer src="{{ url_for('static', filename='js/dashboard.js')}}"></script>
   
@@ -255,33 +252,62 @@
               </div>
               <div id="ViewFiles" class="actionContent">
                 <h3>File actions.</h3>
-                <p>Below is a list of all files for your company for various projects.</p>
+                <p>Below is a list of pending files for your company for the project you select.</p>
                 <p>The filename denotes the following -> <span>Company_Project_Type_dateAndTime.xlsx</span></p>
+                <label >Select project </label>
+                <select class="input project dropdown"  id="rmsCreatorSelectProject" required>
+                </select>
+                  <!-- <select class="input dropdown"  id="" required>
+                  </select> -->
                 <hr>
-                <div><table>
+                <div>
+                  <table>
                   <tr>
-                  <th>File Type</th>
+                  <th>Type</th>
                   <th>File Status</th>
                   <th>File Amount</th>
                   <th>Date of Upload</th>
-                  <th>File Name</th>
+                  <th>File</th>
                   </tr>
                 </table></div>
-                <div id="viewFiles" class="viewFiles"></div>
+                <div id="listFiles" class="listFiles"></div>
                 <input type="submit" id="fetchFilesButton" class="submit view-employees" value="List Files">
               </div>
 
             {% elif role == 'Authorizer' %}
             <!-- <script type="module" src="{{ url_for('static', filename='js/authorizerActions.js')}}"></script> -->
             <div class="actions active">
-            <button class="action-links" onclick="openAction(event, 'authorizeBudget')">Authorize Budget</button>
-            <button class="action-links" onclick="openAction(event,'authorizePayment')">Authorize Payment File</button>
+            <button class="action-links" onclick="openAction(event, 'authorizeBudget')">File Actions</button>
             <button class="action-links" onclick="openAction(event, 'authorizerCreateProject')">Create Project</button>
             <button class="action-links" onclick="openAction(event, 'authorizerListProjects')">List Projects</button>
             <button class="action-links" onclick="openAction(event, 'authorizerManageProjects')">Manage Projects</button>
           </div>
-            <div id="authorizeBudget" class="actionContent">Authorize Budget</div>
-            <div id="authorizePayment" class="actionContent">Authorize Payment</div>
+            <div id="authorizeBudget" class="actionContent">
+              <h3>Authorize Budget/Payment</h3>
+              <p>First list the pending files for your projects.</p>
+              <p>Preview the budget/payment file  to authorize or reject it with notes.</p>
+              <select class="input fileType" name="rmsFileType" id="rmsFileType" required>
+                <option value="budget">Budget</option>
+                <option value="payment">Payment</option>
+              </select>
+              <hr class="authorizerTab">
+              <div><table class="filesAuthorizer">
+                <tr>
+                <th>Type</th>
+                <th>Project</th>
+                <th>File Status</th>
+                <th>File Amount</th>
+                <th>Date of Upload</th>
+                <th>File</th>
+                </tr>
+              </table></div>
+              <div id="viewFiles" class="viewFiles"></div>
+              <div>
+                <input type="submit" id="listFilesButton" class="submit view-employees authorizerButtons" value="List Files">
+                <input type="submit" id="authorizeBudget" class="submit view-employees authorizerButtons" value="Authorize">
+                <input type="submit" id="rejectBudget" class="submit view-employees authorizerButtons" value="Reject">
+              </div>
+            </div>
             <div id="authorizerCreateProject" class="actionContent">
               <h3>Create a new project here</h3>
               <p>It's easy just enter a name and the dates you expect the project to run from-to</p>

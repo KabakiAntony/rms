@@ -2,7 +2,7 @@
 html,body{
     margin:0;
     padding:0;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Sofia Pro', sans-serif;
     font-size: 100%;
     font-weight: 400;
     color: #212529;
@@ -118,6 +118,10 @@ html,body{
 .create-project{
   width: 40%;
 }
+#rmsFileType, #rmsCreatorSelectProject{
+  display: block;
+  width: 25%;
+}
 .error{
   color: rgba(255, 0, 0, 0.719);
   font-size: 11px;
@@ -153,7 +157,7 @@ html,body{
   cursor: pointer;
 }
 .submit{
-font-weight:normal;
+font-weight:bold;
 background-color: #0096D6;
 border-radius:1.5rem;
 border:none;
@@ -166,6 +170,7 @@ display: inline-block;
 width:100%;
 font-size: 120%;
 margin-top: 10px;
+font-family: 'Sofia Pro', sans-serif;
 }
 .projectSubmit{
   width:50%;
@@ -186,8 +191,11 @@ margin-top: 10px;
   font-size: 90%;
   margin-top: 25px;
 }
+.authorizerButtons{
+  width:15%;
+}
 .signout-button{
-  font-weight: normal;
+  font-weight: bold;
   background-color: #464849da;
   color:rgb(255, 255, 255);
   border-radius:1.5rem;
@@ -195,6 +203,7 @@ margin-top: 10px;
   padding: 5px;
   border: 1px solid rgb(5, 5, 5);
   text-transform: uppercase;
+  font-family: 'Sofia Pro', sans-serif;
 }
 .text-center{
   text-align: center;
@@ -299,7 +308,7 @@ margin-top: 10px;
   border-radius: 0.5rem;
   display: none;
   font-size: 13px;
-  font-weight: bold;
+  font-weight: normal;
 }
 .actionNotification.success {
   background-color: #d4edda;
@@ -345,6 +354,11 @@ th{
     color: white;
     font-weight: bold;
 }
+.filesAuthorizer, .authorizerTab{
+  margin-top: 10px;
+  width:100%;
+}
+
 #hack{
     padding-bottom:30px;
 }
@@ -399,7 +413,7 @@ span{
   font-size: 15px;
   color:white;
   text-transform: uppercase;
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Sofia Pro', sans-serif;
   font-weight: bold;
 }
 .actions button:hover {
