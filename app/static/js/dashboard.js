@@ -14,6 +14,7 @@ function openAction(evt, actionName) {
     
     if (actionName === "UploadPayment" || actionName === "UploadBudget" || actionName === "ViewFiles"){
         getProject(actionName);
+        console.log(actionName);
     }
   }
 
@@ -34,10 +35,11 @@ function getProject(theTab){
     if (theTab === "UploadPayment"){
         dropDown = paymentDropDown;
     }
-    else if(theTab === "UploadBudget"){
+    if(theTab === "UploadBudget"){
         dropDown = budgetDropDown;
     }
-    else{
+    if (theTab === "ViewFiles"){
+        console.log(theTab)
         dropDown = filesDropDown;
     }
 
