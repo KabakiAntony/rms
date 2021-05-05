@@ -12,7 +12,7 @@ function openAction(evt, actionName) {
     document.getElementById('profileInstruction').style.display = "none";
     evt.currentTarget.className += " active";
     
-    if (actionName === "UploadPayment" || actionName === "UploadBudget"){
+    if (actionName === "UploadPayment" || actionName === "UploadBudget" || actionName === "ViewFiles"){
         getProject(actionName);
     }
   }
@@ -20,6 +20,7 @@ function openAction(evt, actionName) {
 
 let budgetDropDown = document.getElementById('rmsCreatorBudgetTag');
 let paymentDropDown = document.getElementById('rmsCreatorPaymentTag');
+let filesDropDown = document.getElementById('rmsCreatorSelectProject');
 let defaultOption = document.createElement('option');
 defaultOption.text = 'Select project';
 let companyId = document.getElementById('rmsCreatorBudgetCompanyId');
@@ -33,8 +34,11 @@ function getProject(theTab){
     if (theTab === "UploadPayment"){
         dropDown = paymentDropDown;
     }
-    else{
+    else if(theTab === "UploadBudget"){
         dropDown = budgetDropDown;
+    }
+    else{
+        dropDown = filesDropDown;
     }
 
     dropDown.length = 0 ;

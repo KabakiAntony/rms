@@ -3,9 +3,11 @@ import {clearErrorDivs, rmsFetchGet} from './rmsModule.js'
 
 let companyId = document.getElementById('rmsCompanyId');
 let fetchFiles = document.getElementById('fetchFilesButton');
-let viewFiles = document.getElementById('viewFiles');
+let listFiles = document.getElementById('listFiles');
 let budgetDropDown = document.getElementById('rmsCreatorBudgetTag');
 let paymentDropDown = document.getElementById('rmsCreatorPaymentTag');
+let projectDropDown = document.getElementById('rmsCreatorSelectProject');
+let showFilesTable = document.getElementById('show_files');
 
 // variables for budget file upload
 let budgetUploadForm = document.getElementById('rmsBudgetForm');
@@ -37,9 +39,16 @@ paymentUploadForm.addEventListener('submit',(e)=>{
     uploadFile(paymentDropDown,paymentInput,'/auth/upload/payments','paymentExcelFile','rmsPaymentForm');
 })
 
-const filesUrl = '/files/'+companyId.value;
-fetchFiles.addEventListener(
-    "click", 
-    rmsFetchGet.bind(fetchFiles, filesUrl,'',viewFiles)
-    );
+projectDropDown.addEventListener('change',()=>{
+    let filesUrl = ""; 
+    if (rmsCreatorSelectProject.value != "Select project"){
+        listFiles.innerHTML = "";
+        filesUrl = `/files/${companyId.value}/${rmsCreatorSelectProject.value}`;
+        fetchFiles.addEventListener("click",rmsFetchGet.bind(fetchFiles, filesUrl,'',listFiles));
+    }
+    
+})
+
+
+
 

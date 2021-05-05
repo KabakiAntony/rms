@@ -12,6 +12,7 @@ from app.api.utils import rename_file, convert_to_csv, custom_make_response, \
     token_required, get_file_name, remove_unused_duplicates
 
 
+DB_URL = os.environ.get("DATABASE_URL")
 PAYMENTS_UPLOAD_FOLDER = os.environ.get("PAYMENTS_FOLDER")
 BUDGET_UPLOAD_FOLDER = os.environ.get("BUDGET_FOLDER")
 
@@ -240,18 +241,25 @@ def error_messages(msg, file_src):
         )
 
 
-@rms.route('/files/<companyId>', methods=["GET"])
+@rms.route('/files/<companyId>/<projectName>', methods=["GET"])
 @token_required
-def get_company_files(user, companyId):
+def get_company_files(user, companyId, projectName):
     """return the files for a given company"""
-    the_files = Files.query.filter_by(companyId=user['companyId']).all()
+
+    project_name = projectName + "." + companyId
+    this_project = Project.query.filter_by(project_name=project_name).first()
+    project = project_schema.dump(this_project)
+
+    the_files = Files.query.filter_by(companyId=user['companyId']).\
+        filter_by(projectId=project['id']).all()
+
     _the_files = files_schema.dump(the_files)
     if not _the_files:
         return abort(
             custom_make_response(
                 "error",
-                "No files have been found for your \
-                    company, upload some & try again.",
+                "No file(s) have been found for the selected \
+                    project,upload some & try again.",
                 404
             )
         )

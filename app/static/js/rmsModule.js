@@ -61,12 +61,12 @@ function closeDiv(myDivId){
   }, 10000);
 }
 function showFilesData(files_data,viewDiv){
-  
+  console.log(files_data)
   for(let i=0; i < files_data.length;i++){
     viewDiv.innerHTML=`
     ${files_data.map(function(filesData){
       return `
-        <table>
+        <table id="show_files">
           <tr>
           <td>${filesData.fileType}</td>
           <td>${filesData.fileStatus}</td>
@@ -219,7 +219,7 @@ export function rmsFileUpload(theUrl,theMethod,theBody, redirectUrl="", theForm)
         // remove console log at the end
         .catch(err => console.log(`This error occured :${err}`));
 }
-export function rmsFetchGet(theUrl,redirectUrl="",theDiv,theFn){
+export function rmsFetchGet(theUrl,redirectUrl="",theDiv){
   fetch(theUrl,{
     method: "GET"
   })
@@ -233,8 +233,11 @@ export function rmsFetchGet(theUrl,redirectUrl="",theDiv,theFn){
           else if(theDiv.id == "projectsView"){
             showProjectData(data,theDiv);
           }
-          else{
+          else if(theDiv.id == "listFiles"){
             showFilesData(data,theDiv);
+          }
+          else{
+            callToast(data,"");
           }
           
         }

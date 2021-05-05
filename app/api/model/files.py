@@ -10,7 +10,6 @@ class Files(db.Model):
     companyId = db.Column(db.String(20), db.ForeignKey("Company.id"))
     projectId = db.Column(db.String(20), db.ForeignKey("Project.id"))
     fileType = db.Column(db.String(10), nullable=False)
-    # fileVersion = db.Column(db.String(2), nullable=False)
     fileAmount = db.Column(db.Float, nullable=False)
     createdBy = db.Column(db.String(20), db.ForeignKey("Users.id"))
     dateCreated = db.Column(db.Date)
@@ -25,7 +24,6 @@ class Files(db.Model):
         companyId,
         projectId,
         fileType,
-        # fileVersion,
         fileAmount,
         createdBy,
         dateCreated,
@@ -39,7 +37,6 @@ class Files(db.Model):
         self.companyId = companyId
         self.projectId = projectId
         self.fileType = fileType
-        # self.fileVersion = fileVersion
         self.fileAmount = fileAmount
         self.createdBy = createdBy
         self.dateCreated = dateCreated
@@ -56,7 +53,6 @@ class FilesSchema(ma.Schema):
             "companyId",
             "projectId",
             "fileType",
-            # "fileVersion",
             "fileAmount",
             "createdBy",
             "dateCreated",

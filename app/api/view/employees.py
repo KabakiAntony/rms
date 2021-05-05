@@ -3,7 +3,7 @@ import psycopg2
 from app.api import rms
 from app.api.model import db
 from werkzeug.utils import secure_filename
-from flask import request, abort
+from flask import request, abort, current_app
 from app.api.model.company import Company, company_schema
 from app.api.utils import (
     allowed_extension,
@@ -38,7 +38,8 @@ def upload_employee_master(user):
         receivedFile = request.files["employeeExcelFile"]
         if allowed_extension(receivedFile.filename) and receivedFile:
             secureFilename = secure_filename(receivedFile.filename)
-            filePath = os.path.join(EMPLOYEE_UPLOAD_FOLDER, secureFilename)
+            filePath = os.path.join(
+                current_app.root_path, EMPLOYEE_UPLOAD_FOLDER, secureFilename)
             receivedFile.save(filePath)
             new_file_path = rename_file(
                 filePath,
