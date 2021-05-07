@@ -124,7 +124,6 @@
                   <label >Select role </label>
                   <select class="input project" name="rmsRole" id="rmsRole" required>
                     <option value="Creator">Creator</option>
-                    <!-- <option value="Reviewer">Reviewer</option> -->
                     <option value="Authorizer">Authorizer</option>
                   </select>
                   <label >Email </label>
@@ -185,6 +184,7 @@
                 <h3>Upload a budget for a given project for authorization.</h3>
                 <p>Note the file must be an excel and in the below format, budget line items are at your company's discretion</p>
                 <p>But the <span>Budget Line</span>, <span>Rate</span> and <span>Total Amount</span> must be there.</p>
+                <p>The system will rename the file into the following format :<span>Company_Project_Filetype_dateAndTime.xlsx</span></p>
                 <table class="excelFormat">
                   <tr>
                     <th>Budget Line</th>
@@ -204,7 +204,7 @@
                   </tr>
                 </table>
                 <form class="form create-project" id="rmsBudgetForm" method="POST">
-                  <input type="hidden" class="input companyid" id="rmsCreatorBudgetCompanyId"  value="{{ companyId }}" required>
+                  <input type="hidden" class="input" id="rmsCompanyId" name="rmsCompanyId" value="{{ companyId }}" required>
                   <label >Select project </label>
                   <select class="input project dropdown"  id="rmsCreatorBudgetTag" required>
                   </select>
@@ -216,9 +216,9 @@
               <div id="UploadPayment" class="actionContent">
                 <h3>Upload a payment file for a given project for authorization.</h3>
                 <p>Select the project for which the payment file is for.</p>
-                <!-- <p>Then select the payment file from your computer.</p> -->
                 <p>Note the payment file must be in the below format.</p>
-                <!-- <p>The mobile number to in the below format but now insert the full number.</p> -->
+                <p>The system will rename the file into the following format :
+                  <span>Company_Project_Filetype_dateAndTime.xlsx</span></p>
                 <table class="excelFormat">
                   <tr>
                     <th>fullname</th>
@@ -241,7 +241,7 @@
 
                 </table>
                 <form class="form create-project" id="rmsPaymentForm" method="POST">
-                  <input type="hidden" class="input companyid" id="rmsCreatorPaymentCompanyId" value="{{ companyId }}" required>
+                  <input type="hidden" class="input" id="rmsCompanyId" name="rmsCompanyId" value="{{ companyId }}" required>
                   <label >Select project </label>
                   <select class="input project dropdown" id="rmsCreatorPaymentTag" placeholder="Select Project" required>
                   </select>
@@ -252,16 +252,13 @@
               </div>
               <div id="ViewFiles" class="actionContent">
                 <h3>File actions.</h3>
-                <p>Below is a list of pending files for your company for the project you select.</p>
-                <p>The filename denotes the following -> <span>Company_Project_Type_dateAndTime.xlsx</span></p>
+                <p>List the pending files for your company for the project you select.</p>
+                <p>Just select the project and the files will be listed</p>
                 <label >Select project </label>
                 <select class="input project dropdown"  id="rmsCreatorSelectProject" required>
                 </select>
-                  <!-- <select class="input dropdown"  id="" required>
-                  </select> -->
-                <hr>
-                <div>
-                  <table>
+                <hr class="authorizerTab">
+                  <div><table class="filesAuthorizer">
                   <tr>
                   <th>Type</th>
                   <th>File Status</th>
@@ -271,22 +268,24 @@
                   </tr>
                 </table></div>
                 <div id="listFiles" class="listFiles"></div>
-                <input type="submit" id="fetchFilesButton" class="submit view-employees" value="List Files">
               </div>
 
             {% elif role == 'Authorizer' %}
-            <!-- <script type="module" src="{{ url_for('static', filename='js/authorizerActions.js')}}"></script> -->
+            <script type="module" src="{{ url_for('static', filename='js/authorizerActions.js')}}"></script>
             <div class="actions active">
-            <button class="action-links" onclick="openAction(event, 'authorizeBudget')">File Actions</button>
+            <button class="action-links" onclick="openAction(event, 'authorizeFiles')">File Actions</button>
             <button class="action-links" onclick="openAction(event, 'authorizerCreateProject')">Create Project</button>
             <button class="action-links" onclick="openAction(event, 'authorizerListProjects')">List Projects</button>
             <button class="action-links" onclick="openAction(event, 'authorizerManageProjects')">Manage Projects</button>
           </div>
-            <div id="authorizeBudget" class="actionContent">
-              <h3>Authorize Budget/Payment</h3>
+            <div id="authorizeFiles" class="actionContent">
+              <input type="hidden" class="input" id="rmsCompanyId" name="rmsCompanyId" value="{{ companyId }}" required>
+              <h3>Authorize or Reject Budget/Payment</h3>
               <p>First list the pending files for your projects.</p>
+              <p>To list files select the file type Budget/Payment below.</p>
               <p>Preview the budget/payment file  to authorize or reject it with notes.</p>
               <select class="input fileType" name="rmsFileType" id="rmsFileType" required>
+                <option value="" disabled selected>Select file type</option>
                 <option value="budget">Budget</option>
                 <option value="payment">Payment</option>
               </select>
@@ -301,10 +300,9 @@
                 <th>File</th>
                 </tr>
               </table></div>
-              <div id="viewFiles" class="viewFiles"></div>
+              <div id="authorizerViewFiles" class="authorizerViewFiles"></div>
               <div>
-                <input type="submit" id="listFilesButton" class="submit view-employees authorizerButtons" value="List Files">
-                <input type="submit" id="authorizeBudget" class="submit view-employees authorizerButtons" value="Authorize">
+                <input type="submit" id="authorizeFiles" class="submit view-employees authorizerButtons" value="Authorize">
                 <input type="submit" id="rejectBudget" class="submit view-employees authorizerButtons" value="Reject">
               </div>
             </div>

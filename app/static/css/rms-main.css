@@ -359,6 +359,12 @@ th{
   margin-top: 10px;
   width:100%;
 }
+.listFiles, .authorizerViewFiles{
+  margin-bottom: 30px;
+}
+#show_files{
+  width:100%;
+}
 
 #hack{
     padding-bottom:30px;
