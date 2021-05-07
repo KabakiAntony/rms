@@ -268,6 +268,38 @@ def get_company_files(user, companyId, projectName):
     )
 
 
+@rms.route('/auth/files/<companyId>/<fileType>', methods=["GET"])
+@token_required
+def get_authorizer_files(user, companyId, fileType):
+    """return the files for a given company for the authorizer"""
+    file_data = db.session.query(Files, Project).\
+        filter(Files.projectId == Project.id).\
+        filter_by(fileType=fileType.capitalize()).all()
+
+    if not file_data:
+        abort(
+            custom_make_response(
+                "error",
+                f"No {fileType} file(s) have been found for your company,\
+                     ask the creator to upload & try again.", 404
+            )
+        )
+
+    fileList = []
+    for result in file_data:
+        result_format = {
+            "fileType": result[0].fileType,
+            "project_name": result[1].project_name,
+            "fileStatus": result[0].fileStatus,
+            "fileAmount": result[0].fileAmount,
+            "dateCreated": result[0].dateCreated.strftime('%m-%d-%Y'),
+            "fileName": result[0].fileName
+        }
+        fileList.append(result_format)
+
+    return custom_make_response("data", fileList, 200)
+
+
 @rms.route('/uploads/<path:fileType>/<path:fileName>', methods=['GET'])
 @token_required
 def download(user, fileType, fileName):

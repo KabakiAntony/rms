@@ -14,7 +14,6 @@ function openAction(evt, actionName) {
     
     if (actionName === "UploadPayment" || actionName === "UploadBudget" || actionName === "ViewFiles"){
         getProject(actionName);
-        console.log(actionName);
     }
   }
 
@@ -24,7 +23,8 @@ let paymentDropDown = document.getElementById('rmsCreatorPaymentTag');
 let filesDropDown = document.getElementById('rmsCreatorSelectProject');
 let defaultOption = document.createElement('option');
 defaultOption.text = 'Select project';
-let companyId = document.getElementById('rmsCreatorBudgetCompanyId');
+let companyId = document.getElementById('rmsCompanyId');
+let fetchProjectsButton = document.getElementById("fetchProjectsButton");
 
 // we are hooking the fetch projects to the tab the user is on
 // determine the the open tab then cascade the  dropdown accordingly
@@ -39,7 +39,6 @@ function getProject(theTab){
         dropDown = budgetDropDown;
     }
     if (theTab === "ViewFiles"){
-        console.log(theTab)
         dropDown = filesDropDown;
     }
 

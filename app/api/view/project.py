@@ -76,7 +76,8 @@ def get_projects(user, companyId):
     """get projects for the given user company"""
     if user["companyId"] == companyId:
         company_projects = Project.query.filter_by(companyId=companyId).all()
-        if not company_projects:
+        _projects = projects_schema.dump(company_projects)
+        if not _projects:
             return abort(
                 custom_make_response(
                     "error",
@@ -85,9 +86,9 @@ def get_projects(user, companyId):
                     404,
                 )
             )
-        elif company_projects:
+        elif _projects:
             return custom_make_response(
-                "data", projects_schema.dump(company_projects), 200
+                "data", _projects, 200
             )
         else:
             return abort(

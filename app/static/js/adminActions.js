@@ -7,7 +7,6 @@ let projectName = document.getElementById('rmsProject');
 let dateFrom = document.getElementById('dateFrom');
 let dateTo = document.getElementById('dateTo');
 let signUpForm = document.getElementById('rmsRegForm');
-// let username = document.getElementById('rmsUsername');
 let email = document.getElementById('rmsEmail');
 let companyId = document.getElementById('rmsCompanyId');
 let isActive = document.getElementById('rmsActive');

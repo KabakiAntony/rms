@@ -61,7 +61,26 @@ function closeDiv(myDivId){
   }, 10000);
 }
 function showFilesData(files_data,viewDiv){
-  console.log(files_data)
+  for(let i=0; i < files_data.length;i++){
+    viewDiv.innerHTML=`
+    ${files_data.map(function(filesData){
+      return `
+        <table id="show_files">
+          <tr>
+          <td>${filesData.fileType}</td>
+          <td>${filesData.project_name.split('.')[0]}</td>
+          <td>${filesData.fileStatus}</td>
+          <td>${filesData.fileAmount}</td>
+          <td>${filesData.dateCreated}</td>
+          <td><a href="uploads/${filesData.fileType.toLowerCase()}/${filesData.fileName}">Preview</a></td>
+          </tr>
+        </table>
+                  `
+        }).join('')}
+    `
+  }
+}
+function showProjectFilesData(files_data,viewDiv){
   for(let i=0; i < files_data.length;i++){
     viewDiv.innerHTML=`
     ${files_data.map(function(filesData){
@@ -72,7 +91,7 @@ function showFilesData(files_data,viewDiv){
           <td>${filesData.fileStatus}</td>
           <td>${filesData.fileAmount}</td>
           <td>${filesData.dateCreated}</td>
-          <td><a href="uploads/${filesData.fileType.toLowerCase()}/${filesData.fileName}">${filesData.fileType} file</a></td>
+          <td><a href="uploads/${filesData.fileType.toLowerCase()}/${filesData.fileName}">Preview</a></td>
           </tr>
         </table>
                   `
@@ -221,7 +240,11 @@ export function rmsFileUpload(theUrl,theMethod,theBody, redirectUrl="", theForm)
 }
 export function rmsFetchGet(theUrl,redirectUrl="",theDiv){
   fetch(theUrl,{
-    method: "GET"
+    method: "GET",
+    headers: {
+      'Cache-Control': 'no-cache',
+      'Pragma': 'no-cache'
+    },
   })
   .then(response => response.json())
   .then(({data,status,error})=>{
@@ -234,6 +257,9 @@ export function rmsFetchGet(theUrl,redirectUrl="",theDiv){
             showProjectData(data,theDiv);
           }
           else if(theDiv.id == "listFiles"){
+            showProjectFilesData(data,theDiv);
+          }
+          else if(theDiv.id == "authorizerViewFiles"){
             showFilesData(data,theDiv);
           }
           else{
