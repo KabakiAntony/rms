@@ -39,6 +39,7 @@ paymentUploadForm.addEventListener('submit',(e)=>{
 
 projectDropDown.addEventListener('change',()=>{
     if (rmsCreatorSelectProject.value != "Select project"){
+        showLoader();
         listFiles.innerHTML = "";
         let filesUrl = `/files/${companyId.value}/${rmsCreatorSelectProject.value}`;
         rmsFetchGet(filesUrl,"",listFiles);
