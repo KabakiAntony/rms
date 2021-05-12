@@ -67,7 +67,7 @@ function showFilesData(files_data,viewDiv){
       return `
         <table id="show_files">
           <tr>
-          <td>${filesData.fileType}</td>
+          <td>${filesData.Id}</td>
           <td>${filesData.project_name.split('.')[0]}</td>
           <td>${filesData.fileStatus}</td>
           <td>${filesData.fileAmount}</td>
@@ -87,6 +87,7 @@ function showProjectFilesData(files_data,viewDiv){
       return `
         <table id="show_files">
           <tr>
+          <td>${filesData.id}</td>
           <td>${filesData.fileType}</td>
           <td>${filesData.fileStatus}</td>
           <td>${filesData.fileAmount}</td>
@@ -104,7 +105,7 @@ function showEmployeeData(employee_data,viewDiv){
     viewDiv.innerHTML=`
       ${employee_data.map(function(employeeData){
         return `
-      <table>
+        <table id="show_files">
           <tr>
           <td>${employeeData.firstname +" "+ employeeData.lastname}</td>
           <td>${employeeData.email}</td>
@@ -121,7 +122,7 @@ function showProjectData(project_data,viewDiv){
     viewDiv.innerHTML=`
       ${project_data.map(function(projectData){
         return `
-            <table>
+            <table id="show_files">
               <tr>
               <td>${projectData.project_name.split('.')[0]}</td>
               <td>${projectData.date_from}</td>

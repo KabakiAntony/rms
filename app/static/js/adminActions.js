@@ -127,14 +127,16 @@ reactivateForm.addEventListener('submit',(e)=>{
 })
 // fetch the employee master file from the database 
 const employeesUrl = '/employees/'+companyId.value;
-fetchEmployeesButton.addEventListener(
-    "click", 
-    rmsFetchGet.bind(fetchEmployeesButton, employeesUrl,'',employeesView)
+fetchEmployeesButton.addEventListener("click",()=>{
+    showLoader();
+    rmsFetchGet(employeesUrl,'',employeesView);
+    }
     );
 
 //fetch projects
 const projectsUrl = '/projects/'+companyId.value
-fetchProjectsButton.addEventListener(
-    "click", 
-    rmsFetchGet.bind(fetchProjectsButton,projectsUrl,'',projectsView)
+fetchProjectsButton.addEventListener("click", ()=>{
+        showLoader();
+        rmsFetchGet(projectsUrl,'',projectsView);
+    }
     );
