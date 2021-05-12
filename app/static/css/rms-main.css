@@ -344,9 +344,7 @@ table{
 td{
   border: 1px solid #000000;
 }
-#employeesView tr:hover{background-color: #82c3df;}
-#projectsView tr:hover{background-color: #82c3df;} 
-.viewFiles tr:hover{background-color: #82c3df;}
+#show_files tr:hover{background-color: #82c3df;}
 th{
     padding-top: 5px;
     padding-bottom: 5px;
@@ -360,7 +358,13 @@ th{
   width:100%;
 }
 .listFiles, .authorizerViewFiles{
-  margin-bottom: 30px;
+  margin-bottom: 15px;
+}
+textarea{
+  margin-top: 15px;
+  resize: none;
+  font-family: inherit;
+  font-weight: inherit;
 }
 #show_files{
   width:100%;

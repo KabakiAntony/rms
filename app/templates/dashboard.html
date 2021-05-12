@@ -74,8 +74,8 @@
               <div id="viewEmployees" class="actionContent">
                  <h3>Employees list</h3>
                  <p>Shows a list of all company employees.</p>
-                 <hr>
-                 <div><table>
+                 <hr class="authorizerTab">
+                  <div><table class="filesAuthorizer">
                   <tr>
                   <th>Name</th>
                   <th>Email</th>
@@ -156,8 +156,8 @@
               <div id="listProjects" class="actionContent">
                 <h3>All your projects</h3>
                 <p>Shows a list of all projects active/closed</p>
-                <hr>
-                <div><table>
+                <hr class="authorizerTab">
+                  <div><table class="filesAuthorizer">
                   <tr>
                   <th>Project Name</th>
                   <th>Date From</th>
@@ -252,15 +252,15 @@
               </div>
               <div id="ViewFiles" class="actionContent">
                 <h3>File actions.</h3>
-                <p>List the pending files for your company for the project you select.</p>
-                <p>Just select the project and the files will be listed</p>
-                <label >Select project </label>
+                <p>Select a project below to list it's files.</p>
+                <p><span>Only the pending files for the project will be listed.</span></p>
                 <select class="input project dropdown"  id="rmsCreatorSelectProject" required>
                 </select>
                 <hr class="authorizerTab">
                   <div><table class="filesAuthorizer">
                   <tr>
-                  <th>Type</th>
+                  <th>File ID</th>
+                  <th>File Type</th>
                   <th>File Status</th>
                   <th>File Amount</th>
                   <th>Date of Upload</th>
@@ -268,6 +268,10 @@
                   </tr>
                 </table></div>
                 <div id="listFiles" class="listFiles"></div>
+                <div>
+                  <input type="submit" id="" class="submit view-employees authorizerButtons" value="Withdraw">
+                  <input type="submit" id="" class="submit view-employees authorizerButtons" value="Edit">
+                </div>
               </div>
 
             {% elif role == 'Authorizer' %}
@@ -281,18 +285,20 @@
             <div id="authorizeFiles" class="actionContent">
               <input type="hidden" class="input" id="rmsCompanyId" name="rmsCompanyId" value="{{ companyId }}" required>
               <h3>Authorize or Reject Budget/Payment</h3>
-              <p>First list the pending files for your projects.</p>
-              <p>To list files select the file type Budget/Payment below.</p>
+              <p>To list files select the file type (Budget/Payment) below.</p>
               <p>Preview the budget/payment file  to authorize or reject it with notes.</p>
+              <p><span>Only the pending files for different projects for your company will be listed.</span></p>
               <select class="input fileType" name="rmsFileType" id="rmsFileType" required>
-                <option value="" disabled selected>Select file type</option>
+                <option value="none" selected disabled>
+                  Select file type
+                </option>
                 <option value="budget">Budget</option>
                 <option value="payment">Payment</option>
               </select>
               <hr class="authorizerTab">
               <div><table class="filesAuthorizer">
                 <tr>
-                <th>Type</th>
+                <th>File Id</th>
                 <th>Project</th>
                 <th>File Status</th>
                 <th>File Amount</th>
@@ -301,6 +307,7 @@
                 </tr>
               </table></div>
               <div id="authorizerViewFiles" class="authorizerViewFiles"></div>
+              <textarea id="authorizationNote" name="authNotes" rows="3" cols="50" maxlength="200" placeholder="Give a short explanation for rejection not more than 200 characters or just indicate 'OK' if authorized"></textarea>
               <div>
                 <input type="submit" id="authorizeFiles" class="submit view-employees authorizerButtons" value="Authorize">
                 <input type="submit" id="rejectBudget" class="submit view-employees authorizerButtons" value="Reject">
