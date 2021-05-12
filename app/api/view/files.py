@@ -288,6 +288,7 @@ def get_authorizer_files(user, companyId, fileType):
     fileList = []
     for result in file_data:
         result_format = {
+            "Id": result[0].id,
             "fileType": result[0].fileType,
             "project_name": result[1].project_name,
             "fileStatus": result[0].fileStatus,
