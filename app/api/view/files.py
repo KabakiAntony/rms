@@ -274,6 +274,7 @@ def get_authorizer_files(user, companyId, fileType):
     """return the files for a given company for the authorizer"""
     file_data = db.session.query(Files, Project).\
         filter(Files.projectId == Project.id).\
+        filter_by(companyId=user['companyId']).\
         filter_by(fileType=fileType.capitalize()).all()
 
     if not file_data:
