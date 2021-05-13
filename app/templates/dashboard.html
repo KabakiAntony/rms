@@ -82,7 +82,9 @@
                   <th>Mobile No.</th>
                   </tr>
                 </table></div>
-                 <div id="employeesView" class="employeesView"></div>
+                 <div id="employeesView" class="employeesView">
+                  <table id="show_files"></table>
+                 </div>
                  <input type="submit" id="fetchButton" class="submit view-employees" value="List Employees">
               </div>
               <div id="uploadMasterFile" class="actionContent">
@@ -165,7 +167,9 @@
                   <th>Status</th>
                   </tr>
                 </table></div>
-                <div id="projectsView" class="projectsView"></div>
+                <div id="projectsView" class="projectsView">
+                  <table id="list_projects"></table>
+                </div>
                 <input type="submit" id="fetchProjectsButton" class="submit view-employees" value="List Projects">
               </div>
               <div id="manageProjects" class="actionContent">
@@ -254,6 +258,7 @@
                 <h3>File actions.</h3>
                 <p>Select a project below to list it's files.</p>
                 <p><span>Only the pending files for the project will be listed.</span></p>
+                <p>To select a file for action click on the table row.</p>
                 <select class="input project dropdown"  id="rmsCreatorSelectProject" required>
                 </select>
                 <hr class="authorizerTab">
@@ -267,7 +272,9 @@
                   <th>File</th>
                   </tr>
                 </table></div>
-                <div id="listFiles" class="listFiles"></div>
+                <div id="listFiles" class="listFiles">
+                  <table id="show_files"></table>
+                </div>
                 <div>
                   <input type="submit" id="" class="submit view-employees authorizerButtons" value="Withdraw">
                   <input type="submit" id="" class="submit view-employees authorizerButtons" value="Edit">
@@ -306,7 +313,9 @@
                 <th>File</th>
                 </tr>
               </table></div>
-              <div id="authorizerViewFiles" class="authorizerViewFiles"></div>
+              <div id="authorizerViewFiles" class="authorizerViewFiles">
+                <table id="show_files"></table>
+              </div>
               <textarea id="authorizationNote" name="authNotes" rows="3" cols="50" maxlength="200" placeholder="Give a short explanation for rejection not more than 200 characters or just indicate 'OK' if authorized"></textarea>
               <div>
                 <input type="submit" id="authorizeFiles" class="submit view-employees authorizerButtons" value="Authorize">

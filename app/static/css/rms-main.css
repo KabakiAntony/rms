@@ -345,6 +345,7 @@ td{
   border: 1px solid #000000;
 }
 #show_files tr:hover{background-color: #82c3df;}
+#list_projects tr:hover{background-color: #82c3df;}
 th{
     padding-top: 5px;
     padding-bottom: 5px;
@@ -366,7 +367,7 @@ textarea{
   font-family: inherit;
   font-weight: inherit;
 }
-#show_files{
+#show_files, #list_projects{
   width:100%;
 }
 

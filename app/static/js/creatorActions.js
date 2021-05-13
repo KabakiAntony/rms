@@ -3,6 +3,7 @@ import {clearErrorDivs, rmsFetchGet} from './rmsModule.js'
 
 let companyId = document.getElementById('rmsCompanyId');
 let listFiles = document.getElementById('listFiles');
+let table = document.getElementById('show_files');
 let budgetDropDown = document.getElementById('rmsCreatorBudgetTag');
 let paymentDropDown = document.getElementById('rmsCreatorPaymentTag');
 let projectDropDown = document.getElementById('rmsCreatorSelectProject');
@@ -40,12 +41,11 @@ paymentUploadForm.addEventListener('submit',(e)=>{
 projectDropDown.addEventListener('change',()=>{
     if (rmsCreatorSelectProject.value != "Select project"){
         showLoader();
-        listFiles.innerHTML = "";
+        table.innerHTML="";
         let filesUrl = `/files/${companyId.value}/${rmsCreatorSelectProject.value}`;
         rmsFetchGet(filesUrl,"",listFiles);
     }
 })
-
 
 
 

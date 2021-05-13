@@ -15,6 +15,8 @@ let fetchEmployeesButton = document.getElementById("fetchButton");
 let employeesView = document.getElementById("employeesView");
 let fetchProjectsButton = document.getElementById("fetchProjectsButton");
 let projectsView = document.getElementById("projectsView");
+let employeeTable = document.getElementById('show_files');
+let projectsTable = document.getElementById('list_projects');
 let signUpInfo;
 let theBody;
 // the following part goes into employee file upload
@@ -129,6 +131,7 @@ reactivateForm.addEventListener('submit',(e)=>{
 const employeesUrl = '/employees/'+companyId.value;
 fetchEmployeesButton.addEventListener("click",()=>{
     showLoader();
+    employeeTable.innerHTML = "";
     rmsFetchGet(employeesUrl,'',employeesView);
     }
     );
@@ -137,6 +140,7 @@ fetchEmployeesButton.addEventListener("click",()=>{
 const projectsUrl = '/projects/'+companyId.value
 fetchProjectsButton.addEventListener("click", ()=>{
         showLoader();
+        projectsTable.innerHTML = "";
         rmsFetchGet(projectsUrl,'',projectsView);
     }
     );

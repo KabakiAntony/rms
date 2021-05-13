@@ -9,6 +9,7 @@ import {showLoader} from './rmsModule.js'
 let signInForm = document.getElementById('rmsForm');
 let inEmail = document.getElementById('rmsEmail');
 let inPassword = document.getElementById('rmsPassword');
+let submitButton = document.getElementById('submit');
 let signInData;
 
 /* sign in validations*/
@@ -31,4 +32,3 @@ signInForm.addEventListener('submit',(e)=>{
     showLoader();
     signIn();
 });
-

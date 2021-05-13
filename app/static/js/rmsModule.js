@@ -60,12 +60,12 @@ function closeDiv(myDivId){
     document.getElementById(myDivId).style.display = "none";
   }, 10000);
 }
-function showFilesData(files_data,viewDiv){
+function showFilesData(files_data){
+  let table = document.getElementById('show_files');
   for(let i=0; i < files_data.length;i++){
-    viewDiv.innerHTML=`
+    table.innerHTML=`
     ${files_data.map(function(filesData){
       return `
-        <table id="show_files">
           <tr>
           <td>${filesData.Id}</td>
           <td>${filesData.project_name.split('.')[0]}</td>
@@ -74,18 +74,17 @@ function showFilesData(files_data,viewDiv){
           <td>${filesData.dateCreated}</td>
           <td><a href="uploads/${filesData.fileType.toLowerCase()}/${filesData.fileName}">Preview</a></td>
           </tr>
-        </table>
                   `
         }).join('')}
     `
   }
 }
-function showProjectFilesData(files_data,viewDiv){
+function showProjectFilesData(files_data){
+  let table = document.getElementById('show_files');
   for(let i=0; i < files_data.length;i++){
-    viewDiv.innerHTML=`
+    table.innerHTML=`
     ${files_data.map(function(filesData){
       return `
-        <table id="show_files">
           <tr>
           <td>${filesData.id}</td>
           <td>${filesData.fileType}</td>
@@ -94,42 +93,39 @@ function showProjectFilesData(files_data,viewDiv){
           <td>${filesData.dateCreated}</td>
           <td><a href="uploads/${filesData.fileType.toLowerCase()}/${filesData.fileName}">Preview</a></td>
           </tr>
-        </table>
                   `
         }).join('')}
     `
   }
 }
-function showEmployeeData(employee_data,viewDiv){
+function showEmployeeData(employee_data){
+  let table = document.getElementById('show_files');
   for (let i = 0; i < employee_data.length; i++) {
-    viewDiv.innerHTML=`
+    table.innerHTML=`
       ${employee_data.map(function(employeeData){
         return `
-        <table id="show_files">
           <tr>
           <td>${employeeData.firstname +" "+ employeeData.lastname}</td>
           <td>${employeeData.email}</td>
           <td>${'+'+employeeData.mobile}</td>
           </tr>
-        </table>
                     `
           }).join('')}
         `
     }
 }
-function showProjectData(project_data,viewDiv){
+function showProjectData(project_data){
+  let table = document.getElementById('list_projects');
   for (let i = 0; i < project_data.length; i++) {
-    viewDiv.innerHTML=`
+    table.innerHTML=`
       ${project_data.map(function(projectData){
         return `
-            <table id="show_files">
               <tr>
               <td>${projectData.project_name.split('.')[0]}</td>
               <td>${projectData.date_from}</td>
               <td>${projectData.date_to}</td>
               <td>${projectData.project_status}</td>
-              </tr>
-            </table>   
+              </tr>   
             `
           }).join('')}
         `
@@ -241,27 +237,27 @@ export function rmsFileUpload(theUrl,theMethod,theBody, redirectUrl="", theForm)
 }
 export function rmsFetchGet(theUrl,redirectUrl="",theDiv){
   fetch(theUrl,{
-    method: "GET",
-    headers: {
-      'Cache-Control': 'no-cache',
-      'Pragma': 'no-cache'
-    },
+    method: "GET"
   })
   .then(response => response.json())
   .then(({data,status,error})=>{
       if(status === 201 || status === 200 || status === 202){
         if (filename === 'dashboard'){
           if (theDiv.id == "employeesView"){
-            showEmployeeData(data,theDiv);
+            showEmployeeData(data);
+            highlight_row();
           }
           else if(theDiv.id == "projectsView"){
-            showProjectData(data,theDiv);
+            showProjectData(data);
+            highlight_row();
           }
           else if(theDiv.id == "listFiles"){
-            showProjectFilesData(data,theDiv);
+            showProjectFilesData(data);
+            highlight_row();
           }
           else if(theDiv.id == "authorizerViewFiles"){
-            showFilesData(data,theDiv);
+            showFilesData(data);
+            highlight_row();
           }
           else{
             callToast(data,"");
@@ -290,3 +286,28 @@ export function clearErrorDivs(){
   document.getElementById('success').style.display = " none";
   document.getElementById('error').style.display = " none";
 }
+
+function highlight_row() {
+  let table = document.getElementById('show_files');
+  let cells = table.getElementsByTagName('td');
+  for (let i = 0; i < cells.length; i++) {
+      let cell = cells[i];
+      cell.onclick = function () {
+          let rowId = this.parentNode.rowIndex;
+
+          let rowsNotSelected = table.getElementsByTagName('tr');
+          for (let row = 0; row < rowsNotSelected.length; row++) {
+              rowsNotSelected[row].style.backgroundColor = "";
+              rowsNotSelected[row].classList.remove('selected');
+          }
+          let rowSelected = table.getElementsByTagName('tr')[rowId];
+          rowSelected.style.backgroundColor = "#82c3df";
+          rowSelected.className += " selected";
+          let msg = "";
+          msg = 'The ID of the file is: ' + rowSelected.cells[0].innerHTML;
+          msg += '\nThe cell value is: ' + this.innerHTML;
+          alert(msg);
+      }
+  }
+
+} //end of function
