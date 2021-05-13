@@ -303,10 +303,14 @@ function highlight_row() {
           let rowSelected = table.getElementsByTagName('tr')[rowId];
           rowSelected.style.backgroundColor = "#82c3df";
           rowSelected.className += " selected";
-          let msg = "";
-          msg = 'The ID of the file is: ' + rowSelected.cells[0].innerHTML;
-          msg += '\nThe cell value is: ' + this.innerHTML;
-          alert(msg);
+          let file_id = document.getElementById('rmsFileId')
+          // let msg = "";
+          // msg = 'The ID of the file is: ' + rowSelected.cells[0].innerHTML;
+          file_id.value = rowSelected.cells[0].innerHTML;
+          // console.log(document.getElementById('rmsFileId').value)
+          // let lastCell = table.rows[rowId].cells.length;
+          // msg += '\nThe file name is : ' + rowSelected.cells[lastCell-1].innerHTML;
+          // alert(msg);
       }
   }
 

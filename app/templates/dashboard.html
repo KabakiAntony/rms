@@ -293,7 +293,7 @@
               <input type="hidden" class="input" id="rmsCompanyId" name="rmsCompanyId" value="{{ companyId }}" required>
               <h3>Authorize or Reject Budget/Payment</h3>
               <p>To list files select the file type (Budget/Payment) below.</p>
-              <p>Preview the budget/payment file  to authorize or reject it with notes.</p>
+              <p>To select a file for authorization or rejection click on preview that will also open the file.</p>
               <p><span>Only the pending files for different projects for your company will be listed.</span></p>
               <select class="input fileType" name="rmsFileType" id="rmsFileType" required>
                 <option value="none" selected disabled>
@@ -314,12 +314,13 @@
                 </tr>
               </table></div>
               <div id="authorizerViewFiles" class="authorizerViewFiles">
+                <input type="hidden" class="input" id="rmsFileId" name="rmsFileId" value="" required>
                 <table id="show_files"></table>
               </div>
               <textarea id="authorizationNote" name="authNotes" rows="3" cols="50" maxlength="200" placeholder="Give a short explanation for rejection not more than 200 characters or just indicate 'OK' if authorized"></textarea>
               <div>
-                <input type="submit" id="authorizeFiles" class="submit view-employees authorizerButtons" value="Authorize">
-                <input type="submit" id="rejectBudget" class="submit view-employees authorizerButtons" value="Reject">
+                <input type="submit" id="authorizeFile" class="submit view-employees authorizerButtons" value="Authorize">
+                <input type="submit" id="rejectFile" class="submit view-employees authorizerButtons" value="Reject">
               </div>
             </div>
             <div id="authorizerCreateProject" class="actionContent">
