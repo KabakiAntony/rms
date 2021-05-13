@@ -9,7 +9,7 @@ from app.api.model.project import Project, project_schema
 from app.api.model.files import Files, file_schema, files_schema
 from werkzeug.utils import secure_filename
 from app.api.utils import rename_file, convert_to_csv, custom_make_response, \
-    token_required, get_file_name, remove_unused_duplicates
+    token_required, get_file_name, remove_unused_duplicates, check_for_whitespace
 
 
 DB_URL = os.environ.get("DATABASE_URL")
@@ -252,6 +252,7 @@ def get_company_files(user, companyId, projectName):
 
     the_files = Files.query.filter_by(companyId=user['companyId']).\
         filter_by(projectId=project['id']).all()
+    # add filter for leaving out the authorized files.
 
     _the_files = files_schema.dump(the_files)
     if not _the_files:
@@ -272,6 +273,7 @@ def get_company_files(user, companyId, projectName):
 @token_required
 def get_authorizer_files(user, companyId, fileType):
     """return the files for a given company for the authorizer"""
+    # add filter for pending files only
     file_data = db.session.query(Files, Project).\
         filter(Files.projectId == Project.id).\
         filter_by(companyId=user['companyId']).\
@@ -313,3 +315,34 @@ def download(user, fileType, fileName):
         downloaded_file = send_from_directory(
             PAYMENTS_UPLOAD_FOLDER, fileName, as_attachment=True)
     return downloaded_file
+
+
+@rms.route('/action/files/<id>', methods=['PATCH'])
+@token_required
+def authorize_or_reject(user, id):
+    """ authorize or reject file """
+    try:
+        data = request.get_json()
+        new_status = data['new_status']
+        fileId = id
+        date_actioned = datetime.datetime.utcnow()
+        todays_date = date_actioned.strftime("%Y-%m-%d")
+        file_status = new_status
+
+        check_for_whitespace(data, ["new_status", "file_id"])
+        new_file_params = {
+            "fileStatus": file_status,
+            "dateAuthorizedOrRejected": todays_date,
+            "authorizedOrRejectedBy": user['id']
+        }
+        Files.query.filter_by(id=fileId).update(new_file_params)
+        db.session.commit()
+        return custom_make_response(
+            "data", f"File {file_status} successfully.", 200)
+
+    except Exception as e:
+        abort(
+            custom_make_response(
+                "error", f"The following error occured :: {e}", 400
+            )
+        )
