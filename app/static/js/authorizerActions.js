@@ -24,6 +24,7 @@ authorizeButton.addEventListener('click', ()=>{
         alert("Select the file you want to authorize.");
     }
     else{
+        showLoader();
         let patch_url = `/action/files/${fileId.value}`;
         rmsFetch(patch_url,'PATCH',authorizeBody,'','')
         fileId.value = "";
