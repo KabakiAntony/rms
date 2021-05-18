@@ -14,9 +14,9 @@
   <script defer src="{{ url_for('static', filename='js/dashboard.js')}}"></script>
   
   {% if title %}
-    <title> RMS / {{ title }} </title>
+    <title> BT / {{ title }} </title>
     {% else %}
-    <title>RMS</title>
+    <title>BT</title>
     {% endif %}
 </head>
 <body>
@@ -24,7 +24,7 @@
         <header>
             <nav>
                 <div class="header">
-                    <a href="#" class="logo">RMS</a>
+                    <a href="#" class="logo">BT</a>
                     <div class="header-right">
                         {% if session %}
                         Hi {{ username }}

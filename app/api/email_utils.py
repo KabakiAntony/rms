@@ -10,7 +10,7 @@ from sendgrid.helpers.mail import Mail
 def send_mail(user_email, the_subject, the_content):
     """send email on relevant user action"""
     message = Mail(
-        from_email=("kabaki.antony@gmail.com", "RMS Team"),
+        from_email=("kabaki.antony@gmail.com", "BT Technologies Team"),
         to_emails=user_email,
         subject=the_subject,
         html_content=the_content,
