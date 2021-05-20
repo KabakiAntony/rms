@@ -1,4 +1,4 @@
-import { showLoader, rmsFetchGet, rmsFetch } from './rmsModule.js'
+import { showLoader, rmsFetchGet, rmsFetch, remove_row_highlight } from './rmsModule.js'
 
 let selectFileType = document.getElementById('rmsFileType');
 let companyId = document.getElementById('rmsCompanyId');
@@ -28,6 +28,7 @@ authorizeButton.addEventListener('click', ()=>{
         let patch_url = `/action/files/${fileId.value}`;
         rmsFetch(patch_url,'PATCH',authorizeBody,'','')
         fileId.value = "";
+        remove_row_highlight();
     }
 })
 

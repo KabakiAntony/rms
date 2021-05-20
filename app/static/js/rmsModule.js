@@ -304,14 +304,20 @@ function highlight_row() {
           rowSelected.style.backgroundColor = "#82c3df";
           rowSelected.className += " selected";
           let file_id = document.getElementById('rmsFileId')
-          // let msg = "";
-          // msg = 'The ID of the file is: ' + rowSelected.cells[0].innerHTML;
           file_id.value = rowSelected.cells[0].innerHTML;
-          // console.log(document.getElementById('rmsFileId').value)
-          // let lastCell = table.rows[rowId].cells.length;
-          // msg += '\nThe file name is : ' + rowSelected.cells[lastCell-1].innerHTML;
-          // alert(msg);
       }
   }
-
-} //end of function
+}
+// remove row highlight after action
+export function remove_row_highlight() {
+  let table = document.getElementById('show_files');
+   for (let i in table.rows)
+   {
+     let row = table.rows[i];
+     if (row.className === " selected")
+     {
+      row.style.backgroundColor = "";
+      row.classList.remove('selected');
+     }
+   }
+}
