@@ -367,6 +367,21 @@ textarea{
   font-family: inherit;
   font-weight: inherit;
 }
+.download-template{
+  font-weight: bold;
+  color: #fff;
+  text-decoration: none;
+  padding: 5px;
+  background-color: #0096D6;
+  border-radius: 1.5rem;
+  font-family: 'Sofia Pro', sans-serif;
+}
+.download-template:hover{
+  background-color: white;
+  color: rgba(2, 3, 8, 0.644);
+  border: 1px solid rgba(2, 3, 8, 0.644);
+  cursor: pointer;
+}
 #show_files, #list_projects{
   width:100%;
 }

@@ -9,7 +9,8 @@ from app.api.model.project import Project, project_schema
 from app.api.model.files import Files, file_schema, files_schema
 from werkzeug.utils import secure_filename
 from app.api.utils import rename_file, convert_to_csv, custom_make_response, \
-    token_required, get_file_name, remove_unused_duplicates, check_for_whitespace
+    token_required, get_file_name, remove_unused_duplicates,\
+    check_for_whitespace
 
 
 DB_URL = os.environ.get("DATABASE_URL")
