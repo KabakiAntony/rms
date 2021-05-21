@@ -221,10 +221,11 @@
               </div>
               <div id="UploadPayment" class="actionContent">
                 <h3>Upload a payment file for a given project for authorization.</h3>
-                <p>Select the project for which the payment file is for.</p>
-                <p>Note the payment file must be in the below format.</p>
-                <p>The system will rename the file into the following format :
-                  <span>Company_Project_Filetype_dateAndTime.xlsx</span></p>
+                <p>First -> &nbsp;&nbsp;<a  class="download-template" href="/uploads/payment/BudgetLinesTemplate.xlsx">Download Payment Template</a></p>
+                <p>Fill in the payment fields you are making for a given individual, leave the rest as is.</p>
+                <p>Select the project the payment is for on the select project dropdown</p>
+                <p>Then browse for the file you have just filled in figures, then press send to authorizer.</p>
+                <p>Once upload is successful the file will be renamed to the following format :<span>Company_Project_Payment_DateAndTime.xlsx</span></p>
                 <table class="excelFormat">
                   <tr>
                     <th>fullname</th>
@@ -298,7 +299,7 @@
               <p>To select a file for authorization or rejection click on preview that will also open the file.</p>
               <p><span>Only the pending files for different projects for your company will be listed.</span></p>
               <select class="input fileType" name="rmsFileType" id="rmsFileType" required>
-                <option value="none" selected disabled>
+                <option value="none" selected>
                   Select file type
                 </option>
                 <option value="budget">Budget</option>
