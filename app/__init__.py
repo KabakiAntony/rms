@@ -12,6 +12,7 @@ from app.api.view.budget import rms as budget_blueprint
 from app.api.view.employees import rms as employee_blueprint
 from app.api.view.user import rms as user_blueprint
 from app.api.view.payments import rms as payment_blueprint
+from app.api.view.detailedFile import rms as detailedFile_blueprint
 
 migrate = Migrate(compare_type=True)
 
@@ -35,6 +36,7 @@ def create_app():
     app.register_blueprint(employee_blueprint)
     app.register_blueprint(user_blueprint)
     app.register_blueprint(payment_blueprint)
+    app.register_blueprint(detailedFile_blueprint)
     app.app_context().push()
 
     return app
