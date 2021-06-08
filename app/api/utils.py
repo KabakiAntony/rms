@@ -67,13 +67,11 @@ def add_id_and_company_id(filePath, company_id):
 
 def convert_to_csv(filePath, upload_dir):
     """convert excel file to csv"""
-    # read the excel file
     dataFile = read_excel(filePath, engine="openpyxl")
     base_name = os.path.basename(filePath)
     csv_file_name = os.path.splitext(base_name)[0]
     new_upload_dir_path = os.path.join(current_app.root_path, upload_dir)
     csv_file_path = new_upload_dir_path + csv_file_name + ".csv"
-    # convert to csv
     dataFile.to_csv(csv_file_path, index=False)
     return csv_file_path
 
