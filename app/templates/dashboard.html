@@ -190,25 +190,7 @@
                 <p>Fill the budget lines that match your company, leave the rest as is.</p>
                 <p>Select the project the budget is for on the select project dropdown</p>
                 <p>Then browse for the file you have just filled in figures, then press send to authorizer.</p>
-                <p>Once upload is successful the file will be renamed to the following format :<span>Company_Project_Budget_DateAndTime.xlsx</span></p>
-                <table class="excelFormat">
-                  <tr>
-                    <th>Budget Line</th>
-                    <th>Rate</th>
-                  </tr>
-                  <tr>
-                    <td>eg Local Transport- Urban</td>
-                    <td>300</td>                    
-                  </tr>
-                  <tr>
-                    <td>eg Interviewers Allowance</td>
-                    <td>1200</td>                    
-                  </tr>
-                  <tr>
-                    <td>Total Amount</td>
-                    <td>1500</td>                    
-                  </tr>
-                </table>
+                <p>Once upload is successful the file will be renamed to the following format :<span>Company_ProjectName_Budget_DateAndTime.xlsx</span></p>
                 <form class="form create-project" id="rmsBudgetForm" method="POST">
                   <input type="hidden" class="input" id="rmsCompanyId" name="rmsCompanyId" value="{{ companyId }}" required>
                   <label >Select project </label>
@@ -260,8 +242,8 @@
               <div id="ViewFiles" class="actionContent">
                 <h3>File actions.</h3>
                 <p>Select a project below to list it's files.</p>
-                <p><span>Only the pending files for the project will be listed.</span></p>
-                <p>To select a file for action click on the table row.</p>
+                <p><span>This will list only Pending, Rejected and Withdrawn Files</span></p>
+                <p>To withdraw / edit a file select it on the table below </p>
                 <select class="input project dropdown"  id="rmsCreatorSelectProject" required>
                 </select>
                 <hr class="authorizerTab">
@@ -299,9 +281,7 @@
               <p>To select a file for authorization or rejection click on preview that will also open the file.</p>
               <p><span>Only the pending files for different projects for your company will be listed.</span></p>
               <select class="input fileType" name="rmsFileType" id="rmsFileType" required>
-                <option value="none" selected>
-                  Select file type
-                </option>
+                <option value="none" selected>Select file type</option>
                 <option value="budget">Budget</option>
                 <option value="payment">Payment</option>
               </select>
