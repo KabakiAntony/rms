@@ -9,9 +9,6 @@ class DetailedFile(db.Model):
     __tablename__ = "DetailedFile"
 
     id = db.Column(db.String(20), primary_key=True)
-    companyId = db.Column(db.String(20), db.ForeignKey("Company.id"))
-    projectId = db.Column(db.String(20), db.ForeignKey("Project.id"))
-    fileType = db.Column(db.String(20), nullable=False)
     urbanLocalTransport = db.Column(db.Float)
     briefingLocalTransport = db.Column(db.Float)
     ruralLocalTransport = db.Column(db.Float)
@@ -36,9 +33,6 @@ class DetailedFile(db.Model):
     def __init__(
         self,
         id,
-        companyId,
-        projectId,
-        fileType,
         urbanLocalTransport,
         briefingLocalTransport,
         ruralLocalTransport,
@@ -63,9 +57,6 @@ class DetailedFile(db.Model):
     ):
         """initializing objects for budget model"""
         self.id = id
-        self.companyId = companyId
-        self.projectId = projectId
-        self.fileType = fileType
         self.urbanLocalTransport = urbanLocalTransport
         self.briefingLocalTransport = briefingLocalTransport
         self.ruralLocalTransport = ruralLocalTransport
@@ -92,9 +83,6 @@ class DetailedFileSchema(ma.Schema):
     class Meta:
         fields = (
             "id",
-            "companyId",
-            "projectId",
-            "fileType",
             "urbanLocalTransport",
             "briefingLocalTransport",
             "ruralLocalTransport",
