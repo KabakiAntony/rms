@@ -1,16 +1,17 @@
 import os
 import csv
 import datetime
+from openpyxl import load_workbook
+import pandas
 from app.api import rms
 from app.api.model import db
 from flask import request, abort, send_from_directory, current_app
-from app.api.utils import generate_db_ids
 from app.api.model.project import Project, project_schema
 from app.api.model.files import Files, file_schema, files_schema
 from werkzeug.utils import secure_filename
 from app.api.utils import rename_file, convert_to_csv, custom_make_response, \
     token_required, get_file_name, remove_unused_duplicates,\
-    check_for_whitespace
+    check_for_whitespace, insert_csv, generate_db_ids
 
 
 DB_URL = os.environ.get("DATABASE_URL")
@@ -27,14 +28,15 @@ def file_operation(received_file, upload_folder, file_src, company_id, user_id):
     filePath = os.path.join(
         current_app.root_path, upload_folder, secureFilename)
     received_file.save(filePath)
-    renamed_file_path = rename_file(
+    renamed_file_path= rename_file(
         filePath,
         company_id,
         upload_folder,
         "_" + request.form["projectName"] + "_" + file_src + "_",
     )
-    print(renamed_file_path)
+   
     csvFile = convert_to_csv(renamed_file_path, upload_folder)
+
     if file_src == "Budget":
         _amount = get_budget_amount(csvFile, renamed_file_path)
         if check_pending_files(company_id, file_src, _amount):
@@ -66,11 +68,24 @@ def file_operation(received_file, upload_folder, file_src, company_id, user_id):
             remove_unused_duplicates(renamed_file_path)
             abort(400, "Budget  Unauthorized")
 
+    
+    id = generate_db_ids()
     renamed_file = get_file_name(renamed_file_path)
-    insert_file_data(company_id, _amount, file_src, renamed_file, user_id)
+    insert_file_data(id,company_id, _amount, file_src, renamed_file, user_id)
+    altered_csv_file = add_file_id(csvFile, id)
+    insert_csv(altered_csv_file, 'public."DetailedFile"')
     return custom_make_response(
         "data", f"{file_src} file successfully sent for authorization.", 200
     )
+
+
+def add_file_id(csv_file_path, fileId):
+    """given a file add file id to the file"""
+    data_file = pandas.read_csv(csv_file_path)
+    data_file.loc[0,'id'] = fileId
+    new_file = data_file.dropna()
+    new_file.to_csv(csv_file_path, index=False)
+    return csv_file_path
 
 
 def get_project_id(company_id):
@@ -82,19 +97,18 @@ def get_project_id(company_id):
     return project["id"]
 
 
-def insert_file_data(company_id, file_amt, file_typ, file_name, created_by):
+def insert_file_data(file_id,company_id, file_amt, file_typ, file_name, created_by):
     """given an excel file after it has gone
     under all conversions the prepare all the
     details and insert them into the files table.
     """
     project_id = get_project_id(company_id)
-    id = generate_db_ids()
     date_created = datetime.datetime.utcnow()
     todays_date = date_created.strftime("%Y-%m-%d")
     file_status = "Pending"
 
     new_file = Files(
-        id=id,
+        id=file_id,
         companyId=company_id,
         projectId=project_id,
         fileType=file_typ,
@@ -129,20 +143,16 @@ def get_payment_amount(payment_csv_file, renamed_file):
     return payment_amount
 
 
-def get_budget_amount(budget_file_csv, renamed_file):
+def get_budget_amount(budget_file_csv, budget_file):
     """
     get the budget amount from
     from the just uploaded file
     """
-    saved_csv = open(budget_file_csv, "r")
-    reader_file = csv.reader(saved_csv)
-    count_rows = 0
-    for row in reader_file:
-        count_rows += 1
-    budget_amount = row[1]
+    data_file = pandas.read_csv(budget_file_csv)
+    budget_amount = data_file.loc[0, 'totalAmount']
     if not budget_amount:
         remove_unused_duplicates(budget_file_csv)
-        remove_unused_duplicates(renamed_file)
+        remove_unused_duplicates(budget_file)
         abort(400, "Wrong file format")
     return budget_amount
 
@@ -188,6 +198,7 @@ def error_messages(msg, file_src):
             )
         )
     elif "id" in message:
+        print(message)
         abort(
             custom_make_response(
                 "error",
@@ -252,7 +263,8 @@ def get_company_files(user, companyId, projectName):
     project = project_schema.dump(this_project)
 
     the_files = Files.query.filter_by(companyId=user['companyId']).\
-        filter_by(projectId=project['id']).all()
+        filter_by(projectId=project['id']).\
+        filter_by(fileStatus="Pending").all()
     # add filter for leaving out the authorized files.
 
     _the_files = files_schema.dump(the_files)
@@ -260,8 +272,8 @@ def get_company_files(user, companyId, projectName):
         return abort(
             custom_make_response(
                 "error",
-                "No file(s) have been found for the selected \
-                    project,upload some & try again.",
+                "No pending / rejected / withdrawn file(s) have been \
+                    found for the selected project,upload some & try again.",
                 404
             )
         )
